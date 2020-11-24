@@ -185,52 +185,6 @@ function triangle() {
 
 }
 
-function gridVerticalLines() {
-    // let xStep = canvasWidth / stepWidth;
-    // let yStep = canvasHeight / stepHeight;
-
-    let xStep = 0;
-
-    var points = [];
-
-    while (xStep <= canvasWidth) {
-
-        var point = {
-            x: xStep,
-            y: canvasHeight
-        };
-
-        points.push(point);
-
-        xStep += stepWidth;
-    }
-
-    return points;
-}
-
-function gridHorizontalLines() {
-    // let xStep = canvasWidth / stepWidth;
-    // let yStep = canvasHeight / stepHeight;
-
-    let yStep = 0;
-
-    var points = [];
-
-    while (yStep <= canvasHeight) {
-
-        var point = {
-            x: canvasWidth,
-            y: yStep
-        };
-
-        points.push(point);
-
-        yStep += stepHeight;
-    }
-
-    return points;
-}
-
 function createOsc() {
 
     let types = ['sine', 'square', 'triangle', 'sawtooth'];
@@ -252,19 +206,6 @@ function createOsc() {
     osc.appendChild(select);
 
     return osc;
-}
-
-
-function createCanvas(width, height) {
-    
-    let canvas = document.createElement('canvas');
-
-    //  default width 300 pixels and height 150 pixels.
-    canvas.width = width;
-    canvas.height = height;
-
-    return canvas;
-
 }
 
 function createInterface() {
