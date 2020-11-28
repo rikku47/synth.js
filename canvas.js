@@ -1,202 +1,224 @@
-// class Grid {
-//     constructor(name, year) {
-//         this.name = name;
-//         this.year = year;
-//     }
+let canvas = {};
 
-//     createCanvas(width, height) {
+let vector = { x: 0, y: 0 };
 
-//         let canvas = document.createElement('canvas');
+let baseVector = { x: 0, y: 0 };
 
-//         //  default width 300 pixels and height 150 pixels.
-//         canvas.width = width;
-//         canvas.height = height;
+let grid = { topLeft: true, topRight: true, bottomRight: true, bottomLeft: true, gapY: 40, gapX: 40 };
 
-//         return canvas;
-//     }
-// }
-function createCanvas(width, height, backgroundcolor, gapY, lineWidthY, strokeStyleY, drawTopYArea, drawBottomYArea, gapX, lineWidthX, strokeStyleX, drawLeftXArea, drawRightXArea) {
+function setPositionToCenter(canvas) {
+    vector.x = canvas.width / 2;
+    vector.y = canvas.height / 2;
+}
 
-    let canvas = document.createElement('canvas');
+function createCoordinateAxes(canvas = null, middle = true) {
+
+    if (canvas != null) {
+        if (middle) {
+            setPositionToCenter(canvas);
+        }
+
+        let ctx = canvas.getContext('2d');
+
+        ctx.moveTo(vector.x, vector.y);
+        ctx.lineTo(0, vector.y);
+
+        // ctx.beginPath();
+        ctx.moveTo(vector.x, vector.y);
+        ctx.lineTo(canvas.width, vector.y);
+
+        // ctx.beginPath();
+        ctx.moveTo(vector.x, vector.y);
+        ctx.lineTo(vector.x, 0);
+
+        // ctx.beginPath();
+        ctx.moveTo(vector.x, vector.y);
+        ctx.lineTo(vector.x, canvas.height);
+
+        ctx.stroke();
+    }
+}
+
+function createGrid(canvas) {
+
+    function createQuadrant(isPos0, isPos1) {
+
+        if (isPos0 == false & isPos1 == true) {
+
+            while (vector.x > 0) {
+                vector.x -= grid.gapX;
+
+                ctx.moveTo(vector.x, vector.y);
+                ctx.lineTo(vector.x, 0);
+            };
+
+            setPositionToCenter(canvas);
+        }
+
+        if (isPos0 == true & isPos1 == true) {
+
+            while (vector.x < canvas.width) {
+                vector.x += grid.gapX;
+
+                ctx.moveTo(vector.x, vector.y);
+                ctx.lineTo(vector.x, 0);
+            };
+
+            setPositionToCenter(canvas);
+        }
+
+        if (isPos0 == true & isPos1 == false) {
+
+            while (vector.x < canvas.width) {
+                vector.x += grid.gapX;
+
+                ctx.moveTo(vector.x, vector.y);
+                ctx.lineTo(vector.x, canvas.height);
+            };
+
+            setPositionToCenter(canvas);
+        }
+
+        if (isPos0 == false & isPos1 == false) {
+
+            while (vector.x > 0) {
+                vector.x -= grid.gapX;
+
+                ctx.moveTo(vector.x, vector.y);
+                ctx.lineTo(vector.x, canvas.height);
+            };
+
+            setPositionToCenter(canvas);
+        }
+
+        ctx.stroke();
+    }
+
+    // vector.y = yEdgeBottom;
+
+    // while (vector.y > yEdgeTop) {
+
+    //     vector.y -= grid.gapY;
+
+    //     ctx.moveTo(vector.x, vector.y);
+    //     ctx.lineTo(0, vector.y);
+    // }
+
+    // setPositionToCenter(canvas);
+
+    // ctx.stroke();
+
     let ctx = canvas.getContext('2d');
 
-    canvas.width = width;
-    canvas.height = height;
-    canvas.style.background = backgroundcolor;
+    // LeftTop -+
+    // RightTop ++
+    // RightBottom +-
+    // LeftBottom --
 
-    let canvasMiddleX = canvas.width / 2;
-    let canvasMiddleY = canvas.height / 2;
-
-    let x = canvasMiddleX;
-    let y = canvasMiddleY;
-
-
-
-    ctx.lineWidth = lineWidthY;
-    ctx.strokeStyle = strokeStyleY;
-
-
-    if (drawTopYArea) {
-
-        ctx.beginPath();
-
-        while (y > 0) {
-
-            y -= gapY;
-
-            ctx.moveTo(0, y);
-            ctx.lineTo(canvas.width, y);
-        }
-
-        ctx.stroke();
+    if (grid.topLeft) {
+        createQuadrant(false, true);
     }
 
-    y = canvasMiddleY;
-
-
-
-    if (drawBottomYArea) {
-
-        ctx.beginPath();
-
-        while (y < canvas.height) {
-
-            ctx.moveTo(0, y);
-            ctx.lineTo(canvas.width, y);
-
-            y += gapY;
-        }
-
-        ctx.stroke();
+    if (grid.topRight) {
+        createQuadrant(true, true);
     }
 
-    y = canvasMiddleY;
-
-
-
-    ctx.lineWidth = lineWidthX;
-    ctx.strokeStyle = strokeStyleX;
-
-
-
-    if (drawLeftXArea) {
-
-        ctx.beginPath();
-
-        while (x > 0) {
-
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
-
-            x -= gapX;
-        }
-
-        ctx.stroke();
+    if (grid.bottomRight) {
+        createQuadrant(true, false);
     }
 
-    x = canvasMiddleX;
+    if (grid.bottomLeft) {
+        createQuadrant(false, false);
+    }
+}
 
+function resetCanvas(id) {
+    let canvas = document.getElementById(id).children[0];
+    let context = canvas.getContext('2d');
+    context.clearRect(0, 0, canvas.width, canvas.height);
+}
 
+function draw(id) {
 
-    if (drawRightXArea) {
+    let y = canvas.height / 2;
+    let factor = 120;
+    let strokeStyle = 'blue';
+    let func = Math.sin;
+
+    drawFunction(canvas, x, y, factor, strokeStyle, func);
+
+    element.appendChild(canvas);
+
+    function drawFunction(canvas, x, y, factor, strokeStyle, func) {
+
+        let ctx = canvas.getContext('2d');
+
+        ctx.strokeStyle = strokeStyle;
+
+        ctx.moveTo(x, y);
 
         ctx.beginPath();
 
         while (x < canvas.width) {
 
-            ctx.moveTo(x, 0);
-            ctx.lineTo(x, canvas.height);
-
-            x += gapX;
-        }
+            ctx.lineTo(x, y + func(x * Math.PI / 180) * factor);
+            x++;
+        };
 
         ctx.stroke();
     }
-
-    x = canvasMiddleX;
-
-    return canvas;
 }
 
-function drawSineWave(canvas, x, y, factor, strokeStyle) {
+function initialize() {
 
-    let ctx = canvas.getContext('2d');
+    let id = 'canvas';
 
-    ctx.strokeStyle = strokeStyle;
+    let canvasCointainer = document.getElementById(id);
 
-    ctx.beginPath();
+    let canvas = document.createElement('canvas');
 
-    ctx.moveTo(x, y);
+    canvasCointainer.appendChild(canvas);
 
-    while (x < canvas.width) {
-        let newY = y + Math.sin(x * Math.PI / 180) * factor;
-        ctx.lineTo(x, newY);
-        x++;
-    };
+    canvas.width = canvasCointainer.clientWidth;
+    canvas.height = canvasCointainer.clientHeight;
 
-    ctx.stroke();
+    createCoordinateAxes(canvas);
+
+    createGrid(canvas);
+
+
+    // let backgroundcolor = 'black';
+
+    // let drawTopYArea = true;
+    // let drawBottomYArea = true;
+
+    // let gapY = 40;
+    // let lineWidthY = 1;
+    // let strokeStyleY = 'magenta';
+
+    // let drawLeftXArea = true;
+    // let drawRightXArea = true;
+
+    // let gapX = 40;
+    // let lineWidthX = 1;
+    // let strokeStyleX = 'lightblue';
+
+
+    // let input = document.createElement('input');
+
+    // input.id = 'x';
+    // input.addEventListener('change', () => {
+
+    //     resetCanvas(id);
+    //     draw(id, input.value);
+    // });
+
+    // let form = document.getElementById('form');
+
+    // form.appendChild(input);
+
+    // draw(id);
 }
 
-function drawCosinusWave(canvas, x, y, factor, strokeStyle) {
-
-    let ctx = canvas.getContext('2d');
-
-    ctx.strokeStyle = strokeStyle;
-
-    ctx.beginPath();
-
-    ctx.moveTo(x, y);
-
-    while (x < canvas.width) {
-        let newY = y + Math.cos(x * Math.PI / 180) * factor;
-        ctx.lineTo(x, newY);
-        x++;
-    };
-
-    ctx.stroke();
-}
-
-function draw() {
-
-    let body = document.body;
-
-    let width = document.body.clientWidth;
-    let height = document.body.clientHeight;
-
-    let backgroundcolor = 'black';
-
-    let drawTopYArea = true;
-    let drawBottomYArea = true;
-
-    let gapY = 40;
-    let lineWidthY = 1;
-    let strokeStyleY = 'magenta';
-
-    let drawLeftXArea = true;
-    let drawRightXArea = true;
-
-    let gapX = 40;
-    let lineWidthX = 1;
-    let strokeStyleX = 'lightblue';
-
-    let canvas = createCanvas(width, height, backgroundcolor, gapY, lineWidthY, strokeStyleY, drawTopYArea, drawBottomYArea, gapX, lineWidthX, strokeStyleX, drawLeftXArea, drawRightXArea);
-    
-    let SineXStart = 0;
-    let SineYStart = canvas.height / 2;
-    let factorSine = 120;
-    let strokeStyleSine = 'red';
-
-    drawSineWave(canvas, SineXStart, SineYStart, factorSine, strokeStyleSine);
-
-    let CosXStart = 0;
-    let CosYStart = canvas.height / 2;
-    let factorCos = 120;
-    let strokeStyleCos = 'blue';
-
-    drawCosinusWave(canvas, CosXStart, CosYStart, factorCos, strokeStyleCos);
-
-    body.appendChild(canvas);
-
-}
-
-document.addEventListener("DOMContentLoaded", draw);
+// document.addEventListener("DOMContentLoaded", draw(id));
+document.addEventListener("DOMContentLoaded", initialize);
