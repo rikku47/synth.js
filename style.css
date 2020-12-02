@@ -10,3 +10,18 @@ body{
 #canvas {
     height: 100%;
 }
+
+#form {
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    position: absolute;
+    width: 22rem;
+}
+
+#values {
+    height: 16rem;
+    overflow-y: auto;
+}
