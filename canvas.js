@@ -2,170 +2,203 @@ let canvas = {};
 
 let vector = { x: 0, y: 0 };
 
+let centerVector = true;
+
 let baseVector = { x: 0, y: 0 };
 
-let grid = { topLeft: true, topRight: true, bottomRight: true, bottomLeft: true, gapY: 40, gapX: 40 };
+let grid = { topLeft: true, topRight: true, bottomRight: true, bottomLeft: true, gapY: 30, gapX: 30 };
 
-function setPositionToCenter(canvas) {
-    vector.x = canvas.width / 2;
-    vector.y = canvas.height / 2;
+function setVectorToCenter(ctx) {
+    vector.x = ctx.canvas.width / 2;
+    vector.y = ctx.canvas.height / 2;
 }
 
-function createCoordinateAxes(canvas = null, middle = true) {
+function drawLine(ctx, x1, y1, x2, y2, color = 'black', lineWidth = 1) {
 
-    if (canvas != null) {
-        if (middle) {
-            setPositionToCenter(canvas);
-        }
+    ctx.beginPath();
 
-        let ctx = canvas.getContext('2d');
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
 
-        ctx.moveTo(vector.x, vector.y);
-        ctx.lineTo(0, vector.y);
+    ctx.strokeStyle = color;
 
-        // ctx.beginPath();
-        ctx.moveTo(vector.x, vector.y);
-        ctx.lineTo(canvas.width, vector.y);
+    ctx.lineWidth = lineWidth;
 
-        // ctx.beginPath();
-        ctx.moveTo(vector.x, vector.y);
-        ctx.lineTo(vector.x, 0);
+    ctx.stroke();
 
-        // ctx.beginPath();
-        ctx.moveTo(vector.x, vector.y);
-        ctx.lineTo(vector.x, canvas.height);
+}
 
-        ctx.stroke();
+function drawCoordinateAxes(ctx = null) {
+
+    if (ctx != null) {
+
+        drawLine(ctx, vector.x, vector.y, 0, vector.y, 'red', 2);
+
+        drawLine(ctx, vector.x, vector.y, ctx.canvas.width, vector.y, 'blue', 2);
+
+        drawLine(ctx, vector.x, vector.y, vector.x, 0, 'green', 2);
+
+        drawLine(ctx, vector.x, vector.y, vector.x, ctx.canvas.height, 'magenta', 2);
     }
 }
 
-function createGrid(canvas) {
+function drawGrid(ctx = null) {
 
-    function createQuadrant(isPos0, isPos1) {
+    //              x   y   legend  inverse
+    // LeftTop      -   +   1       3
+    // RightTop     +   +   2       4
+    // RightBottom  +   -   3       1
+    // LeftBottom   -   -   4       2
 
-        if (isPos0 == false & isPos1 == true) {
+    function createQuadrant(quadrant, drawBars) {
+
+        if (quadrant == 1) {
 
             while (vector.x > 0) {
+
                 vector.x -= grid.gapX;
 
-                ctx.moveTo(vector.x, vector.y);
-                ctx.lineTo(vector.x, 0);
+                drawLine(ctx, vector.x, vector.y, vector.x, 0, 'black');
             };
 
-            setPositionToCenter(canvas);
+            setVectorToCenter(ctx);
+
+            while (vector.y > 0) {
+
+                vector.y -= grid.gapY;
+
+                drawLine(ctx, vector.x, vector.y, 0, vector.y, 'black');
+            };
+
+            setVectorToCenter(ctx);
         }
 
-        if (isPos0 == true & isPos1 == true) {
+        if (quadrant == 2) {
 
-            while (vector.x < canvas.width) {
+            while (vector.x < ctx.canvas.width) {
+
                 vector.x += grid.gapX;
 
-                ctx.moveTo(vector.x, vector.y);
-                ctx.lineTo(vector.x, 0);
+                drawLine(ctx, vector.x, vector.y, vector.x, 0, 'black');
             };
 
-            setPositionToCenter(canvas);
+            setVectorToCenter(ctx);
+
+            while (vector.y > 0) {
+
+                vector.y -= grid.gapY;
+
+                drawLine(ctx, vector.x, vector.y, ctx.canvas.width, vector.y, 'black');
+            };
+
+            setVectorToCenter(ctx);
         }
 
-        if (isPos0 == true & isPos1 == false) {
+        if (quadrant == 3) {
 
-            while (vector.x < canvas.width) {
+            while (vector.x < ctx.canvas.width) {
+
                 vector.x += grid.gapX;
 
-                ctx.moveTo(vector.x, vector.y);
-                ctx.lineTo(vector.x, canvas.height);
+                drawLine(ctx, vector.x, vector.y, vector.x, ctx.canvas.height, 'black');
             };
 
-            setPositionToCenter(canvas);
+            setVectorToCenter(ctx);
+
+            while (vector.y < ctx.canvas.height) {
+
+                vector.y += grid.gapY;
+
+                drawLine(ctx, vector.x, vector.y, ctx.canvas.width, vector.y, 'black');
+            };
+
+            setVectorToCenter(ctx);
         }
 
-        if (isPos0 == false & isPos1 == false) {
+        if (quadrant == 4) {
 
             while (vector.x > 0) {
+
                 vector.x -= grid.gapX;
 
-                ctx.moveTo(vector.x, vector.y);
-                ctx.lineTo(vector.x, canvas.height);
+                drawLine(ctx, vector.x, vector.y, vector.x, ctx.canvas.height, 'black');
             };
 
-            setPositionToCenter(canvas);
+            setVectorToCenter(ctx);
+
+            while (vector.y < ctx.canvas.height) {
+
+                vector.y += grid.gapY;
+
+                drawLine(ctx, vector.x, vector.y, 0, vector.y, 'black');
+            };
+
+            setVectorToCenter(ctx);
+        }
+    }
+
+    if (ctx != null) {
+
+        if (grid.topLeft) {
+
+            createQuadrant(1);
         }
 
-        ctx.stroke();
-    }
+        if (grid.topRight) {
 
-    // vector.y = yEdgeBottom;
+            createQuadrant(2);
+        }
 
-    // while (vector.y > yEdgeTop) {
+        if (grid.bottomRight) {
 
-    //     vector.y -= grid.gapY;
+            createQuadrant(3);
+        }
 
-    //     ctx.moveTo(vector.x, vector.y);
-    //     ctx.lineTo(0, vector.y);
-    // }
+        if (grid.bottomLeft) {
 
-    // setPositionToCenter(canvas);
-
-    // ctx.stroke();
-
-    let ctx = canvas.getContext('2d');
-
-    // LeftTop -+
-    // RightTop ++
-    // RightBottom +-
-    // LeftBottom --
-
-    if (grid.topLeft) {
-        createQuadrant(false, true);
-    }
-
-    if (grid.topRight) {
-        createQuadrant(true, true);
-    }
-
-    if (grid.bottomRight) {
-        createQuadrant(true, false);
-    }
-
-    if (grid.bottomLeft) {
-        createQuadrant(false, false);
+            createQuadrant(4);
+        }
     }
 }
 
-function resetCanvas(id) {
-    let canvas = document.getElementById(id).children[0];
-    let context = canvas.getContext('2d');
-    context.clearRect(0, 0, canvas.width, canvas.height);
+function resetCanvas(ctx) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function draw(id) {
+function drawFunction(ctx, x, y, func, factor, strokeStyle) {
 
-    let y = canvas.height / 2;
-    let factor = 120;
-    let strokeStyle = 'blue';
-    let func = Math.sin;
+    let fValues = [];
 
-    drawFunction(canvas, x, y, factor, strokeStyle, func);
+    for (let index = 0; index <= 360; index++) {
 
-    element.appendChild(canvas);
+        let fValue = { x: index, value: func(index * Math.PI / 180) };
 
-    function drawFunction(canvas, x, y, factor, strokeStyle, func) {
+        fValues.push(fValue);
+    }
 
-        let ctx = canvas.getContext('2d');
+    ctx.moveTo(x, y);
 
-        ctx.strokeStyle = strokeStyle;
+    ctx.beginPath();
 
-        ctx.moveTo(x, y);
+    fValues.forEach((fValue) => {
+        ctx.lineTo(x, y + fValue.value * factor);
+        x++;
+    })
 
-        ctx.beginPath();
+    ctx.strokeStyle = strokeStyle;
 
-        while (x < canvas.width) {
+    ctx.stroke();
 
-            ctx.lineTo(x, y + func(x * Math.PI / 180) * factor);
-            x++;
-        };
+    return fValues;
+}
 
-        ctx.stroke();
+function drawVector(ctx = null) {
+
+    if (ctx != null) {
+
+        ctx.fillStyle = "blue";
+
+        ctx.fillRect(vector.x - 4, vector.y - 4, 8, 8);
     }
 }
 
@@ -177,48 +210,53 @@ function initialize() {
 
     let canvas = document.createElement('canvas');
 
-    canvasCointainer.appendChild(canvas);
-
     canvas.width = canvasCointainer.clientWidth;
     canvas.height = canvasCointainer.clientHeight;
 
-    createCoordinateAxes(canvas);
+    canvasCointainer.appendChild(canvas);
 
-    createGrid(canvas);
+    let ctx = canvas.getContext('2d');
 
+    if (centerVector) {
+        setVectorToCenter(ctx);
+    };
 
-    // let backgroundcolor = 'black';
+    drawGrid(ctx, true);
 
-    // let drawTopYArea = true;
-    // let drawBottomYArea = true;
+    drawCoordinateAxes(ctx);
 
-    // let gapY = 40;
-    // let lineWidthY = 1;
-    // let strokeStyleY = 'magenta';
+    drawVector(ctx);
 
-    // let drawLeftXArea = true;
-    // let drawRightXArea = true;
+    let factor = 90;
+    let strokeStyle = 'black';
+    let func = Math.sin;
 
-    // let gapX = 40;
-    // let lineWidthX = 1;
-    // let strokeStyleX = 'lightblue';
+    let values = drawFunction(ctx, vector.x, vector.y, func, factor, strokeStyle);
 
+    let ulValues = document.getElementById('values');
 
-    // let input = document.createElement('input');
+    values.forEach((value) => {
 
-    // input.id = 'x';
-    // input.addEventListener('change', () => {
+        let li = document.createElement('li');
 
-    //     resetCanvas(id);
-    //     draw(id, input.value);
+        li.value = value.value;
+        li.textContent = 'X-/ bzw. Winkel in Grad ' + value.x + ': ' + value.value;
+
+        ulValues.appendChild(li);
+    });
+
+    // func = Math.cos;
+
+    // values = drawFunction(ctx, vector.x, vector.y, func, factor, strokeStyle);
+
+    // values.forEach((value) => {
+
+    //     let li = document.createElement('li');
+
+    //     li.value = value.value;
+    //     li.textContent = 'X-/ bzw. Winkel in Grad ' + value.x + ': ' + value.value;
+
+    //     ulValues.appendChild(li);
     // });
 
-    // let form = document.getElementById('form');
-
-    // form.appendChild(input);
-
-    // draw(id);
 }
-
-// document.addEventListener("DOMContentLoaded", draw(id));
-document.addEventListener("DOMContentLoaded", initialize);
