@@ -1,32 +1,67 @@
-function createInput() {
+function createInput(type, id) {
     let input = document.createElement('input');
 
-    input.type = 'number';
-    input.id = 'start';
+    input.type = type;
+    input.id = id;
+
+    return input;
+}
+
+function createSelect() {
 
     let select = document.createElement('select');
-    
-    select.addEventListener('select', ()=>{
-        console.log(value);
+
+    let options = ['sin', 'cos'];
+
+    options.forEach((type) => {
+
+        let option = document.createElement('option');
+
+        switch (type) {
+            case 'cos':
+                option.textContent = 'Kosinus';
+                break;
+        
+            default:
+                option.textContent = 'Sinus';
+                break;
+        }
+        option.value = type;
+
+        select.appendChild(option);
     });
 
-    let optionS = document.createElement('option');
-
-    optionS.value = 'sine';
-    optionS.textContent = 'Sinus'
-
-    let optionC = document.createElement('option');
-
-    optionC.value = 'cosine';
-    optionC.textContent = 'Kosinus';
-
-    select.appendChild(optionS);
-    select.appendChild(optionC);
+    return select;
+}
+function createInterface(params) {
 
     let form = document.getElementById('form');
 
-    form.appendChild(input);
+    let xCoord = createInput('number', 'xCoord');
+    let yCoord = createInput('number', 'yCoord');
+
+    let h1 = document.createElement('h1');
+    
+    h1.textContent = 'Funktion und die dazugehörigen Werte'
+
+    let select = createSelect();
+
+    let list = document.createElement('ul');
+
+    list.id = 'values';
+
+    // form.appendChild(xCoord);
+    // form.appendChild(yCoord);
+    form.appendChild(h1);
     form.appendChild(select);
+    form.appendChild(list);
 }
 
-document.addEventListener("DOMContentLoaded", createInput);
+function updateVector(x) {
+    vector.x = x;
+    reDraw();
+}
+
+function reDraw() {
+    
+}
