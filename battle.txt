@@ -1,0 +1,3 @@
+let is like a sperat place for every new variable.
+var is the same place.
+const
