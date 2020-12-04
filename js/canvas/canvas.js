@@ -1,14 +1,14 @@
 let canvas = {};
 
+let baseVector = { x: 0, y: 0 };
+
 let vector = { x: 0, y: 0 };
 
 let centerVector = true;
 
-let baseVector = { x: 0, y: 0 };
-
 let grid = { topLeft: true, topRight: true, bottomRight: true, bottomLeft: true, gapY: 30, gapX: 30 };
 
-function setVectorToCenter(ctx) {
+function setVectorToCenter(ctx, vector) {
     vector.x = ctx.canvas.width / 2;
     vector.y = ctx.canvas.height / 2;
 }
@@ -28,7 +28,7 @@ function drawLine(ctx, x1, y1, x2, y2, color = 'black', lineWidth = 1) {
 
 }
 
-function drawCoordinateAxes(ctx = null) {
+function drawCoordinateAxes(ctx = null, vector) {
 
     if (ctx != null) {
 
@@ -42,7 +42,7 @@ function drawCoordinateAxes(ctx = null) {
     }
 }
 
-function drawGrid(ctx = null) {
+function drawGrid(ctx = null, vector) {
 
     //              x   y   legend  inverse
     // LeftTop      -   +   1       3
@@ -50,7 +50,7 @@ function drawGrid(ctx = null) {
     // RightBottom  +   -   3       1
     // LeftBottom   -   -   4       2
 
-    function createQuadrant(quadrant, drawBars) {
+    function createQuadrant(quadrant, vector, drawBars) {
 
         if (quadrant == 1) {
 
@@ -61,7 +61,7 @@ function drawGrid(ctx = null) {
                 drawLine(ctx, vector.x, vector.y, vector.x, 0, 'black');
             };
 
-            setVectorToCenter(ctx);
+            setVectorToCenter(ctx, vector);
 
             while (vector.y > 0) {
 
@@ -70,7 +70,7 @@ function drawGrid(ctx = null) {
                 drawLine(ctx, vector.x, vector.y, 0, vector.y, 'black');
             };
 
-            setVectorToCenter(ctx);
+            setVectorToCenter(ctx, vector);
         }
 
         if (quadrant == 2) {
@@ -82,7 +82,7 @@ function drawGrid(ctx = null) {
                 drawLine(ctx, vector.x, vector.y, vector.x, 0, 'black');
             };
 
-            setVectorToCenter(ctx);
+            setVectorToCenter(ctx, vector);
 
             while (vector.y > 0) {
 
@@ -91,7 +91,7 @@ function drawGrid(ctx = null) {
                 drawLine(ctx, vector.x, vector.y, ctx.canvas.width, vector.y, 'black');
             };
 
-            setVectorToCenter(ctx);
+            setVectorToCenter(ctx, vector);
         }
 
         if (quadrant == 3) {
@@ -103,7 +103,7 @@ function drawGrid(ctx = null) {
                 drawLine(ctx, vector.x, vector.y, vector.x, ctx.canvas.height, 'black');
             };
 
-            setVectorToCenter(ctx);
+            setVectorToCenter(ctx, vector);
 
             while (vector.y < ctx.canvas.height) {
 
@@ -112,7 +112,7 @@ function drawGrid(ctx = null) {
                 drawLine(ctx, vector.x, vector.y, ctx.canvas.width, vector.y, 'black');
             };
 
-            setVectorToCenter(ctx);
+            setVectorToCenter(ctx, vector);
         }
 
         if (quadrant == 4) {
@@ -124,7 +124,7 @@ function drawGrid(ctx = null) {
                 drawLine(ctx, vector.x, vector.y, vector.x, ctx.canvas.height, 'black');
             };
 
-            setVectorToCenter(ctx);
+            setVectorToCenter(ctx, vector);
 
             while (vector.y < ctx.canvas.height) {
 
@@ -133,7 +133,7 @@ function drawGrid(ctx = null) {
                 drawLine(ctx, vector.x, vector.y, 0, vector.y, 'black');
             };
 
-            setVectorToCenter(ctx);
+            setVectorToCenter(ctx, vector);
         }
     }
 
@@ -141,74 +141,88 @@ function drawGrid(ctx = null) {
 
         if (grid.topLeft) {
 
-            createQuadrant(1);
+            createQuadrant(1, vector);
         }
 
         if (grid.topRight) {
 
-            createQuadrant(2);
+            createQuadrant(2, vector);
         }
 
         if (grid.bottomRight) {
 
-            createQuadrant(3);
+            createQuadrant(3, vector);
         }
 
         if (grid.bottomLeft) {
 
-            createQuadrant(4);
+            createQuadrant(4, vector);
         }
     }
 }
 
-function resetCanvas(ctx) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
+function drawCoords(ctx, vector, coords, equalize, rasterize) {
 
-function drawFunction(ctx, x, y, func, factor, strokeStyle) {
-
-    let fValues = [];
-
-    for (let index = 0; index <= 360; index++) {
-
-        let fValue = { x: index, value: func(index * Math.PI / 180) };
-
-        fValues.push(fValue);
-    }
-
-    ctx.moveTo(x, y);
+    let count = 0;
 
     ctx.beginPath();
 
-    fValues.forEach((fValue) => {
-        ctx.lineTo(x, y + fValue.value * factor);
-        x++;
-    })
+    coords.forEach((coord) => {
 
-    ctx.strokeStyle = strokeStyle;
+        if(count % rasterize == 0){
 
-    ctx.stroke();
+            ctx.moveTo(vector.x + coord.x, vector.y + coord.y);
 
-    return fValues;
+            drawVector(ctx, vector, coord, equalize, 'magenta', 1);
+
+        };
+
+        count++;
+    });
 }
 
-function drawVector(ctx = null) {
+function drawVector(ctx = null, vector0, vector1, equalize, color = 'black', thickness = 4) {
 
     if (ctx != null) {
 
-        ctx.fillStyle = "blue";
+        ctx.fillStyle = color;
 
-        ctx.fillRect(vector.x - 4, vector.y - 4, 8, 8);
+        let x = 0;
+        let y = 0;
+
+        if (vector0.x == vector1.x & vector0.y == vector1.y) {
+
+            x = vector0.x - thickness;
+
+            y = vector0.y - thickness;
+
+        } else {
+
+            x = vector0.x + vector1.x - thickness;
+
+            y = vector0.y + vector1.y * equalize - thickness;
+
+        }
+
+        thick = thickness * 2;
+
+        ctx.fillRect(x, y, thick, thick);
     }
+}
+
+function resetCanvas(ctx) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
 function initialize() {
 
-    let id = 'canvas';
+    let id = 'canvasContainer';
 
     let canvasCointainer = document.getElementById(id);
 
     let canvas = document.createElement('canvas');
+
+    canvas.id = 'canvas';
 
     canvas.width = canvasCointainer.clientWidth;
     canvas.height = canvasCointainer.clientHeight;
@@ -218,45 +232,88 @@ function initialize() {
     let ctx = canvas.getContext('2d');
 
     if (centerVector) {
-        setVectorToCenter(ctx);
+        setVectorToCenter(ctx, baseVector);
     };
 
-    drawGrid(ctx, true);
+    drawGrid(ctx, baseVector);
 
-    drawCoordinateAxes(ctx);
+    drawCoordinateAxes(ctx, baseVector);
 
-    drawVector(ctx);
+    let equalize = 1;
 
-    let factor = 90;
-    let strokeStyle = 'black';
-    let func = Math.sin;
+    drawVector(ctx, baseVector, baseVector, equalize);
 
-    let values = drawFunction(ctx, vector.x, vector.y, func, factor, strokeStyle);
+    let startX = 0;
+    let endX = 360;
 
-    let ulValues = document.getElementById('values');
+    // let strokeStyle = 'black';
 
-    values.forEach((value) => {
+    // let close = false;
+    // let fill = false;
 
-        let li = document.createElement('li');
+    // switch (key) {
+    //     case value:
 
-        li.value = value.value;
-        li.textContent = 'X-/ bzw. Winkel in Grad ' + value.x + ': ' + value.value;
+    //         break;
 
-        ulValues.appendChild(li);
-    });
+    //     default:
+    //         break;
+    // }
 
-    // func = Math.cos;
+    let coords = [];
 
-    // values = drawFunction(ctx, vector.x, vector.y, func, factor, strokeStyle);
+    equalize = 90;
 
-    // values.forEach((value) => {
+    let rasterize = 4;
 
-    //     let li = document.createElement('li');
+    for (let currentX = startX; currentX <= endX; currentX++) {
 
-    //     li.value = value.value;
-    //     li.textContent = 'X-/ bzw. Winkel in Grad ' + value.x + ': ' + value.value;
+        coords.push({ x: currentX, y: Math.sin(currentX * Math.PI / 180) });
 
-    //     ulValues.appendChild(li);
-    // });
+    };
 
+    drawCoords(ctx, baseVector, coords, equalize, rasterize);
+
+    // let coordsCoSine = [];
+
+    // for (let currentX = 0; currentX <= endX; index++) {
+
+    //     coordsCoSine.push({ x: currentX, y: cos(currentX * Math.PI / 180)});
+
+    // };
+}
+
+function reDraw(totalDegree) {
+    
+    let canvas = document.getElementById('canvas');
+
+    let ctx = canvas.getContext('2d');
+    
+    resetCanvas(ctx);
+
+    if (centerVector) {
+        setVectorToCenter(ctx, baseVector);
+    };
+
+    drawGrid(ctx, baseVector);
+
+    drawCoordinateAxes(ctx, baseVector);
+
+    let equalize = 1;
+
+    drawVector(ctx, baseVector, baseVector, equalize);
+
+    let coords = [];
+
+    let startX = 0;
+    equalize = 90;
+    let rasterize = 4;
+
+    for (let currentX = startX; currentX <= totalDegree; currentX++) {
+
+        coords.push({ x: currentX, y: Math.sin(currentX * Math.PI / 180) });
+
+    };
+
+    drawCoords(ctx, baseVector, coords, equalize, rasterize);
 }

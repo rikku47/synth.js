@@ -1,73 +1,56 @@
-function inputObject() {
-
-    let func = function () {
-        console.log('Hello World...');
-    };
+function createInputObject(id, type, attributes, funcs) {
 
     let object = {
-        id: 'number',
-        type: 'range',
-        attributes: [['min', '0'], ['max', '360']],
-        funcs: [['input', func]]
+        id: id,
+        type: type,
+        attributes: attributes,
+        funcs: funcs
     };
 
     return object;
 }
 
-function createOverview() {
-
-    let form = document.getElementById('form');
-
-    let xCoord = createInput('number', 'xCoord');
-    let yCoord = createInput('number', 'yCoord');
-
-    let h1 = document.createElement('h1');
-
-    h1.textContent = 'Funktion und die dazugehörigen Werte'
-
-    let select = createSelect();
-
-    let list = document.createElement('ul');
-
-    list.id = 'values';
-
-    // form.appendChild(xCoord);
-    // form.appendChild(yCoord);
-    form.appendChild(h1);
-    form.appendChild(select);
-    form.appendChild(list);
-}
-
-function createEditor() {
+function createForm() {
 
     let container = document.createElement('div');
     container.classList.add('container');
 
-    let options = [];
+    let h1 = document.createElement('h1');
 
-    let inputObj = inputObject();
+    h1.textContent = 'Eigenschaften';
+
+    let label = createLabel('lblNumber', 'h1', 'Grad');
+
+    let update = function (range) {
+
+        let value = range.srcElement.value;
+
+        let textarea = document.getElementById('textarea');
+
+        textarea.textContent = value;
+
+        reDraw(value);
+    };
+
+    let id = 'number';
+    let type = 'range';
+    let attributes = [['min', '0'], ['max', '360'], ['step', '1'],['value', '0']];
+    let funcs = [['input', update]];
+
+    let inputObj = createInputObject(id, type, attributes, funcs);
 
     let input = createInput(inputObj.id, inputObj.type, inputObj.attributes, inputObj.funcs);
 
-    // container.appendChild(createSelect('voices', options));
-    // container.appendChild(createTextarea('output'));
+    let textarea = createTextarea('textarea');
+
+    container.appendChild(h1);
+    container.appendChild(label);
     container.appendChild(input);
+    container.appendChild(textarea);
 
     document.body.appendChild(container);
 }
 
-function createInterface(params) {
-
-    // createOverview();
-
-    createEditor();
+function createInterface() {
+    createForm();
 }
-
-// function updateVector(x) {
-//     vector.x = x;
-//     reDraw();
-// }
-
-// function reDraw() {
-
-// }
