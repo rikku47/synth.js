@@ -1,4 +1,4 @@
-function parseNoteValues(){
+function parseNoteValues() {
     return JSON.parse('notevalues.js');
 }
 
@@ -125,3 +125,9 @@ function triangle() {
     return points;
 
 }
+
+var context = new AudioContext();
+var o = context.createOscillator();
+o.type = "sine";
+o.connect(context.destination);
+// o.start();
