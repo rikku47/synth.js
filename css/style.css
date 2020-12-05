@@ -19,10 +19,6 @@ body{
     width: 22rem;
 }
 
-#canvasContainer {
-    height: 100%;
-}
-
 #form {
     background-color: black;
     color: white;
