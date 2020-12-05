@@ -1,12 +1,14 @@
-let canvas = {};
-
-let baseVector = { x: 0, y: 0 };
-
-let vector = { x: 0, y: 0 };
-
-let centerVector = true;
-
-let grid = { topLeft: true, topRight: true, bottomRight: true, bottomLeft: true, gapY: 30, gapX: 30 };
+let canvasC = {
+    baseVector: { x: 0, y: 0 },
+    centerVector: true,
+    ctx: null,
+    endX: 360,
+    equalize: 90,
+    functions: { sine: true, cos: true },
+    grid: { topLeft: true, topRight: true, bottomRight: true, bottomLeft: true, gapY: 30, gapX: 30 },
+    increment: 1,
+    startX: 0
+};
 
 function setVectorToCenter(ctx, vector) {
     vector.x = ctx.canvas.width / 2;
@@ -161,52 +163,57 @@ function drawGrid(ctx = null, vector) {
     }
 }
 
-function drawCoords(ctx, vector, coords, equalize, rasterize) {
+function drawFunction(ctx, vector, currentX, endX, increment, equalize, func) {
 
-    let count = 0;
+    if (currentX <= endX) {
+        let y = 0;
 
-    ctx.beginPath();
+        if (func == 0) {
+            y = Math.sin(currentX * Math.PI / 180) * equalize;
+        }
+        if (func == 1) {
+            y = Math.cos(currentX * Math.PI / 180) * equalize;
+        }
 
-    coords.forEach((coord) => {
+        drawVector(ctx, vector, { x: currentX, y: y }, true, 'magenta', 1);
 
-        if(count % rasterize == 0){
+        currentX += increment;
 
-            ctx.moveTo(vector.x + coord.x, vector.y + coord.y);
-
-            drawVector(ctx, vector, coord, equalize, 'magenta', 1);
-
-        };
-
-        count++;
-    });
+        drawFunction(ctx, vector, currentX, endX, increment, equalize, func);
+    }
 }
 
-function drawVector(ctx = null, vector0, vector1, equalize, color = 'black', thickness = 4) {
+function drawVector(ctx = null, vector0, vector1, isRelative, color = 'black', thickness = 4) {
 
     if (ctx != null) {
 
+        let tempVector = { x: vector0.x, y: vector0.y };
+
         ctx.fillStyle = color;
 
-        let x = 0;
-        let y = 0;
+        if (isRelative) {
 
-        if (vector0.x == vector1.x & vector0.y == vector1.y) {
+            tempVector.x += vector1.x;
 
-            x = vector0.x - thickness;
-
-            y = vector0.y - thickness;
+            tempVector.y += vector1.y;
 
         } else {
 
-            x = vector0.x + vector1.x - thickness;
+            tempVector.x = vector1.x;
 
-            y = vector0.y + vector1.y * equalize - thickness;
+            tempVector.y = vector1.y;
 
         }
 
+        tempVector.x -= thickness;
+
+        tempVector.y -= thickness;
+
         thick = thickness * 2;
 
-        ctx.fillRect(x, y, thick, thick);
+        ctx.beginPath();
+
+        ctx.fillRect(tempVector.x, tempVector.y, thick, thick);
     }
 }
 
@@ -229,66 +236,33 @@ function initialize() {
 
     canvasCointainer.appendChild(canvas);
 
-    let ctx = canvas.getContext('2d');
+    canvasC.ctx = canvas.getContext('2d');
 
     if (centerVector) {
-        setVectorToCenter(ctx, baseVector);
+        setVectorToCenter(canvasC.ctx, canvasC.baseVector);
     };
 
-    drawGrid(ctx, baseVector);
+    drawGrid(canvasC.ctx, canvasC.baseVector);
 
-    drawCoordinateAxes(ctx, baseVector);
+    drawCoordinateAxes(canvasC.ctx, canvasC.baseVector);
 
-    let equalize = 1;
+    drawVector(canvasC.ctx, canvasC.baseVector, canvasC.baseVector, false, 'black', 4);
 
-    drawVector(ctx, baseVector, baseVector, equalize);
-
-    let startX = 0;
-    let endX = 360;
-
-    // let strokeStyle = 'black';
-
-    // let close = false;
-    // let fill = false;
-
-    // switch (key) {
-    //     case value:
-
-    //         break;
-
-    //     default:
-    //         break;
-    // }
-
-    let coords = [];
-
-    equalize = 90;
-
-    let rasterize = 4;
-
-    for (let currentX = startX; currentX <= endX; currentX++) {
-
-        coords.push({ x: currentX, y: Math.sin(currentX * Math.PI / 180) });
-
+    if (canvasC.functions.sine) {
+        drawFunction(canvasC.ctx, canvasC.baseVector, startX, endX, increment, equalize, 0);
     };
 
-    drawCoords(ctx, baseVector, coords, equalize, rasterize);
-
-    // let coordsCoSine = [];
-
-    // for (let currentX = 0; currentX <= endX; index++) {
-
-    //     coordsCoSine.push({ x: currentX, y: cos(currentX * Math.PI / 180)});
-
-    // };
+    if (canvasC.functions.cos) {
+        drawFunction(ctx, baseVector, startX, endX, increment, equalize, 1);
+    };
 }
 
 function reDraw(totalDegree) {
-    
+
     let canvas = document.getElementById('canvas');
 
     let ctx = canvas.getContext('2d');
-    
+
     resetCanvas(ctx);
 
     if (centerVector) {
