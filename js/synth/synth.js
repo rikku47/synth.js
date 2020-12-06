@@ -5,11 +5,17 @@ class Synth {
             y: 0
         };
         this.canvasContainer = canvasContainer;
-        this.centerVector = true;
+        this.canvasDimensions = {
+            left: 0,
+            top: 0,
+            right: 0,
+            bottom: 0
+        },
+            this.centerVector = true;
         this.ctx = document.createElement('canvas').getContext('2d');
         this.grid = {
             topLeft: true,
-            topRight: false,
+            topRight: true,
             bottomRight: false,
             bottomLeft: false,
             gapY: 30,
@@ -20,13 +26,13 @@ class Synth {
         this.setVectorToCenter(this.baseVector);
     }
 
-    get baseVectorP() {
-        return this.baseVector;
-    }
+    // get baseVectorP() {
+    //     return this.baseVector;
+    // }
 
-    get gridP() {
-        return this.grid;
-    }
+    // get gridP() {
+    //     return this.grid;
+    // }
 
     setCanvas() {
 
@@ -57,18 +63,72 @@ class Synth {
 
     }
 
-    drawBars(left, right, up, down, color) {
+    drawCoordinateAxes(vector) {
 
-        while (left <= right) {
+        this.drawLine(vector.x, vector.y, 0, vector.y, 'red', 2);
 
-            this.drawLine(left, up, left, down, color);
+        this.drawLine(vector.x, vector.y, this.ctx.canvas.width, vector.y, 'blue', 2);
 
-            left += this.grid.gapX;
+        this.drawLine(vector.x, vector.y, vector.x, 0, 'green', 2);
 
-        };
+        this.drawLine(vector.x, vector.y, vector.x, this.ctx.canvas.height, 'magenta', 2);
     }
 
-    drawGrid() {
+    drawBars(vector, isLeft, isX, isY, color) {
+
+        let currentX = 0;
+        let top = 0;
+        let bottom = vector.y;
+        let bar = 0;
+        let bars = Math.floor(this.ctx.canvas.width / 2 / this.grid.gapX);
+
+        // top = vector.y - 40;
+        // bottom = vector.y + 40;
+
+        if (isX) {
+            if (isLeft) {
+                currentX = vector.x - this.grid.gapX;
+            } else {
+                currentX = vector.x + this.grid.gapX;
+            }
+
+            while (bar < bars) {
+
+                this.drawLine(currentX, top, currentX, bottom, color);
+
+                if (isLeft) {
+                    currentX -= this.grid.gapX;
+                } else {
+                    currentX += this.grid.gapX;
+                }
+
+                bar++;
+            };
+        }
+
+        // if (isY) {
+        //     if (isLeft) {
+        //         currentX = vector.x - this.grid.gapX;
+        //     } else {
+        //         currentX = vector.x + this.grid.gapX;
+        //     }
+
+        //     while (bar < bars) {
+
+        //         this.drawLine(currentX, top, currentX, bottom, color);
+
+        //         if (isLeft) {
+        //             currentX -= this.grid.gapX;
+        //         } else {
+        //             currentX += this.grid.gapX;
+        //         }
+
+        //         bar++;
+        //     };
+        // }
+    }
+
+    drawGrid(vector) {
 
         //              x   y   legend  inverse
         // LeftTop      -   +   1       3
@@ -78,42 +138,14 @@ class Synth {
 
         if (this.grid.topLeft) {
 
-            let left = this.ctx.canvas.width % this.grid.gapX;
-            let right = this.ctx.canvas.width / 2;
-
-            let up = this.ctx.canvas.height % this.grid.gapY;
-            let down = this.ctx.canvas.height / 2;
-
-            this.drawBars(left, right, up, down, 'black');
-
-            // while (start <= end) {
-
-            //     this.drawLine(this.baseVector.x, start, 0, start, 'black');
-
-            //     start += this.grid.gapY;
-
-            // };
+            this.drawBars(vector, true, true, true, 'black');
+            
         }
 
         if (this.grid.topRight) {
 
-            while (this.baseVector.x < this.ctx.canvas.width) {
+            this.drawBars(vector, false, true, true, 'black');
 
-                this.baseVector.x += this.baseVector.gapX;
-
-                this.drawLine(this.baseVector.x, this.baseVector.y, this.baseVector.x, 0, 'black');
-            };
-
-            this.setVectorToCenter(this.baseVector);
-
-            while (this.baseVector.y > 0) {
-
-                this.baseVector.y -= this.grid.gapY;
-
-                this.drawLine(this.baseVector.x, this.baseVector.y, this.ctx.canvas.width, this.baseVector.y, 'black');
-            };
-
-            setVectorToCenter(this.baseVector);
         }
 
         if (this.grid.bottomRight) {
@@ -298,4 +330,6 @@ class Synth {
 
 const synth = new Synth(document.body);
 
-synth.drawGrid();
+synth.setVectorToCenter(synth.baseVector);
+synth.drawCoordinateAxes(synth.baseVector);
+synth.drawGrid(synth.baseVector);
