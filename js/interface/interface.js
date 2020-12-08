@@ -29,7 +29,7 @@ function createForm() {
 
         textarea.textContent = value;
 
-        reDraw(value);
+        synth.reDraw(value);
     };
 
     let id = 'number';

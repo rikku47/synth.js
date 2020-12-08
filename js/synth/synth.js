@@ -1,8 +1,23 @@
 class Synth {
-    constructor(canvasContainer) {
+    constructor(
+        canvasContainer = null,
+        x = 0,
+        y = 0,
+        isCoordinateAxes = true,
+        isGrid = true,
+        centerVector = true,
+        topLeft = true,
+        topRight = true,
+        bottomRight = true,
+        bottomLeft = true,
+        isX = true,
+        isY = true,
+        gapY = 10,
+        gapX = 10
+    ) {
         this.currentVector = {
-            x: 0,
-            y: 0
+            x: x,
+            y: y
         };
         this.canvasContainer = canvasContainer;
         // this.canvasDimensions = {
@@ -11,20 +26,102 @@ class Synth {
         //     right: 0,
         //     bottom: 0
         // };
-        this.centerVector = true;
+        this.isCoordinateAxes = isCoordinateAxes;
+        this.isGrid = isGrid;
+        this.centerVector = centerVector;
         this.ctx = document.createElement('canvas').getContext('2d');
         this.grid = {
-            topLeft: true,
-            topRight: true,
-            bottomRight: true,
-            bottomLeft: true,
-            gapY: 40,
-            gapX: 40
+            topLeft: topLeft,
+            topRight: topRight,
+            bottomRight: bottomRight,
+            bottomLeft: bottomLeft,
+            isX: isX,
+            isY: isY,
+            gapY: gapY,
+            gapX: gapX,
+            color: 'black'
+        };
+        this.funcs = {};
+        this.amplitude = 0;
+        this.setCanvas();
+
+        if (this.centerVector) {
+            this.setVectorToCenter();
         };
 
-        this.setCanvas();
-        this.setVectorToCenter(this.currentVector);
+        if (this.isCoordinateAxes) {
+            this.drawCoordinateAxes();
+        };
+
+        if (this.isGrid) {
+            this.drawGrid();
+            // this.drawVector(synth.currentVector, false, 'black', 1);
+        }
     }
+
+    get topLeft() {
+        return this.grid.topLeft;
+    };
+
+    set topLeft(value) {
+        this.grid.topLeft = value;
+    };
+
+    get topRight() {
+        return this.grid.topRight;
+    };
+
+    set topRight(value) {
+        this.grid.topRight = value;
+    };
+
+    get bottomRight() {
+        return this.grid.bottomRight;
+    };
+
+    set bottomRight(value) {
+        this.grid.bottomRight = value;
+    };
+
+    get bottomLeft() {
+        return this.grid.bottomLeft;
+    };
+
+    set bottomLeft(value) {
+        this.grid.bottomLeft = value;
+    };
+
+    get isX() {
+        return this.grid.isX;
+    };
+
+    set isX(value) {
+        this.grid.isX = value;
+    };
+
+    get isY() {
+        return this.grid.isY;
+    };
+
+    set isY(value) {
+        this.grid.isY = value;
+    };
+
+    get gapX() {
+        return this.grid.gapX;
+    };
+
+    set gapX(value) {
+        this.grid.gapX = value;
+    };
+
+    get gapY() {
+        return this.grid.gapY;
+    };
+
+    set gapY(value) {
+        this.grid.gapY = value;
+    };
 
     setCanvas() {
 
@@ -35,9 +132,9 @@ class Synth {
         this.canvasContainer.appendChild(this.ctx.canvas);
     }
 
-    setVectorToCenter(vector) {
-        vector.x = this.ctx.canvas.width / 2;
-        vector.y = this.ctx.canvas.height / 2;
+    setVectorToCenter() {
+        this.currentVector.x = this.ctx.canvas.width / 2;
+        this.currentVector.y = this.ctx.canvas.height / 2;
     }
 
     drawLine(x1, y1, x2, y2, color = 'black', lineWidth = 1) {
@@ -55,159 +152,234 @@ class Synth {
 
     }
 
-    drawCoordinateAxes(vector) {
+    drawCoordinateAxes() {
 
-        this.drawLine(vector.x, vector.y, 0, vector.y, 'red', 2);
+        this.drawLine(this.currentVector.x, this.currentVector.y, 0, this.currentVector.y, 'red', 2);
 
-        this.drawLine(vector.x, vector.y, this.ctx.canvas.width, vector.y, 'blue', 2);
+        this.drawLine(this.currentVector.x, this.currentVector.y, this.ctx.canvas.width, this.currentVector.y, 'blue', 2);
 
-        this.drawLine(vector.x, vector.y, vector.x, 0, 'green', 2);
+        this.drawLine(this.currentVector.x, this.currentVector.y, this.currentVector.x, 0, 'green', 2);
 
-        this.drawLine(vector.x, vector.y, vector.x, this.ctx.canvas.height, 'magenta', 2);
+        this.drawLine(this.currentVector.x, this.currentVector.y, this.currentVector.x, this.ctx.canvas.height, 'magenta', 2);
     }
 
-    drawBars(vector, sector, isX, isY, color) {
+    drawBars(sector) {
 
-        if (isX) {
+        if (sector != undefined) {
 
-            let currentX = vector.x;
-            let top = 0;
-            let bottom = vector.y;
-            let bar = 0;
-            let bars = Math.floor(this.ctx.canvas.width / 2 / this.grid.gapX);
+            if (this.grid.isX) {
 
-            if (sector == 3 | sector == 4) {
-                top = vector.y;
-                bottom = this.ctx.canvas.height;
-            };
+                let currentX = this.currentVector.x;
+                let top = 0;
+                let bottom = this.currentVector.y;
+                let bar = 0;
+                let bars = Math.floor(this.ctx.canvas.width / 2 / this.grid.gapX);
 
-            while (bar < bars) {
-
-                if (sector == 1 | sector == 4) {
-                    currentX -= this.grid.gapX;
-                } else {
-                    currentX += this.grid.gapX;
+                if (sector == 3 | sector == 4) {
+                    top = this.currentVector.y;
+                    bottom = this.ctx.canvas.height;
                 };
 
-                this.drawLine(currentX, top, currentX, bottom, color);
+                while (bar < bars) {
 
-                bar++;
-            };
-        }
+                    if (sector == 1 | sector == 4) {
+                        currentX -= this.grid.gapX;
+                    } else {
+                        currentX += this.grid.gapX;
+                    };
 
-        if (isY) {
+                    this.drawLine(currentX, top, currentX, bottom);
 
-            let currentY = vector.y;
-            let left = 0;
-            let right = vector.x;
-            let bar = 0;
-            let bars = Math.floor(this.ctx.canvas.height / 2 / this.grid.gapY);
+                    bar++;
+                };
+            }
 
-            if (sector == 2 | sector == 3) {
-                left = vector.x;
-                right = this.ctx.canvas.width;
-            };
+            if (this.grid.isY) {
 
-            while (bar < bars) {
+                let currentY = this.currentVector.y;
+                let left = 0;
+                let right = this.currentVector.x;
+                let bar = 0;
+                let bars = Math.floor(this.ctx.canvas.height / 2 / this.grid.gapY);
 
-                if (sector == 1 | sector == 2) {
-                    currentY -= this.grid.gapY;
-                } else {
-                    currentY += this.grid.gapY;
+                if (sector == 2 | sector == 3) {
+                    left = this.currentVector.x;
+                    right = this.ctx.canvas.width;
                 };
 
-                this.drawLine(left, currentY, right, currentY, color);
+                while (bar < bars) {
 
-                bar++;
-            };
+                    if (sector == 1 | sector == 2) {
+                        currentY -= this.grid.gapY;
+                    } else {
+                        currentY += this.grid.gapY;
+                    };
+
+                    this.drawLine(left, currentY, right, currentY);
+
+                    bar++;
+                };
+            }
         }
     }
 
-    drawGrid(vector) {
+    drawGrid() {
 
-        //              x   y   legend  inverse
-        // LeftTop      -   +   1       3
-        // RightTop     +   +   2       4
-        // RightBottom  +   -   3       1
-        // LeftBottom   -   -   4       2
+        //              x   y   legend  inverse index
+        // LeftTop      -   +   1       3       0
+        // RightTop     +   +   2       4       1
+        // RightBottom  +   -   3       1       2
+        // LeftBottom   -   -   4       2       3
 
         if (this.grid.topLeft) {
 
-            this.drawBars(vector, 1, true, true, 'black');
+            this.drawBars(1);
 
-        }
+        };
 
         if (this.grid.topRight) {
 
-            this.drawBars(vector, 2, true, true, 'black');
+            this.drawBars(2);
 
-        }
+        };
 
         if (this.grid.bottomRight) {
 
-            this.drawBars(vector, 3, true, true, 'black');
+            this.drawBars(3);
 
-        }
+        };
 
         if (this.grid.bottomLeft) {
 
-            this.drawBars(vector, 4, true, true, 'black');
+            this.drawBars(4);
+
+        };
+    }
+
+    drawVector(vector, isRelative = true, color = 'black', thickness = 1) {
+
+        this.ctx.fillStyle = color;
+
+        let vectorForDraw = { x: vector.x, y: vector.y };
+
+        if (isRelative) {
+
+            vectorForDraw.x = this.currentVector.x + vector.x;
+
+            vectorForDraw.y = this.currentVector.y + vector.y;
 
         }
+
+        let thick = thickness * 2;
+
+        this.ctx.beginPath();
+
+        this.ctx.fillRect(vectorForDraw.x - thickness, vectorForDraw.y - thickness, thick, thick);
     }
 
-    drawVector(vector, isRelative, color = 'black', thickness = 4) {
-    
-            this.ctx.fillStyle = color;
-    
-            if (isRelative) {
-    
-                this.currentVector.x += vector.x;
-    
-                this.currentVector.y += vector.y;
-    
-            } else {
-    
-                this.currentVector.x = vector.x;
-    
-                this.currentVector.y = vector.y;
-    
-            }
-    
-            this.currentVector.x-= thickness;
-    
-            this.currentVector.y -= thickness;
-    
-            let thick = thickness * 2;
-    
-            this.ctx.beginPath();
-    
-            this.ctx.fillRect(this.currentVector.x, this.currentVector.y, thick, thick);
-    }
-
-    drawFunction(vector, current, end, increment, equalize, func) {
+    drawFunction(func, current, end, increment, equalize, isRealtive, color, thickness) {
 
         if (current <= end) {
-           
+
             let y = 0;
-    
+
             if (func == 0) {
 
                 y = Math.sin(current * Math.PI / 180) * equalize;
-            
-            }
+
+            };
+
             if (func == 1) {
 
                 y = Math.cos(current * Math.PI / 180) * equalize;
-           
-            }
-    
-            this.drawVector({x: current, y: y}, true, 'magenta', 1);
-    
+
+            };
+
+            if (func == 2) {
+
+                let sineVal = Math.sin(current * Math.PI / 180);
+
+                if (sineVal == 0 || sineVal == -1 || sineVal == 1) {
+
+                    this.amplitude = sineVal;
+
+                };
+
+                y = this.amplitude * equalize;
+
+                // if (current % 90 == 0) {
+
+                //     y = Math.sin(current * Math.PI / 180) * equalize;
+
+                // };
+
+                // increment = 90;
+
+            };
+
+            if (func == 3) {
+
+                let coSineVal = Math.cos(current * Math.PI / 180);
+
+                if (coSineVal == 0 || coSineVal == -1 || coSineVal == 1) {
+
+                    this.amplitude = coSineVal;
+
+                    this.drawLine();
+                };
+
+                y = this.amplitude * equalize;
+
+                // if (current % 90 == 0) {
+
+                //     y = Math.cose(current * Math.PI / 180) * equalize;
+
+                // };
+
+                // increment = 90;
+
+            };
+
+            this.drawVector({ x: current, y: y }, isRealtive, color, thickness);
+
             current += increment;
-    
-            this.drawFunction({x: current, y: y}, current, end, increment, equalize, func);
+
+            this.drawFunction(func, current, end, increment, equalize, isRealtive, color, thickness);
+
         }
+    }
+
+    resetCanvas() {
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    }
+
+    compareFunctions() {
+
+    }
+
+    reDraw(value) {
+
+        this.setCanvas();
+
+        if (this.centerVector) {
+            this.setVectorToCenter();
+        };
+
+        if (this.isCoordinateAxes) {
+            this.drawCoordinateAxes();
+        };
+
+        if (this.isGrid) {
+            this.drawGrid();
+            // this.drawVector(synth.currentVector, false, 'black', 1);
+        };
+
+        let end = Number(value);
+
+        this.drawFunction(0, 0, end, 1, synth.grid.gapY * 3, true, 'magenta', 2);
+        this.drawFunction(1, 0, end, 1, synth.grid.gapY * 3, true, 'magenta', 2);
+        this.drawFunction(2, 0, end, 1, synth.grid.gapY * 3, true, 'green', 2);
+        this.drawFunction(3, 0, end, 1, synth.grid.gapY * 3, true, 'red', 2);
     }
 
     init() {
@@ -222,52 +394,6 @@ class Synth {
 
         var points = [];
 
-        for (let index = 0; index <= 360; index++) {
-
-            if (index == 0) {
-
-                var point = {
-                    x: index,
-                    y: 200 + 100
-                };
-
-                points.push(point);
-
-            } else if (index == 180) {
-
-                var point = {
-                    x: index,
-                    y: 200 + 100
-                };
-
-                points.push(point);
-
-                var point = {
-                    x: index,
-                    y: 200 - 100
-                };
-
-                points.push(point);
-
-            } else if (index == 360) {
-
-                var point = {
-                    x: index,
-                    y: 200 - 100
-                };
-
-                points.push(point);
-
-                var point = {
-                    x: index,
-                    y: 200
-                };
-
-                points.push(point);
-
-            }
-        }
-
         return points;
     }
 
@@ -275,82 +401,19 @@ class Synth {
 
         var points = [];
 
-        for (let index = 0; index <= 360; index++) {
-
-            if (index == 0) {
-
-                var point = {
-                    x: index,
-                    y: 200 + 100
-                };
-
-                points.push(point);
-
-            } else if (index == 180) {
-
-                var point = {
-                    x: index,
-                    y: 200 - 100
-                };
-
-                points.push(point);
-
-                var point = {
-                    x: index,
-                    y: 200 + 100
-                };
-
-                points.push(point);
-
-            } else if (index == 360) {
-
-                var point = {
-                    x: index,
-                    y: 200 - 100
-                };
-                points.push(point);
-
-                var point = {
-                    x: index,
-                    y: 200
-                };
-
-                points.push(point);
-
-            }
-        }
 
         return points;
-    }
-
-    parseNoteValues() {
-        return JSON.parse('notevalues.js');
     }
 
     triangle() {
 
         var points = [];
 
-        for (let index = 0; index <= 360; index++) {
-
-            var point = {
-                x: index,
-                y: 200
-            };
-
-            points.push(point);
-
-        }
-
         return points;
 
     }
+
+    parseNoteValues() {
+        return JSON.parse('notevalues.js');
+    }
 }
-
-const synth = new Synth(document.body);
-
-synth.setVectorToCenter(synth.currentVector);
-synth.drawCoordinateAxes(synth.currentVector);
-synth.drawGrid(synth.currentVector);
-synth.drawVector(synth.currentVector, false, 'black', 4);
-synth.drawFunction(synth.currentVector, 0, 360, 1, 20, 0);

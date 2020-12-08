@@ -3,17 +3,59 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/style.css"/>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
-  <!-- <script src="js/interface/label/label.js"></script>
+  <!-- <script src="js/canvas/canvas.js"></script> -->
+  <script src="js/synth/synth.js"></script>
+  <script src="js/interface/label/label.js"></script>
   <script src="js/interface/input/input.js"></script>
   <script src="js/interface/textarea/textarea.js"></script>
   <script src="js/interface/interface.js"></script>
-  <script src="js/canvas/canvas.js"></script>
-  <script src="js/listeners/listeners.js"></script> -->
-  <script src="js/synth/synth.js"></script>
+  <script src="js/listeners/listeners.js"></script>
+
+  <script>
+
+    let canvasContainer = document.body;
+    let x = 0;
+    let y = 0;
+    let isCoordinateAxes = true;
+    let isGrid = true;
+    let centerVector = true;
+    let topLeft = true;
+    let topRight = true;
+    let bottomRight = true;
+    let bottomLeft = true;
+    let isX = true;
+    let isY = true;
+    let gapY = 30;
+    let gapX = 30;
+
+    const synth = new Synth(
+      canvasContainer,
+      x,
+      y,
+      isCoordinateAxes,
+      isGrid,
+      centerVector,
+      topLeft,
+      topRight,
+      bottomRight,
+      bottomLeft,
+      isX,
+      isY,
+      gapY,
+      gapX
+    );
+
+    synth.drawFunction(0, 0, 360, 1, synth.grid.gapY * 3, true, 'magenta', 2);
+    synth.drawFunction(1, 0, 360, 1, synth.grid.gapY * 3, true, 'magenta', 2);
+    synth.drawFunction(2, 0, 360, 1, synth.grid.gapY * 3, true, 'green', 2);
+    synth.drawFunction(3, 0, 360, 1, synth.grid.gapY * 3, true, 'red', 2);
+  
+  </script>
+
 </body>
 
 </html>
