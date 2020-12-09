@@ -90,19 +90,18 @@ const listOfAttributes =
         'autocomplete'
     ];
 
-
-function createInput(id, type, attributes, funcs) {
+function createInput(inputObject) {
 
     let input = document.createElement('input');
 
-    input.id = id;
-    input.type = type;
+    input.id = inputObject.id;
+    input.type = inputObject.type;
 
-    attributes.forEach((attribute) => {
+    inputObject.attributes.forEach((attribute) => {
         input.setAttribute(attribute[0], attribute[1]);
     });
 
-    funcs.forEach((func) => {
+    inputObject.funcs.forEach((func) => {
         input.addEventListener(func[0], func[1]);
     });
 

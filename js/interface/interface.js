@@ -1,52 +1,66 @@
-function createInputObject(id, type, attributes, funcs) {
-
-    let object = {
-        id: id,
-        type: type,
-        attributes: attributes,
-        funcs: funcs
-    };
-
-    return object;
-}
-
 function createForm() {
 
     let container = document.createElement('div');
     container.classList.add('container');
 
     let h1 = document.createElement('h1');
-
     h1.textContent = 'Eigenschaften';
-
-    let label = createLabel('lblNumber', 'h1', 'Grad');
 
     let update = function (range) {
 
         let value = range.srcElement.value;
 
-        let textarea = document.getElementById('textarea');
-
-        textarea.textContent = value;
-
         synth.reDraw(value);
     };
 
-    let id = 'number';
-    let type = 'range';
-    let attributes = [['min', '0'], ['max', '360'], ['step', '1'],['value', '0']];
-    let funcs = [['input', update]];
+    let inputs = [
+        {
+            id: 'number',
+            type: 'range',
+            attributes: [['min', '0'], ['max', '360'], ['step', '1'], ['value', '0']],
+            funcs: [['input', update]],
+            container: false,
+            label: false
+        },
+        {
+            id: 'number0',
+            type: 'range',
+            attributes: [['min', '0'], ['max', '360'], ['step', '1'], ['value', '0']],
+            funcs: [['input', update]],
+            container: false,
+            label: false
+        },
+    ];
 
-    let inputObj = createInputObject(id, type, attributes, funcs);
+    function createInputs(inputs) {
 
-    let input = createInput(inputObj.id, inputObj.type, inputObj.attributes, inputObj.funcs);
+        let inputsC = [];
+
+        inputs.forEach((input)=>{
+
+            if(input.container) {
+                let div = document.createElement('div');
+            };
+
+            if(input.label){
+                let label = createLabel('lblNumber', 'h1', 'Grad');
+            };
+
+            inputsC.push(createInput(input));
+
+        });
+
+        return inputsC;
+    };
 
     let textarea = createTextarea('textarea');
 
     container.appendChild(h1);
-    container.appendChild(label);
-    container.appendChild(input);
     container.appendChild(textarea);
+
+    createInputs(inputs).forEach((input)=>{
+        container.appendChild(input);
+    });
 
     document.body.appendChild(container);
 }
