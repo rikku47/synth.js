@@ -16,7 +16,7 @@ class SynthView {
         gapX = 30
     ) {
         this.ctx = document.createElement('canvas').getContext('2d');
-        this.currentVector = {
+        this.base = {
             x: x,
             y: y
         };
@@ -50,20 +50,20 @@ class SynthView {
         this.setCanvas(container);
 
         if (this.centerVector) {
-            this.setVectorToCenter(this.currentVector);
+            this.setVectorToCenter(this.base);
         };
 
         if (this.isCoordinateAxes) {
-            this.drawCoordinateAxes(this.currentVector);
+            this.drawCoordinateAxes(this.base);
         };
 
         if (this.isGrid) {
-            this.drawGrid(this.currentVector);
+            this.drawGrid(this.base);
         };
 
-        this.drawVector(this.currentVector, false);
+        // this.drawVector(this.currentVector, false);
 
-        this.draw();
+        // this.draw();
     };
 
     get topLeft() {
@@ -339,11 +339,11 @@ class SynthView {
 
         if (isRelative) {
 
-            vectorForDraw.x = this.currentVector.x + vector.x;
+            vectorForDraw.x = this.base.x + vector.x;
 
-            vectorForDraw.y = this.currentVector.y + vector.y;
+            vectorForDraw.y = this.base.y + vector.y;
 
-        }
+        };
 
         let thick = thickness * 2;
 
@@ -352,30 +352,34 @@ class SynthView {
         this.ctx.fillRect(vectorForDraw.x - thickness, vectorForDraw.y - thickness, thick, thick);
     }
 
-    drawLine(x1, y1, x2, y2, color = 'black', lineWidth = 1) {
+    drawPath(base, coords, color = 'black', lineWidth = 1) {
 
         this.ctx.beginPath();
+        
+        this.ctx.moveTo(base.x, base.y);
 
-        this.ctx.moveTo(x1, y1);
-        this.ctx.lineTo(x2, y2);
+        coords.forEach((coord) => {
 
-        this.ctx.strokeStyle = color;
+            this.ctx.strokeStyle = color;
 
-        this.ctx.lineWidth = lineWidth;
+            this.ctx.lineWidth = lineWidth;
 
-        this.ctx.stroke();
+            this.ctx.lineTo(coord.x, coord.y);
 
+            this.ctx.stroke();
+        });
     }
 
     drawCoordinateAxes(vector) {
 
-        this.drawLine(vector.x, vector.y, 0, vector.y, 'red', 2);
+        //Summarize??? rename vector to coord???
+        this.drawPath(vector, [{ x: 0, y: vector.y }], 'red', 2);
 
-        this.drawLine(vector.x, vector.y, this.ctx.canvas.width, vector.y, 'blue', 2);
+        this.drawPath(vector, [{ x: this.ctx.canvas.width, y: vector.y }], 'blue', 2);
 
-        this.drawLine(vector.x, vector.y, vector.x, 0, 'green', 2);
+        this.drawPath(vector, [{ x: vector.x, y: 0 }], 'green', 2);
 
-        this.drawLine(vector.x, vector.y, vector.x, this.ctx.canvas.height, 'magenta', 2);
+        this.drawPath(vector, [{ x: vector.x, y: this.ctx.canvas.height }], 'magenta', 2);
     }
 
     drawBars(sector, vector) {
@@ -403,7 +407,7 @@ class SynthView {
                         currentX += this.grid.gapX;
                     };
 
-                    this.drawLine(currentX, top, currentX, bottom);
+                    this.drawPath({ x: currentX, y: top }, [{ x: currentX, y: bottom }]);
 
                     bar++;
                 };
@@ -430,7 +434,7 @@ class SynthView {
                         currentY += this.grid.gapY;
                     };
 
-                    this.drawLine(left, currentY, right, currentY);
+                    this.drawPath({ x: left, y: currentY }, [{ x: right, y: currentY }]);
 
                     bar++;
                 };
@@ -471,81 +475,57 @@ class SynthView {
         };
     }
 
-    drawFunction(func, current, end, increment, equalize, isRealtive, color, thickness) {
+    drawFunction(func) {
 
-        if (func.current <= func.end) {
+        // if (func == 2) {
 
-            let y = 0;
+        //     let sineVal = Math.sin(current * Math.PI / 180);
 
-            if (func.id == 0) {
+        //     if (sineVal == 0 || sineVal == -1 || sineVal == 1) {
 
-                y = Math.sin(func.current * Math.PI / 180) * func.equalize;
+        //         this.amplitude = sineVal;
 
-            };
+        //     };
 
-            if (func.id == 1) {
+        //     y = this.amplitude * equalize;
 
-                y = Math.cos(func.current * Math.PI / 180) * func.equalize;
+        // if (current % 90 == 0) {
 
-            };
+        //     y = Math.sin(current * Math.PI / 180) * equalize;
 
-            // if (func == 2) {
+        // };
 
-            //     let sineVal = Math.sin(current * Math.PI / 180);
+        // increment = 90;
 
-            //     if (sineVal == 0 || sineVal == -1 || sineVal == 1) {
+        // };
 
-            //         this.amplitude = sineVal;
+        // if (func == 3) {
 
-            //     };
+        //     let coSineVal = Math.cos(current * Math.PI / 180);
 
-            //     y = this.amplitude * equalize;
+        //     if (coSineVal == 0 || coSineVal == -1 || coSineVal == 1) {
 
-                // if (current % 90 == 0) {
+        //         this.amplitude = coSineVal;
 
-                //     y = Math.sin(current * Math.PI / 180) * equalize;
+        //         this.drawLine();
+        //     };
 
-                // };
+        //     y = this.amplitude * equalize;
 
-                // increment = 90;
+        // if (current % 90 == 0) {
 
-            // };
+        //     y = Math.cose(current * Math.PI / 180) * equalize;
 
-            // if (func == 3) {
+        // };
 
-            //     let coSineVal = Math.cos(current * Math.PI / 180);
+        // increment = 90;
 
-            //     if (coSineVal == 0 || coSineVal == -1 || coSineVal == 1) {
+        // };
 
-            //         this.amplitude = coSineVal;
-
-            //         this.drawLine();
-            //     };
-
-            //     y = this.amplitude * equalize;
-
-                // if (current % 90 == 0) {
-
-                //     y = Math.cose(current * Math.PI / 180) * equalize;
-
-                // };
-
-                // increment = 90;
-
-            // };
-
-            this.drawVector({ x: current, y: y }, isRealtive, color, thickness);
-
-            current += increment;
-
-            this.drawFunction(func, current, end, increment, equalize, isRealtive, color, thickness);
-
-        }
+            this.drawPath(func.base, func.coords, func.color, func.thickness);
     }
 
-    draw() {
-        let model = new SynthModel(this.currentVector.x, this.currentVector.y);
-
+    draw(model) {
         model.funcs.forEach((func) => {
             this.drawFunction(func);
         });
@@ -556,16 +536,16 @@ class SynthView {
         this.resetCanvas();
 
         if (this.isCoordinateAxes) {
-            this.drawCoordinateAxes(this.currentVector);
+            this.drawCoordinateAxes(this.base);
         };
 
         if (this.isGrid) {
-            this.drawGrid(this.currentVector);
+            this.drawGrid(this.base);
         };
 
         let newValue = Number(value);
 
-        this.drawVector(this.currentVector, false, 'black', newValue);
+        this.drawVector(this.base, false, 'black', newValue);
 
         // this.drawFunction(0, 0, end, 1, synth.grid.gapY * 3, true, 'magenta', 2);
         // this.drawFunction(1, 0, end, 1, synth.grid.gapY * 3, true, 'magenta', 2);

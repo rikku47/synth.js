@@ -19,6 +19,10 @@
   <script>
 
     let view = new SynthView(document.body);
+    let model = new SynthModel();
+
+    model.sin(view.base);
+    view.draw(model);
 
     // let canvasContainer = document.body;
     // let x = 0;
