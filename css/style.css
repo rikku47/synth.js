@@ -7,26 +7,13 @@ body{
     height: 100%;
 }
 
-.container {
-    background-color: black;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    height: 22rem;
-    padding: 1rem;
-    position: absolute;
-    top: 0;
-    width: 22rem;
-}
-
-#form {
+#interface {
     background-color: black;
     color: white;
     display: flex;
     flex-direction: column;
     padding: 1rem;
     position: absolute;
-    width: 22rem;
 }
 
 #values {

@@ -3,3 +3,5 @@ var is the same place.
 const
 
 a function is like a template
+
+degoo
