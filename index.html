@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 
-<body>
+<body onmousemove="updateCoords(event)">
 
   <script src="js/controls/heading/heading.js"></script>
   <script src="js/controls/label/label.js"></script>
@@ -18,13 +18,16 @@
 
   <script>
 
-    let view = new SynthView(document.body);
+    let container = document.body;
+
+    let view = new SynthView(container);
     let model = new SynthModel();
 
     model.sin(view.base);
+    model.cos(view.base);
+
     view.draw(model);
 
-    // let canvasContainer = document.body;
     // let x = 0;
     // let y = 0;
     // let isCoordinateAxes = true;
@@ -56,11 +59,6 @@
     //   gapX
     // );
 
-    // synth.drawFunction(0, 0, 360, 1, synth.grid.gapY * 3, true, 'magenta', 2);
-    // synth.drawFunction(1, 0, 360, 1, synth.grid.gapY * 3, true, 'magenta', 2);
-    // synth.drawFunction(2, 0, 360, 1, synth.grid.gapY * 3, true, 'green', 2);
-    // synth.drawFunction(3, 0, 360, 1, synth.grid.gapY * 3, true, 'red', 2);
-  
   </script>
 
 </body>

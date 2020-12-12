@@ -16,6 +16,7 @@ class SynthView {
         gapX = 30
     ) {
         this.ctx = document.createElement('canvas').getContext('2d');
+        this.ctx.canvas.id = 'canvas';
         this.base = {
             x: x,
             y: y
@@ -52,18 +53,6 @@ class SynthView {
         if (this.centerVector) {
             this.setVectorToCenter(this.base);
         };
-
-        if (this.isCoordinateAxes) {
-            this.drawCoordinateAxes(this.base);
-        };
-
-        if (this.isGrid) {
-            this.drawGrid(this.base);
-        };
-
-        // this.drawVector(this.currentVector, false);
-
-        // this.draw();
     };
 
     get topLeft() {
@@ -355,7 +344,7 @@ class SynthView {
     drawPath(base, coords, color = 'black', lineWidth = 1) {
 
         this.ctx.beginPath();
-        
+
         this.ctx.moveTo(base.x, base.y);
 
         coords.forEach((coord) => {
@@ -477,63 +466,10 @@ class SynthView {
 
     drawFunction(func) {
 
-        // if (func == 2) {
-
-        //     let sineVal = Math.sin(current * Math.PI / 180);
-
-        //     if (sineVal == 0 || sineVal == -1 || sineVal == 1) {
-
-        //         this.amplitude = sineVal;
-
-        //     };
-
-        //     y = this.amplitude * equalize;
-
-        // if (current % 90 == 0) {
-
-        //     y = Math.sin(current * Math.PI / 180) * equalize;
-
-        // };
-
-        // increment = 90;
-
-        // };
-
-        // if (func == 3) {
-
-        //     let coSineVal = Math.cos(current * Math.PI / 180);
-
-        //     if (coSineVal == 0 || coSineVal == -1 || coSineVal == 1) {
-
-        //         this.amplitude = coSineVal;
-
-        //         this.drawLine();
-        //     };
-
-        //     y = this.amplitude * equalize;
-
-        // if (current % 90 == 0) {
-
-        //     y = Math.cose(current * Math.PI / 180) * equalize;
-
-        // };
-
-        // increment = 90;
-
-        // };
-
-            this.drawPath(func.base, func.coords, func.color, func.thickness);
+        this.drawPath(func.base, func.coords, func.color, func.thickness);
     }
 
-    draw(model) {
-        model.funcs.forEach((func) => {
-            this.drawFunction(func);
-        });
-    }
-
-    reDraw(value) {
-
-        this.resetCanvas();
+    draw() {
 
         if (this.isCoordinateAxes) {
             this.drawCoordinateAxes(this.base);
@@ -543,14 +479,11 @@ class SynthView {
             this.drawGrid(this.base);
         };
 
-        let newValue = Number(value);
+        this.drawVector(this.base, false);
 
-        this.drawVector(this.base, false, 'black', newValue);
-
-        // this.drawFunction(0, 0, end, 1, synth.grid.gapY * 3, true, 'magenta', 2);
-        // this.drawFunction(1, 0, end, 1, synth.grid.gapY * 3, true, 'magenta', 2);
-        // this.drawFunction(2, 0, end, 1, synth.grid.gapY * 3, true, 'green', 2);
-        // this.drawFunction(3, 0, end, 1, synth.grid.gapY * 3, true, 'red', 2);
+        model.funcs.forEach((func) => {
+            this.drawFunction(func);
+        });
     }
 
     init() {

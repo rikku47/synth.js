@@ -5,14 +5,29 @@ class SynthModel {
                 start: 0,
                 end: 360,
                 current: 0,
-                increment: 90,
+                increment: 1,
                 // 90 = triangle
                 result: [],
                 equalize: 180,
                 isRelative: true,
                 base: { x: 0, y: 0 },
                 color: 'magenta',
-                thickness: 1,
+                thickness: 2,
+                coords: [],
+                smooth: false
+            },
+            {
+                start: 0,
+                end: 360,
+                current: 0,
+                increment: 1,
+                // 90 = triangle
+                result: [],
+                equalize: 180,
+                isRelative: true,
+                base: { x: 0, y: 0 },
+                color: 'magenta',
+                thickness: 2,
                 coords: [],
                 smooth: false
             }
@@ -33,38 +48,59 @@ class SynthModel {
 
     sin(base) {
 
-        this.funcs[0].base.x = base.x;
-        this.funcs[0].base.y = base.y;
+        let index = 0;
 
-        for (; this.funcs[0].current < this.funcs[0].end; this.funcs[0].current += this.funcs[0].increment) {
-
-            let y = Math.sin(this.funcs[0].current * Math.PI / 180);
-
-            this.funcs[0].result.push({ x: this.funcs[0].current, y: y });
-
-            if (this.funcs[0].isRelative) {
-
-                this.funcs[0].coords.push({ x: this.funcs[0].base.x + this.funcs[0].current, y: this.funcs[0].base.y + (y * this.funcs[0].equalize) });
-            };
-        };
-
-        // this.funcs[0].coords.push({ x: this.funcs[0].base.x + this.funcs[0].current, y: this.funcs[0].base.y + (y * this.funcs[0].equalize) });
+        this.set(index, base);
     }
 
     cos(base) {
 
-        this.funcs[0].base.x = base.x;
-        this.funcs[0].base.y = base.y;
+        let index = 1;
 
-        for (; this.funcs[0].current <= this.funcs[0].end; this.funcs[0].current += this.funcs[0].increment) {
+        this.set(index, base);
+    }
 
-            let y = Math.cos(this.funcs[0].current * Math.PI / 180);
+    set(index, base) {
 
-            this.funcs[0].result.push({ x: this.funcs[0].current, y: y });
+        let func = this.funcs[index];
 
-            if (this.funcs[0].isRelative) {
+        func.base = base;
 
-                this.funcs[0].coords.push({ x: this.funcs[0].base.x + this.funcs[0].current, y: this.funcs[0].base.y + (y * this.funcs[0].equalize) });
+        this.calc(func, index);
+    }
+
+    calc(func, index) {
+
+        for (; func.current <= func.end; func.current += func.increment) {
+
+            let y = 0;
+            let rad = func.current * Math.PI / 180;
+
+            if (index == 0) {
+
+                y = Math.sin(rad);
+
+            } else {
+
+                y = Math.cos(rad);
+
+            };
+
+            func.result.push({ x: func.current, y: y });
+
+            if (func.isRelative) {
+                func.coords.push({ x: func.base.x + func.current, y: func.base.y + (y * func.equalize) });
+            };
+        };
+
+        if (func.end % func.increment != 0) {
+
+            func.result.push({ x: func.end, y: 0 });
+
+            if (func.isRelative) {
+
+                func.coords.push({ x: func.base.x + func.end, y: func.base.y });
+
             };
         };
     }

@@ -16,6 +16,10 @@ body{
     position: absolute;
 }
 
+[draggable=true] {
+    cursor: move;
+}
+
 #values {
     height: 16rem;
     overflow-y: auto;
