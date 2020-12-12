@@ -28,28 +28,38 @@ function dragstart(event) {
 
     sY = event.layerY;
 
-    // event.dataTransfer.setDragImage(event.srcElement, sX, sY);
-
+    event.dataTransfer.setDragImage(document.createElement('img'), sX, sX);
 }
 
 function drag(event) {
-    eX = event.clientX;
-    eY = event.clientY;
+
+    eX = event.clientX - sX;
+
+    eY = event.clientY - sY;
+
+    XY(event);
+
 }
 
 function dragend(event) {
-    document.getElementById('interface').style.left = eX - sX;
-    document.getElementById('interface').style.top = eY - sY;
+
+    XY(event);
+}
+
+function XY(event) {
+    document.getElementById('interface').style.left = event.clientX - sX;
+
+    document.getElementById('interface').style.top = event.clientY - sY;
 }
 
 function dragover(event) {
-    eX = event.clientX;
-    eY = event.clientY;
+    // eX = event.clientX;
+    // eY = event.clientY;
 }
 
 function updateCoords(event) {
-    sX = event.layerX;
-    sY = event.layerY;
+    // sX = event.layerX;
+    // sY = event.layerY;
 }
 
 function initListeners() {
