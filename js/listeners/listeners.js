@@ -2,64 +2,96 @@ let update = function (params) {
     view.reDraw(params.srcElement.value);
 }
 
+let dragObject = undefined;
+
+let sX = 0;
+let sY = 0;
+
 function dragAndDrop() {
 
     let interface = document.getElementById('interface');
 
-    interface.setAttribute('draggable', 'true');
-    interface.setAttribute('ondragstart', 'dragstart(event)');
-    interface.setAttribute('ondrag', 'drag(event)');
-    interface.setAttribute('ondragend', 'dragend(event)');
-    interface.setAttribute('onmousdown', 'updateCoords(event)');
+    interface.setAttribute('data-drag', 'true');
+
+    interface.addEventListener("mousedown", drag);
+
+    // interface.addEventListener('mouseover', register);
+    // interface.addEventListener('mouseout', unRegister);
+    // interface.setAttribute('ondragstart', 'dragstart(event)');
+    // interface.setAttribute('ondrag', 'drag(event)');
+    // interface.setAttribute('ondragend', 'dragend(event)');
+    // interface.setAttribute('onmousdown', 'updateCoords(event)');
 
     let canvas = document.getElementById('canvas');
 
     canvas.setAttribute('ondragover', 'dragover(event)');
 }
 
-let sX = 0;
-let sY = 0;
-let eX = 0;
-let eY = 0;
-
-function dragstart(event) {
+function updateCoords(event) {
 
     sX = event.layerX;
 
     sY = event.layerY;
 
-    event.dataTransfer.setDragImage(document.createElement('img'), sX, sX);
+    if (event.srcElement.getAttribute('data-drag') != undefined) {
+        dragObject = event.srcElement;
+    } else if (event.srcElement.parentNode.getAttribute('data-drag') != undefined) {
+        dragObject = event.srcElement.parentNode;
+    };
+
+    output();
+
+}
+
+function output() {
+
+    console.clear();
+
+    console.log(sX);
+
+    console.log(sY);
+
+    console.log(dragObject);
 }
 
 function drag(event) {
 
-    eX = event.clientX - sX;
+    
+    console.log(event);
+    event.stopPropagation();
+}
 
-    eY = event.clientY - sY;
+function process(event) {
 
-    XY(event);
+    // eX = event.clientX - sX;
+
+    // eY = event.clientY - sY;
+
+    // XY(event);
 
 }
 
-function dragend(event) {
+function end(event) {
 
-    XY(event);
+    // XY(event);
 }
 
 function XY(event) {
-    document.getElementById('interface').style.left = event.clientX - sX;
+    // document.getElementById('interface').style.left = event.clientX - sX;
 
-    document.getElementById('interface').style.top = event.clientY - sY;
+    // document.getElementById('interface').style.top = event.clientY - sY;
+
+    console.log(event);
 }
 
 function dragover(event) {
-    // eX = event.clientX;
-    // eY = event.clientY;
-}
 
-function updateCoords(event) {
-    // sX = event.layerX;
-    // sY = event.layerY;
+    // eX = event.pageX - sX;
+
+    // eY = event.pageY - sY;
+
+    // XY(event);
+
 }
 
 function initListeners() {
@@ -68,3 +100,5 @@ function initListeners() {
 }
 
 document.addEventListener("DOMContentLoaded", initListeners);
+document.addEventListener("mousemove", process);
+document.addEventListener("mouseup", end);
