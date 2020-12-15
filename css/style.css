@@ -4,24 +4,34 @@
 }
 
 body {
-    height: 100%;
+    max-height: 100%;
+    max-width: 100%;
+    overflow: clip;
 }
 
 #interface {
     background-color: black;
     color: white;
+    min-width: min-content;
+    padding: 1rem;
+    position: absolute;
+
+    /* overflow: auto;
+    resize: both; */
+}
+
+#main {
     display: flex;
     flex-direction: column;
-    /* padding: 1rem; */
-    position: absolute;
-    user-select: none;
-
-    /* top: 20px;
-    left: 25px; */
 }
 
 [draggable=true] {
     cursor: move;
+}
+
+input {
+    width: max-content;
+    margin: auto;
 }
 
 img {

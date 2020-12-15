@@ -38,15 +38,25 @@ class SynthView {
 
         this.elements = this.TreeOfElements();
 
+        let inface = document.createElement('div');
         let div = document.createElement('div');
 
-        div.id = 'interface';
+        inface.id = 'interface';
+        div.id = 'main';
 
         this.elements.forEach((element) => {
             div.appendChild(this.createElement(element));
         });
 
-        container.appendChild(div);
+        inface.appendChild(div);
+
+        div = document.createElement('div');
+
+        div.id = 'sub';
+        
+        inface.appendChild(div);
+        
+        container.appendChild(inface);
 
         this.setCanvas(container);
 
