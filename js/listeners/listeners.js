@@ -1,6 +1,6 @@
 let update = function (params) {
     view.reDraw(params.srcElement.value);
-}
+};
 
 let dragObject = undefined;
 
@@ -10,63 +10,89 @@ let diffY = 0;
 let isDraggable = false;
 let isDrag = false;
 
-function dragAndDrop() {
-
-    let interface = document.getElementById('interface');
-
-    interface.setAttribute('draggableC', 'true');
-    interface.addEventListener("mousedown", drag);
-    interface.addEventListener("mouseup", end);
-
-    let canvas = document.getElementById('canvas');
-
-    // canvas.setAttribute('ondragover', 'dragover(event)');
-    document.body.addEventListener("mousemove", updateCoords);
-}
-
 function updateCoords(event) {
 
-    let att = 'draggableC';
+    let att = 'drag';
 
-    if (event.srcElement.getAttribute(att) != undefined) {
+    dragObject = getDragObject(event, att);
 
-        dragObject = event.srcElement;
+    let over = isOver(event, dragObject, ['checkbox', 'range']);
 
-    } else if (event.srcElement.parentNode.getAttribute(att) != undefined) {
-
-        dragObject = event.srcElement.parentNode;
-
+    if (over) {
+        console.log('glowOn');
+    } else {
+        console.log('glowOff');
     };
 
     if (dragObject != undefined) {
 
-        if (
-            event.layerY >= dragObject.offsetTop &
-            event.layerY <= dragObject.offsetHeight &
-            event.layerX >= dragObject.offsetLeft &
-            event.layerX <= dragObject.offsetWidth
-        ) {
-            if (event.srcElement.type != 'range') {
-                isDraggable = true;
-            };
-        } else {
-            isDraggable = false;
-        };
-    }
+        if (isDrag) {
 
-    if (isDrag) {
-        if (
-            event.srcElement.type != 'range' &&
-            event.srcElement.type != 'checkbox'
-        ) {
-            dragObject.style.left = event.clientX - diffX;
-            dragObject.style.top = event.clientY - diffY;
+            if (
+                event.srcElement.type != 'range' &&
+                event.srcElement.type != 'checkbox'
+            ) {
+                // dragObject.style.left = event.clientX - diffX;
+                // dragObject.style.top = event.clientY - diffY;
+
+                dragObject.style.left = event.clientX - diffX;
+                dragObject.style.top = event.clientY - diffY;
+            };
         };
     };
+};
 
-    output(event);
+function getDragObject(event, att) {
 
-}
+    let srcElement = event.srcElement;
+    let compare = undefined;
+
+    if (srcElement.getAttribute(att) != compare) {
+        return srcElement;
+    };
+
+    if (srcElement.parentNode.getAttribute(att) != compare) {
+        return srcElement.parentNode;
+    };
+};
+
+function isOver(event, object, exceptions) {
+
+    let over = false;
+
+    if (
+        event != undefined &&
+        object != undefined &&
+        event.layerY >= object.offsetTop &&
+        event.layerY <= object.offsetHeight &&
+        event.layerX >= object.offsetLeft &&
+        event.layerX <= object.offsetWidth
+    ) {
+        if (exceptions != undefined) {
+            exceptions.some((exeption) => {
+                if (event.srcElement.type == exeption) {
+                    return false;
+                } else {
+                    return true;
+                };
+            });
+        };
+    };
+};
+
+function drag(event) {
+    isDrag = true;
+    diffXY(event);
+};
+
+function diffXY(event) {
+    diffX = event.clientX - dragObject.offsetLeft;
+    diffY = event.clientY - dragObject.offsetTop;
+};
+
+function end() {
+    isDrag = false;
+};
 
 function output(event) {
 
@@ -76,40 +102,25 @@ function output(event) {
     console.log(event.clientX + " " + event.clientY);
     console.log(dragObject.offsetLeft + " " + dragObject.offsetTop);
     console.log(diffX + " " + diffY);
-}
+};
 
-function drag(event) {
+function dragAndDrop() {
 
-    isDrag = true;
+    let interface = document.getElementById('interface');
 
-    diffX = event.clientX - dragObject.offsetLeft;
-    diffY = event.clientY - dragObject.offsetTop;
+    interface.setAttribute('drag', 'true');
+    interface.addEventListener("mousedown", drag);
+    interface.addEventListener("mouseup", end);
 
-    output(event);
+    let canvas = document.getElementById('canvas');
 
-}
+    // canvas.setAttribute('ondragover', 'dragover(event)');
 
-function process(event) {
-
-    output(event);
-
-}
-
-function end(event) {
-
-    isDrag = false;
-
-    output(event);
-}
-
-
-function dragover(event) {
-
-}
+    document.body.addEventListener("mousemove", updateCoords);
+};
 
 function initListeners() {
-    // document.getElementById('thickness').addEventListener('input', update);
     dragAndDrop();
-}
+};
 
 document.addEventListener("DOMContentLoaded", initListeners);
