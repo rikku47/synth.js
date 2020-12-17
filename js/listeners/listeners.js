@@ -8,6 +8,7 @@ let diffX = 0;
 let diffY = 0;
 
 let isDraggable = false;
+
 let isDrag = false;
 
 function updateCoords(event) {
@@ -31,24 +32,19 @@ function updateCoords(event) {
     };
 };
 
-let found = false;
-
 function getDragObject(event, att) {
 
-    console.clear();
-
     let element = event.srcElement;
-
     let compare = undefined;
 
-    if (!isDrag && !found && element.getAttribute(att) != compare &&
+    if (!isDrag && !isDraggable && element.getAttribute(att) != compare &&
         isOver(event, element, ['checkbox', 'range'])) {
-        found = true;
+
+        isDraggable = true;
         dragObject = element;
         element.classList.toggle("bg");
-        console.log('Found');
-        console.log(dragObject);
-    } else if (!isDrag && !found && element.parentNode != compare) {
+
+    } else if (!isDrag && !isDraggable && element.parentNode != compare) {
 
         let currentObject = element.parentNode;
 
@@ -57,13 +53,8 @@ function getDragObject(event, att) {
             if (currentObject.getAttribute(att) != compare &&
                 isOver(event, currentObject, ['checkbox', 'range'])) {
 
+                isDraggable = true;
                 dragObject = currentObject;
-
-                found = true;
-
-                console.log('Found');
-                console.log(dragObject);
-
                 dragObject.classList.toggle("bg");
 
             } else if (currentObject.parentNode != compare) {
@@ -72,12 +63,12 @@ function getDragObject(event, att) {
 
             };
 
-        } while (!found);
-    } else if (!isDrag && found && !isOver(event, dragObject, ['checkbox', 'range'])) {
+        } while (!isDraggable);
+    } else if (!isDrag && isDraggable && !isOver(event, dragObject, ['checkbox', 'range'])) {
         dragObject.classList.toggle("bg");
         dragObject = undefined;
-        found = false;
-        console.log('Not found');
+        isDraggable = false;
+        console.log('Not isDraggable');
     };
 
     return dragObject;
