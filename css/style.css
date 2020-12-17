@@ -13,7 +13,7 @@ body {
     background-color: black;
     color: white;
     min-width: min-content;
-    padding: 1rem;
+    /* padding: 1rem; */
     position: absolute;
 
     /* overflow: auto;
@@ -39,10 +39,13 @@ img {
     -khtml-user-drag: none;
     -moz-user-drag: none;
     -o-user-drag: none;
-    user-drag: none;
 }
 
 #values {
     height: 16rem;
     overflow-y: auto;
+}
+
+#interface.bg {
+    background-color: blue;
 }
