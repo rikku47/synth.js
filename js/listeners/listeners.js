@@ -2,111 +2,54 @@ let update = function (params) {
     view.reDraw(params.srcElement.value);
 };
 
-let dragObject = undefined;
+let dragObject = null;
 
 let diffX = 0;
 let diffY = 0;
 
 let isDraggable = false;
-
 let isDrag = false;
 
-function updateCoords(event) {
+let css = 'bg';
+let exceptions = ['checkbox', 'range'];
 
-    let att = 'drag';
+function setDraggableAndCss(ev, css, exceptions) {
 
-    dragObject = getDragObject(event, att);
+    isDraggable = true;
+    dragObject = ev.currentTarget;
 
-    if (isDrag && dragObject != undefined) {
-
-        if (
-            event.srcElement.type != 'range' &&
-            event.srcElement.type != 'checkbox'
-        ) {
-            // dragObject.style.left = event.clientX - diffX;
-            // dragObject.style.top = event.clientY - diffY;
-
-            dragObject.style.left = event.clientX - diffX;
-            dragObject.style.top = event.clientY - diffY;
-        };
-    };
-};
-
-function getDragObject(event, att) {
-
-    let element = event.srcElement;
-    let compare = undefined;
-
-    if (!isDrag && !isDraggable && element.getAttribute(att) != compare &&
-        isOver(event, element, ['checkbox', 'range'])) {
-
-        isDraggable = true;
-        dragObject = element;
-        element.classList.toggle("bg");
-
-    } else if (!isDrag && !isDraggable && element.parentNode != compare) {
-
-        let currentObject = element.parentNode;
-
-        do {
-
-            if (currentObject.getAttribute(att) != compare &&
-                isOver(event, currentObject, ['checkbox', 'range'])) {
-
-                isDraggable = true;
-                dragObject = currentObject;
-                dragObject.classList.toggle("bg");
-
-            } else if (currentObject.parentNode != compare) {
-
-                currentObject = currentObject.parentNode;
-
-            };
-
-        } while (!isDraggable);
-    } else if (!isDrag && isDraggable && !isOver(event, dragObject, ['checkbox', 'range'])) {
-        dragObject.classList.toggle("bg");
-        dragObject = undefined;
-        isDraggable = false;
-        console.log('Not isDraggable');
-    };
-
-    return dragObject;
-};
-
-function isOver(event, object, exceptions) {
-
-    let over = false;
-
-    if (
-        event != undefined &&
-        object != undefined &&
-        event.clientY >= object.offsetTop &&
-        event.clientY <= object.offsetHeight &&
-        event.clientX >= object.offsetLeft &&
-        event.clientX <= object.offsetWidth
-    ) {
-        over = true;
-
-        if (exceptions != undefined) {
-            exceptions.some((exeption) => {
-                if (event.srcElement.type == exeption) {
-                    over = false;
-                };
-            });
+    for (let index = 0; index < exceptions.length; index++) {
+        const exeption = exceptions[index];
+        if (ev.srcElement.type == exeption) {
+            isDraggable = false;
         };
     };
 
-    return over;
+    if (isDraggable) {
+        if (!ev.currentTarget.classList.contains(css)) {
+            ev.currentTarget.classList.add(css);
+        }
+    } else {
+        ev.currentTarget.classList.remove(css);
+    };
 };
 
-function drag(event) {
-    isDrag = true;
-    diffXY(event);
+function unSetDraggableAndCss(ev, css) {
+    ev.currentTarget.classList.remove(css);
+    isDraggable = false;
+    dragObject = null;
 };
 
-function end() {
+function startDrag(event) {
+    if (isDraggable) {
+        isDrag = true;
+        diffXY(event);
+    };
+};
+
+function endDrag(event) {
     isDrag = false;
+    diffXY(event);
 };
 
 function diffXY(event) {
@@ -114,29 +57,36 @@ function diffXY(event) {
     diffY = event.clientY - dragObject.offsetTop;
 };
 
-function output(event) {
-
-    console.clear();
-    console.log(dragObject);
-    console.log(event);
-    console.log(event.clientX + " " + event.clientY);
-    console.log(dragObject.offsetLeft + " " + dragObject.offsetTop);
-    console.log(diffX + " " + diffY);
+function watchCoords(ev, isDrag) {
+    if (isDrag) {
+        dragObject.style.left = ev.clientX - diffX;
+        dragObject.style.top = ev.clientY - diffY;
+    };
 };
 
 function dragAndDrop() {
 
     let interface = document.getElementById('interface');
 
-    interface.setAttribute('drag', 'true');
-    interface.addEventListener("mousedown", drag);
-    interface.addEventListener("mouseup", end);
+    interface.addEventListener('mouseover', (ev) => {
+        setDraggableAndCss(ev, css, exceptions);
+    });
 
-    let canvas = document.getElementById('canvas');
+    interface.addEventListener('mouseleave', (ev) => {
+        unSetDraggableAndCss(ev, css);
+    });
 
-    // canvas.setAttribute('ondragover', 'dragover(event)');
+    interface.addEventListener("mousedown", (ev) => {
+        startDrag(ev);
+    });
 
-    document.body.addEventListener("mousemove", updateCoords);
+    interface.addEventListener("mouseup", (ev) => {
+        endDrag(ev);
+    });
+
+    document.body.addEventListener("mousemove", (ev) => {
+        watchCoords(ev, isDrag);
+    });
 };
 
 function initListeners() {
