@@ -47,9 +47,8 @@ function startDrag(event) {
     };
 };
 
-function endDrag(event) {
+function endDrag() {
     isDrag = false;
-    diffXY(event);
 };
 
 function diffXY(event) {

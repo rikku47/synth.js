@@ -1,10 +1,10 @@
-function createOption(id, text, type) {
+function createOptionElement(element) {
 
-    let option = document.createElement('option');
+    let option = document.createElement(element.element);
 
-    option.id = id;
-    option.textContent = text;
-    option.value = type;
-
+    option.id = element.id;
+    option.value = element.value;
+    option.textContent = element.text;
+    
     return option;
 }

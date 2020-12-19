@@ -38,25 +38,7 @@ class SynthView {
 
         this.elements = this.TreeOfElements();
 
-        let inface = document.createElement('div');
-        let div = document.createElement('div');
-
-        inface.id = 'interface';
-        div.id = 'main';
-
-        this.elements.forEach((element) => {
-            div.appendChild(this.createElement(element));
-        });
-
-        inface.appendChild(div);
-
-        div = document.createElement('div');
-
-        div.id = 'sub';
-        
-        inface.appendChild(div);
-        
-        container.appendChild(inface);
+        container.appendChild(this.elements);
 
         this.setCanvas(container);
 
@@ -64,6 +46,8 @@ class SynthView {
             this.setVectorToCenter(this.base);
         };
     };
+
+    //#region Getter Setter
 
     get topLeft() {
         return this.grid.topLeft;
@@ -129,120 +113,111 @@ class SynthView {
         this.grid.gapY = value;
     };
 
+    //#endregion
+
     TreeOfElements() {
-        return [
-            {
-                id: 'h1',
-                element: 'h1',
-                attributes: [],
-                funcs: [],
-                container: false,
-                text: 'Synth'
-            },
-            {
-                id: 'h2',
-                element: 'h2',
-                attributes: [],
-                funcs: [],
-                container: false,
-                text: 'Synth options'
-            },
-            {
-                id: 'lblX',
-                element: 'label',
-                for: 'x',
-                text: 'X'
-            },
-            {
-                id: 'x',
-                element: 'input',
-                type: 'number',
-                attributes: [['placeholder', 0]],
-                name: 'x',
-                funcs: [],
-                container: false,
-                connect: []
-            },
-            {
-                id: 'lblY',
-                element: 'label',
-                for: 'y',
-                text: 'Y'
-            },
-            {
-                id: 'y',
-                element: 'input',
-                type: 'number',
-                attributes: [['placeholder', 0]],
-                name: 'y',
-                funcs: [],
-                container: false,
-                connect: []
-            },
-            {
-                id: 'lblThickness',
-                element: 'label',
-                for: 'thickness',
-                text: 'Dicke'
-            },
-            {
-                id: 'thickness',
-                element: 'input',
-                type: 'number',
-                attributes: [['placeholder', 0]],
-                name: 'thickness',
-                funcs: [],
-                container: false,
-                connect: []
-            },
-            {
-                id: 'lblXValue',
-                element: 'label',
-                for: 'xvalue',
-                text: 'X Wert'
-            },
-            {
-                id: 'number',
-                element: 'input',
-                type: 'number',
-                attributes: [['min', '0'], ['max', '360'], ['step', '1'], ['value', '0']],
-                name: 'xvalue',
-                funcs: [],
-                container: false,
-                connect: []
-            },
-            {
-                id: 'lblXSlider',
-                element: 'label',
-                for: 'xslider',
-                text: 'X Schieberegler'
-            },
-            {
-                id: 'range',
-                element: 'input',
-                type: 'range',
-                attributes: [['min', '0'], ['max', '360'], ['step', '1'], ['value', '0']],
-                name: 'xslider',
-                funcs: [],
-                container: false,
-                connect: []
-            },
-            {
-                id: 'lblGrid',
-                element: 'label',
-                for: 'grid',
-                text: 'Raster'
-            },
-            {
-                id: 'chkGrid',
-                element: 'input',
-                type: 'checkbox',
-                attributes: [],
-                name: 'grid',
-                funcs: []
-            }
-        ];
-    }
+        let tree = [{
+            element: 'ul',
+            children: [{
+                    element: 'li',
+                    id: 'zero',
+                    children: [{
+                        element: 'a',
+                        text: 'Main'
+                    }, {
+                        id: 'first',
+                        element: 'div',
+                        attributes: [],
+                        name: 'first',
+                        funcs: [],
+                        css: ['col'],
+                        children: [{
+                                id: 'h1',
+                                element: 'h1',
+                                attributes: [],
+                                funcs: [],
+                                container: false,
+                                text: 'Synth'
+                            }, {
+                                id: 'h2',
+                                element: 'h2',
+                                attributes: [],
+                                funcs: [],
+                                container: false,
+                                text: 'Synth options'
+                            },
+                            {
+                                element: 'label',
+                                for: 'functions',
+                                text: 'Functions'
+                            },
+                            {
+                                id: 'functions',
+                                element: 'select',
+                                options: [{
+                                        element: 'option',
+                                        id: 'sine',
+                                        value: 'sin',
+                                        text: 'SineWave'
+                                    },
+                                    {
+                                        element: 'option',
+                                        id: 'cosine',
+                                        value: 'cosin',
+                                        text: 'CoSineWave'
+                                    }
+                                ],
+                                name: 'functions',
+                                funcs: [],
+                            },
+                            {
+                                id: 'second',
+                                element: 'div',
+                                attributes: [],
+                                name: 'second',
+                                funcs: [],
+                                css: ['col']
+                            }
+                        ]
+                    }]
+                },
+                {
+                    element: 'li',
+                    id: 'one',
+                    children: [{
+                        element: 'a',
+                        text: 'Sub'
+                    }]
+                }
+            ]
+        }];
+
+        let root = document.createElement('div');
+
+        root.id = 'interface';
+
+        tree.forEach((child) => {
+            root.appendChild(this.child(child));
+        });
+
+        return root;
+    };
+
+    child(child) {
+
+        let elem = this.createElement(child);
+
+        if (
+            child.children != undefined &&
+            child.children.length > 0
+        ) {
+            child.children.forEach((child) => {
+                elem.appendChild(this.child(child));
+            });
+        };
+
+        return elem;
+    };
 
     createElement(element) {
 
@@ -257,9 +232,21 @@ class SynthView {
 
                 return createHeadingElement(element);
 
+            case 'a':
+
+                return createAElement(element);
+
             case 'div':
 
                 return createDivElement(element);
+
+            case 'ul':
+
+                return createUlElement(element);
+
+            case 'li':
+
+                return createLiElement(element);
 
             case 'button':
 
@@ -303,14 +290,16 @@ class SynthView {
 
             case 'select':
 
-                break;
+                return createSelectElement(element);
 
             case 'textarea':
 
                 break;
 
         };
-    }
+    };
+
+    //#region Functions
 
     setCanvas(container) {
 
@@ -319,22 +308,25 @@ class SynthView {
         this.ctx.canvas.height = container.clientHeight;
 
         container.appendChild(this.ctx.canvas);
-    }
+    };
 
     resetCanvas() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-    }
+    };
 
     setVectorToCenter(vector) {
         vector.x = this.ctx.canvas.width / 2;
         vector.y = this.ctx.canvas.height / 2;
-    }
+    };
 
     drawVector(vector, isRelative = true, color = 'black', thickness = 1) {
 
         this.ctx.fillStyle = color;
 
-        let vectorForDraw = { x: vector.x, y: vector.y };
+        let vectorForDraw = {
+            x: vector.x,
+            y: vector.y
+        };
 
         if (isRelative) {
 
@@ -349,7 +341,7 @@ class SynthView {
         this.ctx.beginPath();
 
         this.ctx.fillRect(vectorForDraw.x - thickness, vectorForDraw.y - thickness, thick, thick);
-    }
+    };
 
     drawPath(base, coords, color = 'black', lineWidth = 1) {
 
@@ -367,19 +359,31 @@ class SynthView {
 
             this.ctx.stroke();
         });
-    }
+    };
 
     drawCoordinateAxes(vector) {
 
         //Summarize??? rename vector to coord???
-        this.drawPath(vector, [{ x: 0, y: vector.y }], 'red', 2);
+        this.drawPath(vector, [{
+            x: 0,
+            y: vector.y
+        }], 'red', 2);
 
-        this.drawPath(vector, [{ x: this.ctx.canvas.width, y: vector.y }], 'blue', 2);
+        this.drawPath(vector, [{
+            x: this.ctx.canvas.width,
+            y: vector.y
+        }], 'blue', 2);
 
-        this.drawPath(vector, [{ x: vector.x, y: 0 }], 'green', 2);
+        this.drawPath(vector, [{
+            x: vector.x,
+            y: 0
+        }], 'green', 2);
 
-        this.drawPath(vector, [{ x: vector.x, y: this.ctx.canvas.height }], 'magenta', 2);
-    }
+        this.drawPath(vector, [{
+            x: vector.x,
+            y: this.ctx.canvas.height
+        }], 'magenta', 2);
+    };
 
     drawBars(sector, vector) {
 
@@ -406,7 +410,13 @@ class SynthView {
                         currentX += this.grid.gapX;
                     };
 
-                    this.drawPath({ x: currentX, y: top }, [{ x: currentX, y: bottom }]);
+                    this.drawPath({
+                        x: currentX,
+                        y: top
+                    }, [{
+                        x: currentX,
+                        y: bottom
+                    }]);
 
                     bar++;
                 };
@@ -433,13 +443,19 @@ class SynthView {
                         currentY += this.grid.gapY;
                     };
 
-                    this.drawPath({ x: left, y: currentY }, [{ x: right, y: currentY }]);
+                    this.drawPath({
+                        x: left,
+                        y: currentY
+                    }, [{
+                        x: right,
+                        y: currentY
+                    }]);
 
                     bar++;
                 };
             }
         }
-    }
+    };
 
     drawGrid(vector) {
 
@@ -472,12 +488,11 @@ class SynthView {
             this.drawBars(4, vector);
 
         };
-    }
+    };
 
     drawFunction(func) {
-
         this.drawPath(func.base, func.coords, func.color, func.thickness);
-    }
+    };
 
     draw() {
 
@@ -494,7 +509,7 @@ class SynthView {
         model.funcs.forEach((func) => {
             this.drawFunction(func);
         });
-    }
+    };
 
     init() {
         var context = new AudioContext();
@@ -502,32 +517,26 @@ class SynthView {
         o.type = "sine";
         o.connect(context.destination);
         // o.start();
-    }
+    };
 
     square() {
-
         var points = [];
-
         return points;
-    }
+    };
 
     saw() {
-
         var points = [];
-
-
         return points;
-    }
+    };
 
     triangle() {
-
         var points = [];
-
         return points;
-
-    }
+    };
 
     parseNoteValues() {
         return JSON.parse('notevalues.js');
-    }
+    };
+
+    //#endregion
 }

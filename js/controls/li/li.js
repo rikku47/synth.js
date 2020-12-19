@@ -1,15 +1,15 @@
-function createDivElement(element) {
+function createLiElement(element) {
 
-    let div = document.createElement(element.element);
+    let li = document.createElement(element.element);
 
-    div.id = element.id;
-    div.name = element.name;
+    li.id = element.id;
+    li.name = element.name;
 
     if (
         element.text != undefined &&
         element.text.length > 0
     ) {
-        div.textContent = element.text;
+        li.textContent = element.text;
     };
 
     if (
@@ -18,11 +18,11 @@ function createDivElement(element) {
     ) {
         element.css.forEach(
             (cssClass) => {
-                div.classList.add(cssClass);
+                li.classList.add(cssClass);
             }
         );
     };
 
-    return div;
+    return li;
 
 };

@@ -20,7 +20,7 @@ body {
     resize: both; */
 }
 
-#main {
+.col {
     display: flex;
     flex-direction: column;
 }
@@ -48,4 +48,28 @@ img {
 
 #interface.bg {
     background-color: blue;
+}
+
+ul {}
+
+li {
+    position: absolute;
+    width: min-content;
+    background-color: black;
+}
+
+#zero {
+
+}
+
+#one {
+
+}
+
+#zero a {
+    position: relative;
+}
+
+#one a {
+    position: relative;
 }
