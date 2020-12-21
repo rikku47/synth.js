@@ -1,7 +1,20 @@
-function createOutput(id) {
+function createHTMLOutputElement(element) {
 
-    let output = document.createElement('output');
+    if (element.element != undefined) {
 
-    return output;
-    
-}
+        let output = document.createElement(element.element);
+
+        // if(){
+
+        // };
+
+        // if(){
+
+        // };
+
+        return output;
+
+    } else{ 
+        return undefined;
+    };  
+};

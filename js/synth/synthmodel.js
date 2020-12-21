@@ -1,7 +1,6 @@
 class SynthModel {
     constructor() {
-        this.funcs = [
-            {
+        this.funcs = [{
                 start: 0,
                 end: 360,
                 current: 0,
@@ -10,7 +9,10 @@ class SynthModel {
                 result: [],
                 equalize: 180,
                 isRelative: true,
-                base: { x: 0, y: 0 },
+                base: {
+                    x: 0,
+                    y: 0
+                },
                 color: 'magenta',
                 thickness: 2,
                 coords: [],
@@ -25,7 +27,10 @@ class SynthModel {
                 result: [],
                 equalize: 180,
                 isRelative: true,
-                base: { x: 0, y: 0 },
+                base: {
+                    x: 0,
+                    y: 0
+                },
                 color: 'magenta',
                 thickness: 2,
                 coords: [],
@@ -70,6 +75,10 @@ class SynthModel {
     }
 
     calc(func, index) {
+  
+        func.current = 0;
+        func.coords = [];
+        func.result = [];
 
         for (; func.current <= func.end; func.current += func.increment) {
 
@@ -86,31 +95,50 @@ class SynthModel {
 
             };
 
-            func.result.push({ x: func.current, y: y });
+            func.result.push({
+                x: func.current,
+                y: y
+            });
 
             if (func.isRelative) {
-                func.coords.push({ x: func.base.x + func.current, y: func.base.y + (y * func.equalize) });
+                func.coords.push({
+                    x: func.base.x + func.current,
+                    y: func.base.y + (y * func.equalize)
+                });
             };
         };
 
         if (func.end % func.increment != 0) {
 
-            func.result.push({ x: func.end, y: 0 });
+            func.result.push({
+                x: func.end,
+                y: 0
+            });
 
             if (func.isRelative) {
 
-                func.coords.push({ x: func.base.x + func.end, y: func.base.y });
+                func.coords.push({
+                    x: func.base.x + func.end,
+                    y: func.base.y
+                });
 
             };
         };
-    }
+    };
 
     draw() {
 
-    }
+    };
 
     compareFunctions() {
 
-    }
-}
+    };
 
+    updateSinEq(value) {
+        this.funcs[0].equalize = value;
+    };
+
+    updateCosEq(value) {
+        this.funcs[1].equalize = value;
+    };
+};

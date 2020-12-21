@@ -1,9 +1,16 @@
-function createButtonElement(element) {
+function createHTMLButtonElement(element) {
 
-    let button = document.createElement(element.element);
+    if (element.element != undefined) {
 
-    button.name = element.name;
+        let button = document.createElement(element.element);
 
-    return button;
+        if (element.name != undefined) {
+            button.name = element.name;
+        };
 
-}
+        return button;
+
+    } else {
+        return undefined;
+    };
+};

@@ -3,17 +3,30 @@
     padding: 0;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #00B0FF;
+}
+
 body {
     max-height: 100%;
     max-width: 100%;
     overflow: clip;
 }
 
+#canvas {
+    background-color: #212121;
+}
+
 #interface {
-    background-color: black;
+    background-color: #1A1A1A;
     color: white;
-    min-width: min-content;
-    /* padding: 1rem; */
+    min-width: 8rem;
+    padding: 1rem;
     position: absolute;
 
     /* overflow: auto;
@@ -23,10 +36,6 @@ body {
 .col {
     display: flex;
     flex-direction: column;
-}
-
-[draggable=true] {
-    cursor: move;
 }
 
 input {
@@ -46,30 +55,21 @@ img {
     overflow-y: auto;
 }
 
-#interface.bg {
-    background-color: blue;
+#interface.cm {
+    cursor: move;
 }
 
-ul {}
-
-li {
-    position: absolute;
-    width: min-content;
-    background-color: black;
+.content-container {
+    display: flex;
+    flex-direction: column;
 }
 
-#zero {
-
+.menu {
+    display: flex;
 }
 
-#one {
-
-}
-
-#zero a {
-    position: relative;
-}
-
-#one a {
-    position: relative;
+.menu-item {
+    border: 1px white solid;
+    flex-grow: 1;
+    list-style: none;
 }

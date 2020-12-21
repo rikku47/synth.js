@@ -20,7 +20,7 @@
   <script src="js/synth/synthview.js"></script>
   <script src="js/synth/synthmodel.js"></script>
   <script src="js/synth/synthcontroller.js"></script>
-  <script src="js/listeners/listeners.js"></script>
+  <script src="js/synth/synthlisteners.js"></script>
 
   <script>
 
@@ -29,8 +29,8 @@
     let view = new SynthView(container);
     let model = new SynthModel();
 
-    model.sin(view.base);
-    model.cos(view.base);
+    // model.sin(view.base);
+    // model.cos(view.base);
 
     view.draw(model);
 

@@ -1,14 +1,24 @@
-function createHeadingElement(element) {
+function createHTMLHeadingElement(element) {
 
-    let heading = document.createElement(element.element);
+    if (element.element != undefined) {
 
-    heading.id = element.id;
-    heading.name = element.name;
+        let heading = document.createElement(element.element);
 
-    if(element.text.length > 0){
-        heading.textContent = element.text;
+        if (element.id != undefined) {
+            heading.id = element.id;
+        };
+
+        if (element.name != undefined) {
+            heading.name = element.name;
+        };
+
+        if (element.text.length > 0) {
+            heading.textContent = element.text;
+        };
+
+        return heading;
+
+    } else {
+        return undefined;
     };
-
-    return heading;
-
 };

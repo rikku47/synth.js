@@ -15,15 +15,21 @@ const listOfAttributes =
         'novalidate'
     ];
 
-function createForm(id, attributes) {
+function createHTMLFormElement(element) {
 
-    let form = document.createElement('form');
+    if (element.element != undefined) {
 
-    form.id = id;
+        let form = document.createElement(element.element);
 
-    attributes.ForEach((attribute)=>{
-        form.setAttribute(attribute.name, attribute.value);
-    });
+        form.id = id;
+    
+        attributes.ForEach((attribute)=>{
+            form.setAttribute(attribute.name, attribute.value);
+        });
+    
+        return form;
 
-    return form;
-}
+    } else{ 
+        return undefined;
+    };
+};

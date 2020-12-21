@@ -1,7 +1,16 @@
-function createDatalist(id) {
+function createHTMLDataListElement(element) {
 
-    let datalist = document.createElement('datalist');
+    if (element.element != undefined) {
 
-    return datalist;
+        let datalist = document.createElement(element.element);
+
+        if(element.name != undefined){
+            datalist.name = element.name;
+        };
     
-}
+        return datalist;
+
+    } else{ 
+        return undefined;
+    }; 
+};

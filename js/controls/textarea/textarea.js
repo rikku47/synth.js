@@ -1,9 +1,18 @@
-function createTextarea(id) {
+function createHTMLTextareaElement(element) {
 
-    let textarea = document.createElement('textarea');
+    if (element.element != undefined) {
 
-    textarea.id = id;
+        let textarea = document.createElement(element.element);
 
-    return textarea;
+        if (element.id != undefined) {
+            textarea.id = element.id;
+        };
 
-}
+        // if () {};
+
+        return textarea;
+
+    } else {
+        return undefined;
+    };
+};

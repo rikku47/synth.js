@@ -1,13 +1,24 @@
-function createLabelElement(element) {
+function createHTMLLabelElement(element) {
 
-    let label = document.createElement(element.element);
+    if (element.element != undefined) {
 
-    label.id = element.id;
+        let label = document.createElement(element.element);
 
-    label.setAttribute('for', element.for);
+        if (element.id != undefined) {
+            label.id = element.id;
+        };
 
-    label.textContent = element.text;
+        if (element.for != undefined) {
+            label.setAttribute('for', element.for);
+        };
 
-    return label;
+        if (element.text != undefined) {
+            label.textContent = element.text;
+        };
 
-}
+        return label;
+
+    } else {
+        return undefined;
+    };
+};

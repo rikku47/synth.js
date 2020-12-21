@@ -1,7 +1,3 @@
-let update = function (params) {
-    view.reDraw(params.srcElement.value);
-};
-
 let dragObject = null;
 
 let diffX = 0;
@@ -10,7 +6,7 @@ let diffY = 0;
 let isDraggable = false;
 let isDrag = false;
 
-let css = 'bg';
+let css = 'cm';
 let exceptions = ['checkbox', 'range'];
 
 function setDraggableAndCss(ev, css, exceptions) {
@@ -86,6 +82,29 @@ function dragAndDrop() {
     document.body.addEventListener("mousemove", (ev) => {
         watchCoords(ev, isDrag);
     });
+};
+
+function updateFunction(event) {
+    console.log(event.srcElement.value);
+};
+
+function updateEqualize(event) {
+
+    let value = Number(event.srcElement.value);
+
+    model.updateSinEq(value);
+
+    model.sin(view.base);
+
+    view.draw(model);
+};
+
+function updateGap(event) {
+    console.log(event.srcElement.value);
+};
+
+function updateAnimation(event) {
+    console.log(event.srcElement.value);
 };
 
 function initListeners() {

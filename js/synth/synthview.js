@@ -117,80 +117,132 @@ class SynthView {
 
     TreeOfElements() {
         let tree = [{
-            element: 'ul',
-            children: [{
-                    element: 'li',
-                    id: 'zero',
-                    children: [{
-                        element: 'a',
-                        text: 'Main'
-                    }, {
-                        id: 'first',
-                        element: 'div',
-                        attributes: [],
-                        name: 'first',
-                        funcs: [],
-                        css: ['col'],
+                element: 'ul',
+                css: ['menu'],
+                children: [{
+                        element: 'li',
+                        css: ['menu-item'],
                         children: [{
-                                id: 'h1',
-                                element: 'h1',
-                                attributes: [],
-                                funcs: [],
-                                container: false,
-                                text: 'Synth'
-                            }, {
-                                id: 'h2',
-                                element: 'h2',
-                                attributes: [],
-                                funcs: [],
-                                container: false,
-                                text: 'Synth options'
+                            element: 'a',
+                            text: 'main'
+                        }]
+                    },
+                    {
+                        element: 'li',
+                        css: ['menu-item'],
+                        children: [{
+                            element: 'a',
+                            text: 'sub'
+                        }]
+                    }
+                ]
+            },
+            {
+                element: 'div',
+                attributes: [],
+                name: 'first',
+                funcs: [],
+                css: ['content-container'],
+                children: [{
+                        element: 'h1',
+                        attributes: [],
+                        funcs: [],
+                        text: 'synth.js'
+                    },
+                    {
+                        element: 'h2',
+                        attributes: [],
+                        funcs: [],
+                        text: 'options'
+                    },
+                    {
+                        element: 'label',
+                        for: 'functions',
+                        text: 'functions'
+                    },
+                    {
+                        element: 'select',
+                        options: [{
+                                element: 'option',
+                                id: 'sine',
+                                value: 'sin',
+                                text: 'SineWave'
                             },
                             {
-                                element: 'label',
-                                for: 'functions',
-                                text: 'Functions'
-                            },
-                            {
-                                id: 'functions',
-                                element: 'select',
-                                options: [{
-                                        element: 'option',
-                                        id: 'sine',
-                                        value: 'sin',
-                                        text: 'SineWave'
-                                    },
-                                    {
-                                        element: 'option',
-                                        id: 'cosine',
-                                        value: 'cosin',
-                                        text: 'CoSineWave'
-                                    }
-                                ],
-                                name: 'functions',
-                                funcs: [],
-                            },
-                            {
-                                id: 'second',
-                                element: 'div',
-                                attributes: [],
-                                name: 'second',
-                                funcs: [],
-                                css: ['col']
+                                element: 'option',
+                                id: 'cosine',
+                                value: 'cosin',
+                                text: 'CoSineWave'
                             }
+                        ],
+                        name: 'functions',
+                        funcs: [
+                            ['change', updateFunction]
                         ]
-                    }]
-                },
-                {
-                    element: 'li',
-                    id: 'one',
-                    children: [{
-                        element: 'a',
-                        text: 'Sub'
-                    }]
-                }
-            ]
-        }];
+                    },
+                    {
+                        element: 'label',
+                        for: 'equalize',
+                        text: 'equalize'
+                    },
+                    {
+                        id: 'equalize',
+                        element: 'input',
+                        type: 'range',
+                        name: 'equalize',
+                        value: 90,
+                        attributes: [
+                            ['min', '0'],
+                            ['max', '360'],
+                            ['step', '1']
+                        ],
+                        funcs: [
+                            ['input', updateEqualize]
+                        ]
+                    },
+                    {
+                        element: 'label',
+                        for: 'gap',
+                        text: 'gap'
+                    },
+                    {
+                        id: 'gap',
+                        element: 'input',
+                        type: 'range',
+                        name: 'gap',
+                        value: 30,
+                        attributes: [
+                            ['min', '0'],
+                            ['max', '360'],
+                            ['step', '1']
+                        ],
+                        funcs: [
+                            ['input', updateGap]
+                        ]
+                    },
+                    {
+                        element: 'label',
+                        for: 'animation',
+                        text: 'animation'
+                    },
+                    {
+                        id: 'animation',
+                        element: 'input',
+                        type: 'range',
+                        name: 'animation',
+                        value: 360,
+                        attributes: [
+                            ['min', '0'],
+                            ['max', '360'],
+                            ['step', '1']
+                        ],
+                        funcs: [
+                            ['input', updateAnimation]
+                        ]
+                    }
+                ]
+            }
+        ];
 
         let root = document.createElement('div');
 
@@ -230,71 +282,71 @@ class SynthView {
             case 'h5':
             case 'h6':
 
-                return createHeadingElement(element);
+                return createHTMLHeadingElement(element);
 
             case 'a':
 
-                return createAElement(element);
+                return createHTMLAnchorElement(element);
 
             case 'div':
 
-                return createDivElement(element);
+                return createHTMLDivElement(element);
 
             case 'ul':
 
-                return createUlElement(element);
+                return createHTMLUlElement(element);
 
             case 'li':
 
-                return createLiElement(element);
+                return createHTMLLiElement(element);
 
             case 'button':
 
-                break;
+                return createHTMLButtonElement(element);
 
             case 'datalist':
 
-                break;
+                return createHTMLDataListElement(element);
 
             case 'fieldset':
 
-                break;
+                return createHTMLFieldSetElement(element);
 
             case 'form':
 
-                break;
+                return createHTMLFormElement(element);
 
             case 'input':
 
-                return createInputElement(element);
+                return createHTMLInputElement(element);
 
             case 'label':
 
-                return createLabelElement(element);
+                return createHTMLLabelElement(element);
 
             case 'legend':
 
-                break;
+                return createHTMLLegendElement(element);
 
             case 'optgroup':
 
-                break;
+                return createHTMLOptGroupElement(element);
 
             case 'option':
 
-                break;
+                return createHTMLOptionElement(element);
 
             case 'output':
 
-                break;
+                return createHTMLOutputElement(element);
 
             case 'select':
 
-                return createSelectElement(element);
+                return createHTMLSelectElement(element);
 
             case 'textarea':
 
-                break;
+                return createHTMLTextAreaElement(element);
 
         };
     };
@@ -496,6 +548,8 @@ class SynthView {
 
     draw() {
 
+        this.resetCanvas();
+
         if (this.isCoordinateAxes) {
             this.drawCoordinateAxes(this.base);
         };
@@ -506,9 +560,10 @@ class SynthView {
 
         this.drawVector(this.base, false);
 
-        model.funcs.forEach((func) => {
-            this.drawFunction(func);
-        });
+        this.drawFunction(model.funcs[0]);
+        // model.funcs.forEach((func) => {
+        //     this.drawFunction(func);
+        // });
     };
 
     init() {

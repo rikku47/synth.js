@@ -1,7 +1,12 @@
-function createLegend(id) {
+function createHTMLLegendElement(element) {
 
-    let legend = document.createElement('legend');
+    if (element.element != undefined) {
+         
+    let legend = document.createElement(element.element);
 
     return legend;
-    
-}
+
+    } else{ 
+        return undefined;
+    }; 
+};

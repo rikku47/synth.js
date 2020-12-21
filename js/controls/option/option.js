@@ -1,10 +1,26 @@
-function createOptionElement(element) {
+function createHTMLOptionElement(element) {
 
-    let option = document.createElement(element.element);
+    if (element.element != undefined) {
 
-    option.id = element.id;
-    option.value = element.value;
-    option.textContent = element.text;
-    
-    return option;
-}
+        let option = document.createElement(element.element);
+
+        if(element.id != undefined){
+            option.id = element.id;
+        };
+
+        if(element.value != undefined){
+            option.value = element.value;
+        };
+
+        if(element.text != undefined){
+            option.textContent = element.text;
+        };
+
+        // if(){};
+
+        return option;
+        
+    } else {
+        return undefined;
+    };
+};

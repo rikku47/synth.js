@@ -1,7 +1,16 @@
-function createFieldset(id) {
+function createHTMLFieldSetElement(element) {
 
-    let fieldset = document.createElement('fieldset');
+    if (element.element != undefined) {
 
-    return fieldset;
-    
-}
+        let fieldset = document.createElement(element.element);
+
+        if (element.id != undefined) {
+            fieldset.id = element.id;
+        };
+
+        return fieldset;
+
+    } else {
+        return undefined;
+    };
+};
