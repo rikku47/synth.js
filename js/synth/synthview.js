@@ -416,6 +416,13 @@ class SynthView {
     drawCoordinateAxes(vector) {
 
         //Summarize??? rename vector to coord???
+
+        let paths = [
+            [
+                
+            ]
+        ];
+
         this.drawPath(vector, [{
             x: 0,
             y: vector.y
