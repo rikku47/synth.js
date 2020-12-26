@@ -1,7 +1,5 @@
-class Greeting {
-    greet(): void {
-        console.log("Hello World!!!")
-    }
-}
-var obj = new Greeting();
-obj.greet();
+const div = new HTMLDivElement();
+
+div.id = 'test';
+
+document.body.appendChild(div);
