@@ -21,6 +21,10 @@ class SynthView {
             x: x,
             y: y
         };
+        this.borderLeft = 0;
+        this.borderRight = this.ctx.canvas.width;
+        this.borderTop = 0;
+        this.borderBottom = this.ctx.canvas.heigh;
         this.centerVector = centerVector;
         this.isCoordinateAxes = isCoordinateAxes;
         this.isGrid = isGrid;
@@ -45,6 +49,8 @@ class SynthView {
         if (this.centerVector) {
             this.setVectorToCenter(this.base);
         };
+
+        this.draw();
     };
 
     //#region Getter Setter
@@ -367,8 +373,8 @@ class SynthView {
     };
 
     setVectorToCenter(vector) {
-        vector.x = this.ctx.canvas.width / 2;
-        vector.y = this.ctx.canvas.height / 2;
+        vector.x = this.borderRight / 2;
+        vector.y = this.borderBottom / 2;
     };
 
     drawVector(vector, isRelative = true, color = 'black', thickness = 1) {
@@ -407,7 +413,7 @@ class SynthView {
 
             this.ctx.lineWidth = lineWidth;
 
-            this.ctx.lineTo(coord.x, coord.y);
+            this.ctx.lineTo(base.x + coord.x, base.y + coord.y);
 
             this.ctx.stroke();
         });
@@ -415,70 +421,73 @@ class SynthView {
 
     drawCoordinateAxes(vector) {
 
-        //Summarize??? rename vector to coord???
+        //Summarize. rename vector to coord.
 
-        let paths = [
-            [
-                
-            ]
-        ];
+        let paths = [{
+            base: vector,
+            path: [{
+                x: -vector.x,
+                y: 0
+            }],
+            color: 'red',
+            width: 2
+        }, {
+            base: vector,
+            path: [{
+                x: 0,
+                y: -vector.y
+            }],
+            color: 'blue',
+            width: 2
+        }, {
+            base: vector,
+            path: [{
+                x: +vector.x,
+                y: 0
+            }],
+            color: 'blue',
+            width: 2
+        }, {
+            base: vector,
+            path: [{
+                x: 0,
+                y: +vector.y
+            }],
+            color: 'red',
+            width: 2
+        }];
 
-        this.drawPath(vector, [{
-            x: 0,
-            y: vector.y
-        }], 'red', 2);
-
-        this.drawPath(vector, [{
-            x: this.ctx.canvas.width,
-            y: vector.y
-        }], 'blue', 2);
-
-        this.drawPath(vector, [{
-            x: vector.x,
-            y: 0
-        }], 'green', 2);
-
-        this.drawPath(vector, [{
-            x: vector.x,
-            y: this.ctx.canvas.height
-        }], 'magenta', 2);
+        paths.forEach((path) => {
+            this.drawPath(path.base, path.path, path.color, path.width);
+        });
     };
 
     drawBars(sector, vector) {
 
         if (sector != undefined) {
 
-            if (this.grid.isX) {
+            if(sector == 1)
+            {
+                if(this.grid.isX){
+                    let bars = Math.floor(this.base.x / this.grid.gapX);
 
-                let currentX = vector.x;
-                let top = 0;
-                let bottom = vector.y;
-                let bar = 0;
-                let bars = Math.floor(this.ctx.canvas.width / 2 / this.grid.gapX);
+                    while (bars > 0) {
+                        
+                        this.drawPath({
+                            x: this.grid.gapX,
+                            y: 0
+                        }, [{
+                            x: this.grid.gapX,
+                            y: this.borderTop
+                        }]);
 
-                if (sector == 3 | sector == 4) {
-                    top = vector.y;
-                    bottom = this.ctx.canvas.height;
-                };
+                        bars--;
+                    }
+                }
 
-                while (bar < bars) {
+                if(this.grid.isY){
 
-                    if (sector == 1 | sector == 4) {
-                        currentX -= this.grid.gapX;
-                    } else {
-                        currentX += this.grid.gapX;
-                    };
-
-                    this.drawPath({
-                        x: currentX,
-                        y: top
-                    }, [{
-                        x: currentX,
-                        y: bottom
-                    }]);
-
-                    bar++;
-                };
+                }
             }
 
             if (this.grid.isY) {
@@ -526,31 +535,27 @@ class SynthView {
 
         if (this.grid.topLeft) {
 
-            this.drawBars(1, vector);
+            // this.drawBars(1, vector);
 
         };
 
         if (this.grid.topRight) {
 
-            this.drawBars(2, vector);
+            // this.drawBars(2, vector);
 
         };
 
         if (this.grid.bottomRight) {
 
-            this.drawBars(3, vector);
+            // this.drawBars(3, vector);
 
         };
 
         if (this.grid.bottomLeft) {
 
-            this.drawBars(4, vector);
+            // this.drawBars(4, vector);
 
         };
-    };
-
-    drawFunction(func) {
-        this.drawPath(func.base, func.coords, func.color, func.thickness);
     };
 
     draw() {
@@ -565,35 +570,7 @@ class SynthView {
             this.drawGrid(this.base);
         };
 
-        this.drawVector(this.base, false);
-
-        this.drawFunction(model.funcs[0]);
-        // model.funcs.forEach((func) => {
-        //     this.drawFunction(func);
-        // });
-    };
-
-    init() {
-        var context = new AudioContext();
-        var o = context.createOscillator();
-        o.type = "sine";
-        o.connect(context.destination);
-        // o.start();
-    };
-
-    square() {
-        var points = [];
-        return points;
-    };
-
-    saw() {
-        var points = [];
-        return points;
-    };
-
-    triangle() {
-        var points = [];
-        return points;
+        // this.drawVector(this.base, false);
     };
 
     parseNoteValues() {
