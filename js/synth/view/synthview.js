@@ -21,10 +21,6 @@ class SynthView {
             x: x,
             y: y
         };
-        this.borderLeft = 0;
-        this.borderRight = this.ctx.canvas.width;
-        this.borderTop = 0;
-        this.borderBottom = this.ctx.canvas.heigh;
         this.centerVector = centerVector;
         this.isCoordinateAxes = isCoordinateAxes;
         this.isGrid = isGrid;
@@ -46,11 +42,14 @@ class SynthView {
 
         this.setCanvas(container);
 
+        this.borderLeft = 0;
+        this.borderRight = this.ctx.canvas.width;
+        this.borderTop = 0;
+        this.borderBottom = this.ctx.canvas.height;
+
         if (this.centerVector) {
             this.setVectorToCenter(this.base);
         };
-
-        this.draw();
     };
 
     //#region Getter Setter
@@ -413,7 +412,7 @@ class SynthView {
 
             this.ctx.lineWidth = lineWidth;
 
-            this.ctx.lineTo(base.x + coord.x, base.y + coord.y);
+            this.ctx.lineTo(coord.x, coord.y);
 
             this.ctx.stroke();
         });
@@ -426,32 +425,32 @@ class SynthView {
         let paths = [{
             base: vector,
             path: [{
-                x: -vector.x,
-                y: 0
+                x: this.borderLeft,
+                y: vector.y
             }],
             color: 'red',
             width: 2
         }, {
             base: vector,
             path: [{
-                x: 0,
-                y: -vector.y
+                x: vector.x,
+                y: this.borderTop
             }],
             color: 'blue',
             width: 2
         }, {
             base: vector,
             path: [{
-                x: +vector.x,
-                y: 0
+                x: this.borderRight,
+                y: vector.y
             }],
             color: 'blue',
             width: 2
         }, {
             base: vector,
             path: [{
-                x: 0,
-                y: +vector.y
+                x: vector.x,
+                y: this.borderBottom
             }],
             color: 'red',
             width: 2
@@ -462,67 +461,26 @@ class SynthView {
         });
     };
 
-    drawBars(sector, vector) {
+    drawBarsVertical(vector, width, height, gap) {
 
-        if (sector != undefined) {
+        let bars = Math.floor((vector.x + width) / gap);
+        let current = vector.x + gap;
+        let floor = vector.y;
+        let roof = vector.y + height;
 
-            if(sector == 1)
-            {
-                if(this.grid.isX){
-                    let bars = Math.floor(this.base.x / this.grid.gapX);
+        while (bars > 0) {
 
-                    while (bars > 0) {
-                        
-                        this.drawPath({
-                            x: this.grid.gapX,
-                            y: 0
-                        }, [{
-                            x: this.grid.gapX,
-                            y: this.borderTop
-                        }]);
+            this.drawPath({
+                x: current,
+                y: floor
+            }, [{
+                x: current,
+                y: roof
+            }]);
 
-                        bars--;
-                    }
-                }
-
-                if(this.grid.isY){
-
-                }
-            }
-
-            if (this.grid.isY) {
-
-                let currentY = vector.y;
-                let left = 0;
-                let right = vector.x;
-                let bar = 0;
-                let bars = Math.floor(this.ctx.canvas.height / 2 / this.grid.gapY);
-
-                if (sector == 2 | sector == 3) {
-                    left = vector.x;
-                    right = this.ctx.canvas.width;
-                };
-
-                while (bar < bars) {
-
-                    if (sector == 1 | sector == 2) {
-                        currentY -= this.grid.gapY;
-                    } else {
-                        currentY += this.grid.gapY;
-                    };
-
-                    this.drawPath({
-                        x: left,
-                        y: currentY
-                    }, [{
-                        x: right,
-                        y: currentY
-                    }]);
-
-                    bar++;
-                };
-            }
-        }
+            current += gap;
+            bars--;
+        };
     };
 
     drawGrid(vector) {
@@ -535,13 +493,13 @@ class SynthView {
 
         if (this.grid.topLeft) {
 
-            // this.drawBars(1, vector);
+            this.drawBarsVertical(vector, 0, -vector.y, -this.gapX);
 
         };
 
         if (this.grid.topRight) {
 
-            // this.drawBars(2, vector);
+            // this.drawBarsVertical(vector, vector.x, -vector.y, -this.gapX);
 
         };
 

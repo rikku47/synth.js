@@ -26,19 +26,20 @@
 
     let view = new SynthView(container);
 
-    const sine = new Sine();
+    view.draw();
+    // const sine = new Sine();
 
-    sine.increment = 0.5;
+    // sine.increment = 0.5;
 
-    sine.calc();
+    // sine.calc();
 
-    console.log(sine.result);
+    // console.log(sine.result);
 
-    sine.equalizeY();
+    // sine.equalizeY();
 
-    console.log(sine.wavetable);
+    // console.log(sine.wavetable);
 
-    view.drawPath(view.base, sine.wavetable, 'magenta');
+    // view.drawPath(view.base, sine.wavetable, 'magenta');
 
   </script>
 
