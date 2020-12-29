@@ -1,11 +1,11 @@
 class SynthView {
     constructor(
         container,
-        centerVector = true,
+        centerBase = true,
         x = 0,
         y = 0,
-        isCoordinateAxes = true,
-        isGrid = true,
+        activateCoordinateAxes = true,
+        activateGrid = true,
         topLeft = true,
         topRight = true,
         bottomRight = true,
@@ -15,41 +15,43 @@ class SynthView {
         gapY = 30,
         gapX = 30
     ) {
-        this.ctx = document.createElement('canvas').getContext('2d');
-        this.ctx.canvas.id = 'canvas';
-        this.base = {
-            x: x,
-            y: y
+        this.container = container;
+        this.layer = {
+            ctx: this.createLayer('canvas'),
+            base: {
+                x: x,
+                y: y
+            },
+            centerBase: centerBase,
+            activateCoordinateAxes: activateCoordinateAxes,
+            activateGrid: activateGrid,
+            gridProperties: {
+                topLeft: topLeft,
+                topRight: topRight,
+                bottomRight: bottomRight,
+                bottomLeft: bottomLeft,
+                isX: isX,
+                isY: isY,
+                gapY: gapY,
+                gapX: gapX,
+                color: 'black'
+            }
         };
-        this.centerVector = centerVector;
-        this.isCoordinateAxes = isCoordinateAxes;
-        this.isGrid = isGrid;
-        this.grid = {
-            topLeft: topLeft,
-            topRight: topRight,
-            bottomRight: bottomRight,
-            bottomLeft: bottomLeft,
-            isX: isX,
-            isY: isY,
-            gapY: gapY,
-            gapX: gapX,
-            color: 'black'
-        };
+
+        this.layers = [this.layer];
 
         this.elements = this.TreeOfElements();
 
         container.appendChild(this.elements);
 
-        this.setCanvas(container);
+        // this.borderLeft = 0;
+        // this.borderRight = this.ctx.canvas.width;
+        // this.borderTop = 0;
+        // this.borderBottom = this.ctx.canvas.height;
 
-        this.borderLeft = 0;
-        this.borderRight = this.ctx.canvas.width;
-        this.borderTop = 0;
-        this.borderBottom = this.ctx.canvas.height;
-
-        if (this.centerVector) {
-            this.setVectorToCenter(this.base);
-        };
+        // if (this.centerVector) {
+        //     this.setVectorToCenter(this.base);
+        // };
     };
 
     //#region Getter Setter
@@ -358,22 +360,22 @@ class SynthView {
 
     //#region Functions
 
-    setCanvas(container) {
+    setLayer(layer, container) {
 
-        this.ctx.canvas.width = container.clientWidth;
+        layer.ctx.canvas.width = container.clientWidth;
 
-        this.ctx.canvas.height = container.clientHeight;
+        layer.ctx.canvas.height = container.clientHeight;
 
-        container.appendChild(this.ctx.canvas);
+        container.appendChild(layer.ctx.canvas);
     };
 
-    resetCanvas() {
-        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    resetLayer(layer) {
+        layer.clearRect(0, 0, layer.canvas.width, layer.canvas.height);
     };
 
-    setVectorToCenter(vector) {
-        vector.x = this.borderRight / 2;
-        vector.y = this.borderBottom / 2;
+    centerBase(layer) {
+        layer.base.x = layer.ctx.canvas.clientWidth / 2;
+        layer.base.y = layer.ctx.canvas.clientHeight / 2;
     };
 
     drawVector(vector, isRelative = true, color = 'black', thickness = 1) {
@@ -461,26 +463,94 @@ class SynthView {
         });
     };
 
-    drawBarsVertical(vector, width, height, gap) {
+    drawBarsVertical(vector, width, height, gap, corner) {
 
-        let bars = Math.floor((vector.x + width) / gap);
-        let current = vector.x + gap;
-        let floor = vector.y;
-        let roof = vector.y + height;
+        let xS = [];
+        let current = vector.x;
 
-        while (bars > 0) {
+        if (height == 'max') {
+            height = vector.y;
+        };
 
+        if (width == 'max') {
+            width = vector.x;
+        };
+
+        let floor = 0;
+        let roof = 0;
+
+        if (corner == 0 || corner == 1) {
+            floor = vector.y;
+            roof = vector.y - height;
+        } else {
+            floor = vector.y + height;
+            roof = vector.y;
+        };
+
+        if (corner == 0 || corner == 3) {
+            gap = gap * -1;
+        };
+
+        while (current <= vector.x + width &&
+            current >= vector.x - width) {
+            current += gap;
+            xS.push(current);
+        };
+
+        xS.forEach((x) => {
             this.drawPath({
-                x: current,
+                x: x,
                 y: floor
             }, [{
-                x: current,
+                x: x,
                 y: roof
             }]);
+        });
+    };
 
-            current += gap;
-            bars--;
+    drawBarsHorizontal(vector, width, height, gap, corner) {
+
+        let yS = [];
+        let current = vector.y;
+
+        if (height == 'max') {
+            height = vector.y;
         };
+
+        if (width == 'max') {
+            width = vector.x;
+        };
+
+        let right = 0;
+        let left = 0;
+
+        if (corner == 0 || corner == 3) {
+            right = vector.x;
+            left = vector.x - width;
+        } else {
+            right = vector.x + width;
+            left = vector.x;
+        };
+
+        if (corner == 0 || corner == 1) {
+            gap = gap * -1;
+        };
+
+        while (current <= vector.y + height &&
+            current >= vector.y - height) {
+            current += gap;
+            yS.push(current);
+        };
+
+        yS.forEach((y) => {
+            this.drawPath({
+                x: right,
+                y: y
+            }, [{
+                x: left,
+                y: y
+            }]);
+        });
     };
 
     drawGrid(vector) {
@@ -493,42 +563,61 @@ class SynthView {
 
         if (this.grid.topLeft) {
 
-            this.drawBarsVertical(vector, 0, -vector.y, -this.gapX);
+            this.drawBarsVertical(vector, 'max', 'max', this.gapX, 0);
+            this.drawBarsHorizontal(vector, 'max', 'max', this.gapY, 0);
 
         };
 
         if (this.grid.topRight) {
 
-            // this.drawBarsVertical(vector, vector.x, -vector.y, -this.gapX);
-
+            this.drawBarsVertical(vector, 'max', 'max', this.gapX, 1);
+            this.drawBarsHorizontal(vector, 'max', 'max', this.gapY, 1);
         };
 
         if (this.grid.bottomRight) {
 
-            // this.drawBars(3, vector);
+            this.drawBarsVertical(vector, 'max', 'max', this.gapX, 2);
+            this.drawBarsHorizontal(vector, 'max', 'max', this.gapY, 2);
 
         };
 
         if (this.grid.bottomLeft) {
 
-            // this.drawBars(4, vector);
+            this.drawBarsVertical(vector, 'max', 'max', this.gapX, 3);
+            this.drawBarsHorizontal(vector, 'max', 'max', this.gapY, 3);
 
         };
     };
 
-    draw() {
+    createLayer(id) {
+        let layer = document.createElement('canvas').getContext('2d');
+        layer.canvas.id = id;
+        return layer;
+    };
 
-        this.resetCanvas();
+    drawBaseLayer() {
 
-        if (this.isCoordinateAxes) {
-            this.drawCoordinateAxes(this.base);
+        this.setLayer(this.layers[0], this.container);
+
+        if (this.layers[0].centerBase) {
+            this.centerBase(this.layers[0]);
         };
 
-        if (this.isGrid) {
-            this.drawGrid(this.base);
+        if (this.layers[0].activateGrid) {
+            this.drawCoordinateAxes(this.layers[0].base);
         };
+
+        // if (this.isGrid) {
+        //     this.drawGrid(this.base);
+        // };
 
         // this.drawVector(this.base, false);
+    };
+
+    draw() {
+
+        this.drawBaseLayer();
+
     };
 
     parseNoteValues() {
