@@ -7,7 +7,7 @@
 </head>
 
 <body>
-  <script src="js/controls/div/div.js"></script>
+  <!-- <script src="js/controls/div/div.js"></script>
   <script src="js/controls/heading/heading.js"></script>
   <script src="js/controls/label/label.js"></script>
   <script src="js/controls/input/input.js"></script>
@@ -16,18 +16,22 @@
   <script src="js/controls/ul/ul.js"></script>
   <script src="js/controls/li/li.js"></script>
   <script src="js/controls/a/a.js"></script>
-  <script src="js/synth/view/synthview.js"></script>
-  <script src="js/synth/listeners/synthlisteners.js"></script>
+  <script src="js/synth/listeners/synthlisteners.js"></script> -->
 
-  <script src="js/synth/voices/sine/sine.js"></script>
+  <!-- <script src="js/synth/voices/sine/sine.js"></script> -->
 
+  <script src="js/synth/view/synthlayer.js"></script>
   <script>
     let container = document.body;
 
-    let view = new SynthView(container);
+    const layer = new SynthLayer(container);
 
-    view.draw();
+    layer.draw();
     
+    // let view = new SynthView(container);
+
+    // view.draw();
+
     // const sine = new Sine();
 
     // sine.increment = 0.5;
@@ -41,7 +45,6 @@
     // console.log(sine.wavetable);
 
     // view.drawPath(view.base, sine.wavetable, 'magenta');
-
   </script>
 
 </body>

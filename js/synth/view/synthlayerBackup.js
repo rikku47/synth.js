@@ -1,4 +1,4 @@
-class SynthView {
+class SynthLayerBackup {
     constructor(
         container,
         centerBase = true,
@@ -35,7 +35,8 @@ class SynthView {
                 gapY: gapY,
                 gapX: gapX,
                 color: 'black'
-            }
+            },
+            paths: []
         };
 
         this.layers = [this.layer];
@@ -44,14 +45,6 @@ class SynthView {
 
         container.appendChild(this.elements);
 
-        // this.borderLeft = 0;
-        // this.borderRight = this.ctx.canvas.width;
-        // this.borderTop = 0;
-        // this.borderBottom = this.ctx.canvas.height;
-
-        // if (this.centerVector) {
-        //     this.setVectorToCenter(this.base);
-        // };
     };
 
     //#region Getter Setter
@@ -370,7 +363,7 @@ class SynthView {
     };
 
     resetLayer(layer) {
-        layer.clearRect(0, 0, layer.canvas.width, layer.canvas.height);
+        layer.ctx.clearRect(0, 0, layer.canvas.width, layer.canvas.height);
     };
 
     centerBase(layer) {
@@ -402,65 +395,65 @@ class SynthView {
         this.ctx.fillRect(vectorForDraw.x - thickness, vectorForDraw.y - thickness, thick, thick);
     };
 
-    drawPath(base, coords, color = 'black', lineWidth = 1) {
+    drawPaths(layer) {
 
-        this.ctx.beginPath();
+        layer.ctx.beginPath();
 
-        this.ctx.moveTo(base.x, base.y);
+        layer.ctx.moveTo(layer.base.x, layer.base.y);
 
-        coords.forEach((coord) => {
+        layer.paths.forEach((path) => {
 
-            this.ctx.strokeStyle = color;
+            layer.ctx.strokeStyle = path.color;
 
-            this.ctx.lineWidth = lineWidth;
+            layer.ctx.lineWidth = path.lineWidth;
 
-            this.ctx.lineTo(coord.x, coord.y);
+            layer.ctx.lineTo(coord.x, coord.y);
 
-            this.ctx.stroke();
+            layer.ctx.stroke();
         });
     };
 
-    drawCoordinateAxes(vector) {
+    drawCoordinateAxes(layer) {
 
-        //Summarize. rename vector to coord.
+        // Summarize. rename vector to coord.
+        // this.borderRight = layer.canvas.width;
 
-        let paths = [{
-            base: vector,
+        layer.paths = [{
+            base: layer.base,
             path: [{
-                x: this.borderLeft,
-                y: vector.y
+                x: 0,
+                y: layer.base.y
             }],
             color: 'red',
             width: 2
         }, {
-            base: vector,
+            base: layer.base,
             path: [{
-                x: vector.x,
-                y: this.borderTop
+                x: layer.base.x,
+                y: 0
             }],
             color: 'blue',
             width: 2
         }, {
-            base: vector,
+            base: layer.base,
             path: [{
-                x: this.borderRight,
-                y: vector.y
+                x: layer.canvas.width,
+                y: layer.base.y
             }],
             color: 'blue',
             width: 2
         }, {
-            base: vector,
+            base: layer.base,
             path: [{
-                x: vector.x,
-                y: this.borderBottom
+                x: layer.base.x,
+                y: layer.canvas.height
             }],
             color: 'red',
             width: 2
         }];
 
-        paths.forEach((path) => {
-            this.drawPath(path.base, path.path, path.color, path.width);
-        });
+        this.drawPaths(layer);
+
     };
 
     drawBarsVertical(vector, width, height, gap, corner) {
@@ -595,7 +588,7 @@ class SynthView {
         return layer;
     };
 
-    drawBaseLayer() {
+    drawLayer() {
 
         this.setLayer(this.layers[0], this.container);
 
@@ -604,7 +597,7 @@ class SynthView {
         };
 
         if (this.layers[0].activateGrid) {
-            this.drawCoordinateAxes(this.layers[0].base);
+            this.drawCoordinateAxes(this.layers[0]);
         };
 
         // if (this.isGrid) {
@@ -616,7 +609,15 @@ class SynthView {
 
     draw() {
 
-        this.drawBaseLayer();
+        this.drawLayer();
+
+    };
+
+    createPath(){
+
+    };
+
+    swapVariables(){
 
     };
 
