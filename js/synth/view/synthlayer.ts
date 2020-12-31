@@ -143,10 +143,10 @@ class SynthLayer {
         this._layer = value;
     }
 
-    public get paths(): any[] {
+    public get pointGroups(): any[] {
         return this._paths;
     }
-    public set paths(value: any[]) {
+    public set pointGroups(value: any[]) {
         this._paths = value;
     }
 
@@ -163,6 +163,8 @@ class SynthLayer {
         topRight = true,
         bottomRight = true,
         bottomLeft = true,
+        gapX = 30,
+        gapY = 30
     ) {
         this.container = container
         this.x = x
@@ -170,11 +172,14 @@ class SynthLayer {
         this.isCenterCoordinate = isCenterCoordinate
         this.isCoordinateAxes = isCoordinateAxes
         this.isGrid = isGrid
-        this.topLeft = topLeft,
-            this.topRight = topRight,
-            this.bottomRight = bottomRight,
-            this.bottomLeft = bottomLeft,
-            this.createLayer('layer0')
+        this.topLeft = topLeft
+        this.topRight = topRight
+        this.bottomRight = bottomRight
+        this.bottomLeft = bottomLeft
+        this.gapX = gapX
+        this.gapY = gapY
+        this.createLayer('layer0')
+        this.pointGroups = [];
     }
 
     createLayer(id: string) {
@@ -199,58 +204,72 @@ class SynthLayer {
 
     drawCoordinateAxes() {
 
-        this.paths = [{
-            base: {
-                x: this.x,
-                y: this.y
-            },
-            pathPoints: [{
-                x: 0,
-                y: this.y
-            }],
-            color: 'red',
-            width: 2
-        }, {
-            base: {
-                x: this.x,
-                y: this.y
-            },
-            pathPoints: [{
-                x: this.x,
-                y: 0
-            }],
-            color: 'blue',
-            width: 2
-        }, {
-            base: {
-                x: this.x,
-                y: this.y
-            },
-            pathPoints: [{
-                x: this.layer.canvas.width,
-                y: this.y
-            }],
-            color: 'blue',
-            width: 2
-        }, {
-            base: {
-                x: this.x,
-                y: this.y
-            },
-            pathPoints: [{
-                x: this.x,
-                y: this.layer.canvas.height
-            }],
-            color: 'red',
-            width: 2
-        }];
+        this.pointGroups.push
+            ({
+                connectToBase: true,
+                base: {
+                    x: this.x,
+                    y: this.y,
+                },
+                points: [{
+                    x: 0,
+                    y: this.y
+                }],
+                color: 'red',
+                width: 2
+            })
+
+        this.pointGroups.push
+            ({
+                connectToBase: true,
+                base: {
+                    x: this.x,
+                    y: this.y,
+                },
+                points: [{
+                    x: this.x,
+                    y: 0
+                }],
+                color: 'blue',
+                width: 2
+            })
+
+        this.pointGroups.push
+            ({
+                connectToBase: true,
+                base: {
+                    x: this.x,
+                    y: this.y,
+                },
+                points: [{
+                    x: this.layer.canvas.width,
+                    y: this.y
+                }],
+                color: 'blue',
+                width: 2
+            })
+
+        this.pointGroups.push
+            ({
+                connectToBase: true,
+                base: {
+                    x: this.x,
+                    y: this.y,
+                },
+                points: [{
+                    x: this.x,
+                    y: this.layer.canvas.height
+                }],
+                color: 'red',
+                width: 2
+            })
 
         this.drawPaths()
     }
 
     drawBarsVertical(width: string | number, height: string | number) {
 
-        let cl: number[]
+        let cl: any[] = [];
         let current = this.x
         let floor = 0
         let roof = 0
@@ -261,22 +280,38 @@ class SynthLayer {
         ({ height, width } = this.setWidthAndHeight(height, width));
 
         if (left) {
-            while (current >= this.x - width) {
+            while (current >= (this.x - width + this.gapX)) {
                 current -= this.gapX
-                cl.push(current)
+                cl.push({
+                    x: current,
+                    y: floor
+                })
             }
         }
 
         if (right) {
-            while (current <= this.x + width) {
-                current -= this.gapX
-                cl.push(current)
+            while (current <= (this.x + width - this.gapX)) {
+                current += this.gapX
+                cl.push({
+                    x: current,
+                    y: floor
+                })
             }
         }
 
-        cl.forEach((x) => {
-            this.createPath();
-        });
+        this.pointGroups.push
+            ({
+                connectToBase: false,
+                base: {
+                    x: this.x,
+                    y: this.y,
+                },
+                points: cl,
+                color: 'black',
+                width: 1
+            })
+
+        this.drawPaths()
     };
 
     drawBarsHorizontal(width: string | number, height: string | number) {
@@ -287,35 +322,28 @@ class SynthLayer {
         let left = 0
         let gap = this.gapY;
 
+        let top = true;
+        let down = true;
+
         ({ height, width } = this.setWidthAndHeight(height, width));
 
-        if (this.topLeft || this.bottomLeft) {
-            right = this.x
-            left = this.x - width
-        } else {
-            right = this.x + width;
-            left = this.x;
-        };
+        if (top) {
+            while (current >= (this.y - height + this.gapY)) {
+                current -= this.gapY
+                cl.push(current)
+            }
+        }
 
-        if (this.topLeft || this.topRight) {
-            gap = gap * -1;
-        };
+        if (down) {
+            while (current <= (this.y + height - this.gapY)) {
+                current += this.gapX
+                cl.push(current)
+            }
+        }
 
-        while (current <= this.y + height &&
-            current >= this.y - height) {
-            current += gap;
-            cl.push(current);
-        };
-
-        // yS.forEach((y) => {
-        //     this.drawPath({
-        //         x: right,
-        //         y: y
-        //     }, [{
-        //         x: left,
-        //         y: y
-        //     }]);
-        // });
+        cl.forEach((y) => {
+            this.createPath();
+        })
     };
 
     private setWidthAndHeight(height: string | number, width: string | number) {
@@ -344,38 +372,40 @@ class SynthLayer {
         if (this.topLeft) {
 
             this.drawBarsVertical('max', 'max')
-            this.drawBarsHorizontal('max', 'max')
+            // this.drawBarsHorizontal('max', 'max')
         }
 
         if (this.topRight) {
             this.drawBarsVertical('max', 'max')
-            this.drawBarsHorizontal('max', 'max')
+            // this.drawBarsHorizontal('max', 'max')
         }
 
         if (this.bottomRight) {
             this.drawBarsVertical('max', 'max')
-            this.drawBarsHorizontal('max', 'max')
+            // this.drawBarsHorizontal('max', 'max')
         }
 
         if (this.bottomLeft) {
             this.drawBarsVertical('max', 'max')
-            this.drawBarsHorizontal('max', 'max')
+            // this.drawBarsHorizontal('max', 'max')
         }
     }
 
     drawPaths() {
 
-        this.paths.forEach((path) => {
+        this.pointGroups.forEach((path) => {
 
             this.layer.beginPath()
 
-            this.layer.moveTo(path.base.x, path.base.y)
+            if (path.connectToBase) {
+                this.layer.moveTo(path.base.x, path.base.y)
+            }
 
             this.layer.strokeStyle = path.color
 
             this.layer.lineWidth = path.lineWidth
 
-            path.pathPoints.forEach((point: { x: any; y: any; }) => {
+            path.points.forEach((point: { x: any; y: any; }) => {
                 this.layer.lineTo(point.x, point.y)
             })
 
@@ -396,7 +426,7 @@ class SynthLayer {
         }
 
         if (this.isGrid) {
-            this.drawGrid();
+            // this.drawGrid();
         }
     }
 
