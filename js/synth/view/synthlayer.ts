@@ -621,8 +621,18 @@ class SynthLayer {
         }
     }
 
-    createPath() {
-
+    addPath(x: number, y: number, points: any[], color: any, width: number) {
+        this.pointGroups.push({
+            connectToBase: true,
+            isDraw: false,
+            base: {
+                x: x,
+                y: y,
+            },
+            points: points,
+            color: color,
+            width: width
+        })
     }
 
     swapVariables() {
