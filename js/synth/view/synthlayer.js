@@ -127,67 +127,75 @@ class SynthLayer {
         this.layer.clearRect(0, 0, this.layer.canvas.width, this.layer.canvas.height);
     }
     centerCoordinate() {
-        this.x = this.layer.canvas.clientWidth / 2;
-        this.y = this.layer.canvas.clientHeight / 2;
+        if (this.isCenterCoordinate) {
+            this.x = this.layer.canvas.clientWidth / 2;
+            this.y = this.layer.canvas.clientHeight / 2;
+        }
     }
     drawCoordinateAxes() {
-        this.pointGroups.push({
-            connectToBase: true,
-            isDraw: false,
-            base: {
-                x: this.x,
-                y: this.y,
-            },
-            points: [{
-                    x: 0,
-                    y: this.y
-                }],
-            color: 'red',
-            width: 8
-        });
-        this.pointGroups.push({
-            connectToBase: true,
-            isDraw: false,
-            base: {
-                x: this.x,
-                y: this.y,
-            },
-            points: [{
+        if (this.isCoordinateAxes) {
+            this.pointGroups.push({
+                connectToBase: true,
+                addToBase: false,
+                isDraw: false,
+                base: {
                     x: this.x,
-                    y: 0
-                }],
-            color: 'blue',
-            width: 4
-        });
-        this.pointGroups.push({
-            connectToBase: true,
-            isDraw: false,
-            base: {
-                x: this.x,
-                y: this.y,
-            },
-            points: [{
-                    x: this.layer.canvas.width,
-                    y: this.y
-                }],
-            color: 'blue',
-            width: 4
-        });
-        this.pointGroups.push({
-            connectToBase: true,
-            isDraw: false,
-            base: {
-                x: this.x,
-                y: this.y,
-            },
-            points: [{
+                    y: this.y,
+                },
+                points: [{
+                        x: 0,
+                        y: this.y
+                    }],
+                color: 'red',
+                width: 2
+            });
+            this.pointGroups.push({
+                connectToBase: true,
+                addToBase: false,
+                isDraw: false,
+                base: {
                     x: this.x,
-                    y: this.layer.canvas.height
-                }],
-            color: 'red',
-            width: 4
-        });
-        this.drawPaths();
+                    y: this.y,
+                },
+                points: [{
+                        x: this.x,
+                        y: 0
+                    }],
+                color: 'blue',
+                width: 2
+            });
+            this.pointGroups.push({
+                connectToBase: true,
+                addToBase: false,
+                isDraw: false,
+                base: {
+                    x: this.x,
+                    y: this.y,
+                },
+                points: [{
+                        x: this.layer.canvas.width,
+                        y: this.y
+                    }],
+                color: 'blue',
+                width: 2
+            });
+            this.pointGroups.push({
+                connectToBase: true,
+                addToBase: false,
+                isDraw: false,
+                base: {
+                    x: this.x,
+                    y: this.y,
+                },
+                points: [{
+                        x: this.x,
+                        y: this.layer.canvas.height
+                    }],
+                color: 'red',
+                width: 2
+            });
+            this.drawPaths();
+        }
     }
     drawBarsVerticalNorthWest(width, height) {
         ({ height, width } = this.setWidthAndHeight(height, width));
@@ -198,6 +206,7 @@ class SynthLayer {
             current -= this.gapX;
             this.pointGroups.push({
                 connectToBase: true,
+                addToBase: false,
                 isDraw: false,
                 base: {
                     x: current,
@@ -222,6 +231,7 @@ class SynthLayer {
             current += this.gapX;
             this.pointGroups.push({
                 connectToBase: true,
+                addToBase: false,
                 isDraw: false,
                 base: {
                     x: current,
@@ -246,6 +256,7 @@ class SynthLayer {
             current += this.gapX;
             this.pointGroups.push({
                 connectToBase: true,
+                addToBase: false,
                 isDraw: false,
                 base: {
                     x: current,
@@ -270,6 +281,7 @@ class SynthLayer {
             current -= this.gapX;
             this.pointGroups.push({
                 connectToBase: true,
+                addToBase: false,
                 isDraw: false,
                 base: {
                     x: current,
@@ -294,6 +306,7 @@ class SynthLayer {
             current -= this.gapY;
             this.pointGroups.push({
                 connectToBase: true,
+                addToBase: false,
                 isDraw: false,
                 base: {
                     x: right,
@@ -318,6 +331,7 @@ class SynthLayer {
             current -= this.gapY;
             this.pointGroups.push({
                 connectToBase: true,
+                addToBase: false,
                 isDraw: false,
                 base: {
                     x: right,
@@ -342,6 +356,7 @@ class SynthLayer {
             current += this.gapY;
             this.pointGroups.push({
                 connectToBase: true,
+                addToBase: false,
                 isDraw: false,
                 base: {
                     x: right,
@@ -366,6 +381,7 @@ class SynthLayer {
             current += this.gapY;
             this.pointGroups.push({
                 connectToBase: true,
+                addToBase: false,
                 isDraw: false,
                 base: {
                     x: right,
@@ -398,21 +414,23 @@ class SynthLayer {
         // RightTop     +   +   2       4       1
         // RightBottom  +   -   3       1       2
         // LeftBottom   -   -   4       2       3
-        if (this.northWest) {
-            this.drawBarsVerticalNorthWest('max', 'max');
-            this.drawBarsHorizontalNorthWest('max', 'max');
-        }
-        if (this.northEast) {
-            this.drawBarsVerticalNorthEast('max', 'max');
-            this.drawBarsHorizontalNorthEast('max', 'max');
-        }
-        if (this.southEast) {
-            this.drawBarsVerticalSouthEast('max', 'max');
-            this.drawBarsHorizontalSouthEast('max', 'max');
-        }
-        if (this.southWest) {
-            this.drawBarsVerticalSouthWest('max', 'max');
-            this.drawBarsHorizontalSouthWest('max', 'max');
+        if (this.isGrid) {
+            if (this.northWest) {
+                this.drawBarsVerticalNorthWest('max', 'max');
+                this.drawBarsHorizontalNorthWest('max', 'max');
+            }
+            if (this.northEast) {
+                this.drawBarsVerticalNorthEast('max', 'max');
+                this.drawBarsHorizontalNorthEast('max', 'max');
+            }
+            if (this.southEast) {
+                this.drawBarsVerticalSouthEast('max', 'max');
+                this.drawBarsHorizontalSouthEast('max', 'max');
+            }
+            if (this.southWest) {
+                this.drawBarsVerticalSouthWest('max', 'max');
+                this.drawBarsHorizontalSouthWest('max', 'max');
+            }
         }
     }
     drawPaths() {
@@ -425,7 +443,12 @@ class SynthLayer {
                 this.layer.strokeStyle = path.color;
                 this.layer.lineWidth = path.width;
                 path.points.forEach((point) => {
-                    this.layer.lineTo(point.x, point.y);
+                    if (path.addToBase) {
+                        this.layer.lineTo(path.base.x + point.x, path.base.y + point.y);
+                    }
+                    else {
+                        this.layer.lineTo(point.x, point.y);
+                    }
                 });
                 this.layer.stroke();
                 path.isDraw = true;
@@ -434,17 +457,23 @@ class SynthLayer {
     }
     draw() {
         this.setLayer();
-        if (this.isCenterCoordinate) {
-            this.centerCoordinate();
-        }
-        if (this.isCoordinateAxes) {
-            this.drawCoordinateAxes();
-        }
-        if (this.isGrid) {
-            this.drawGrid();
-        }
+        this.centerCoordinate();
+        this.drawCoordinateAxes();
+        this.drawGrid();
     }
-    createPath() {
+    addPath(x, y, connectToBase, addToBase, points, color, width) {
+        this.pointGroups.push({
+            connectToBase: connectToBase,
+            addToBase: addToBase,
+            isDraw: false,
+            base: {
+                x: x,
+                y: y,
+            },
+            points: points,
+            color: color,
+            width: width
+        });
     }
     swapVariables() {
     }

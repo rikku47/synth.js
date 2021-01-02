@@ -2,11 +2,9 @@ class SynthLayer {
 
     //#region Fields
 
-    private _centerCoordinate: boolean;
     private _container: HTMLElement;
     private _gapX: number;
     private _gapY: number;
-    private _isCoordinateAxes: boolean;
     private _isGrid: boolean;
     private _isX: boolean;
     private _isY: boolean;
@@ -14,8 +12,6 @@ class SynthLayer {
     private _northEast: boolean;
     private _southEast: boolean;
     private _southWest: boolean;
-    private _x: number;
-    private _y: number;
 
     private _layer: any;
     private _paths: any[];
@@ -23,14 +19,6 @@ class SynthLayer {
     //#endregion
 
     //#region Getter Setter
-
-    public get isCenterCoordinate(): boolean {
-        return this._centerCoordinate;
-    }
-
-    public set isCenterCoordinate(value: boolean) {
-        this._centerCoordinate = value;
-    }
 
     public get container(): HTMLElement {
         return this._container;
@@ -54,14 +42,6 @@ class SynthLayer {
 
     public set gapY(value: number) {
         this._gapY = value;
-    }
-
-    public get isCoordinateAxes(): boolean {
-        return this._isCoordinateAxes;
-    }
-
-    public set isCoordinateAxes(value: boolean) {
-        this._isCoordinateAxes = value;
     }
 
     public get isGrid(): boolean {
@@ -120,21 +100,6 @@ class SynthLayer {
         this._southEast = value;
     }
 
-    public get x(): number {
-        return this._x;
-    }
-
-    public set x(value: number) {
-        this._x = value;
-    }
-
-    public get y(): number {
-        return this._y;
-    }
-    public set y(value: number) {
-        this._y = value;
-    }
-
     public get layer(): any {
         return this._layer;
     }
@@ -154,8 +119,6 @@ class SynthLayer {
 
     constructor(
         container: HTMLElement,
-        x = 0,
-        y = 0,
         isCenterCoordinate = true,
         isCoordinateAxes = true,
         isGrid = true,
@@ -167,10 +130,6 @@ class SynthLayer {
         gapY = 30
     ) {
         this.container = container
-        this.x = x
-        this.y = y
-        this.isCenterCoordinate = isCenterCoordinate
-        this.isCoordinateAxes = isCoordinateAxes
         this.isGrid = isGrid
         this.northWest = northWest
         this.northEast = northEast
@@ -198,75 +157,22 @@ class SynthLayer {
     }
 
     centerCoordinate() {
-        this.x = this.layer.canvas.clientWidth / 2
-        this.y = this.layer.canvas.clientHeight / 2
+
+        let x = this.layer.canvas.clientWidth / 2
+        let y = this.layer.canvas.clientHeight / 2
+
+        return { x, y }
     }
 
     drawCoordinateAxes() {
 
-        this.pointGroups.push
-            ({
-                connectToBase: true,
-                isDraw: false,
-                base: {
-                    x: this.x,
-                    y: this.y,
-                },
-                points: [{
-                    x: 0,
-                    y: this.y
-                }],
-                color: 'red',
-                width: 8
-            })
+        this.addPath(0, 0, true, false, [], 'red', 2)
 
-        this.pointGroups.push
-            ({
-                connectToBase: true,
-                isDraw: false,
-                base: {
-                    x: this.x,
-                    y: this.y,
-                },
-                points: [{
-                    x: this.x,
-                    y: 0
-                }],
-                color: 'blue',
-                width: 4
-            })
+        this.addPath(0, 0, true, false, [], 'blue', 2)
 
-        this.pointGroups.push
-            ({
-                connectToBase: true,
-                isDraw: false,
-                base: {
-                    x: this.x,
-                    y: this.y,
-                },
-                points: [{
-                    x: this.layer.canvas.width,
-                    y: this.y
-                }],
-                color: 'blue',
-                width: 4
-            })
+        this.addPath(0, 0, true, false, [], 'blue', 2)
 
-        this.pointGroups.push
-            ({
-                connectToBase: true,
-                isDraw: false,
-                base: {
-                    x: this.x,
-                    y: this.y,
-                },
-                points: [{
-                    x: this.x,
-                    y: this.layer.canvas.height
-                }],
-                color: 'red',
-                width: 4
-            })
+        this.addPath(0, 0, true, false, [], 'red', 2)
 
         this.drawPaths()
     }
@@ -287,6 +193,7 @@ class SynthLayer {
             this.pointGroups.push
                 ({
                     connectToBase: true,
+                    addToBase: false,
                     isDraw: false,
                     base: {
                         x: current,
@@ -319,6 +226,7 @@ class SynthLayer {
             this.pointGroups.push
                 ({
                     connectToBase: true,
+                    addToBase: false,
                     isDraw: false,
                     base: {
                         x: current,
@@ -351,6 +259,7 @@ class SynthLayer {
             this.pointGroups.push
                 ({
                     connectToBase: true,
+                    addToBase: false,
                     isDraw: false,
                     base: {
                         x: current,
@@ -383,6 +292,7 @@ class SynthLayer {
             this.pointGroups.push
                 ({
                     connectToBase: true,
+                    addToBase: false,
                     isDraw: false,
                     base: {
                         x: current,
@@ -416,6 +326,7 @@ class SynthLayer {
             this.pointGroups.push
                 ({
                     connectToBase: true,
+                    addToBase: false,
                     isDraw: false,
                     base: {
                         x: right,
@@ -449,6 +360,7 @@ class SynthLayer {
             this.pointGroups.push
                 ({
                     connectToBase: true,
+                    addToBase: false,
                     isDraw: false,
                     base: {
                         x: right,
@@ -482,6 +394,7 @@ class SynthLayer {
             this.pointGroups.push
                 ({
                     connectToBase: true,
+                    addToBase: false,
                     isDraw: false,
                     base: {
                         x: right,
@@ -515,6 +428,7 @@ class SynthLayer {
             this.pointGroups.push
                 ({
                     connectToBase: true,
+                    addToBase: false,
                     isDraw: false,
                     base: {
                         x: right,
@@ -555,25 +469,28 @@ class SynthLayer {
         // RightBottom  +   -   3       1       2
         // LeftBottom   -   -   4       2       3
 
-        if (this.northWest) {
+        if (this.isGrid) {
 
-            this.drawBarsVerticalNorthWest('max', 'max')
-            this.drawBarsHorizontalNorthWest('max', 'max')
-        }
+            if (this.northWest) {
 
-        if (this.northEast) {
-            this.drawBarsVerticalNorthEast('max', 'max')
-            this.drawBarsHorizontalNorthEast('max', 'max')
-        }
+                this.drawBarsVerticalNorthWest('max', 'max')
+                this.drawBarsHorizontalNorthWest('max', 'max')
+            }
 
-        if (this.southEast) {
-            this.drawBarsVerticalSouthEast('max', 'max')
-            this.drawBarsHorizontalSouthEast('max', 'max')
-        }
+            if (this.northEast) {
+                this.drawBarsVerticalNorthEast('max', 'max')
+                this.drawBarsHorizontalNorthEast('max', 'max')
+            }
 
-        if (this.southWest) {
-            this.drawBarsVerticalSouthWest('max', 'max')
-            this.drawBarsHorizontalSouthWest('max', 'max')
+            if (this.southEast) {
+                this.drawBarsVerticalSouthEast('max', 'max')
+                this.drawBarsHorizontalSouthEast('max', 'max')
+            }
+
+            if (this.southWest) {
+                this.drawBarsVerticalSouthWest('max', 'max')
+                this.drawBarsHorizontalSouthWest('max', 'max')
+            }
         }
     }
 
@@ -594,7 +511,11 @@ class SynthLayer {
                 this.layer.lineWidth = path.width
 
                 path.points.forEach((point: { x: any; y: any; }) => {
-                    this.layer.lineTo(point.x, point.y)
+                    if (path.addToBase) {
+                        this.layer.lineTo(path.base.x + point.x, path.base.y + point.y)
+                    } else {
+                        this.layer.lineTo(point.x, point.y)
+                    }
                 })
 
                 this.layer.stroke()
@@ -608,22 +529,18 @@ class SynthLayer {
 
         this.setLayer()
 
-        if (this.isCenterCoordinate) {
-            this.centerCoordinate()
-        }
+        this.centerCoordinate()
 
-        if (this.isCoordinateAxes) {
-            this.drawCoordinateAxes()
-        }
+        this.drawCoordinateAxes()
 
-        if (this.isGrid) {
-            this.drawGrid()
-        }
+        this.drawGrid()
     }
 
-    addPath(x: number, y: number, points: any[], color: any, width: number) {
+    addPath(x: number, y: number, connectToBase: boolean, addToBase: boolean, points: any[], color: any, width: number) {
+
         this.pointGroups.push({
-            connectToBase: true,
+            connectToBase: connectToBase,
+            addToBase: addToBase,
             isDraw: false,
             base: {
                 x: x,

@@ -18,23 +18,19 @@
   <script src="js/controls/a/a.js"></script>
   <script src="js/synth/listeners/synthlisteners.js"></script> -->
 
-  <!-- <script src="js/synth/voices/sine/sine.js"></script> -->
 
   <script src="js/synth/view/synthlayer.js"></script>
+  <script src="js/synth/voices/sine/sine.js"></script>
   <script>
     let container = document.body;
 
-    const layer = new SynthLayer(container);
+    const layer0 = new SynthLayer(container);
 
-    layer.draw();
-    
-    // let view = new SynthView(container);
+    layer0.centerCoordinate();
 
-    // view.draw();
+    layer0.drawCoordinateAxes();
 
     // const sine = new Sine();
-
-    // sine.increment = 0.5;
 
     // sine.calc();
 
@@ -44,7 +40,8 @@
 
     // console.log(sine.wavetable);
 
-    // view.drawPath(view.base, sine.wavetable, 'magenta');
+    // layer.addPath(layer.x, layer.y, false, true, sine.wavetable, 'magenta', 2);
+    // layer.drawPaths();
   </script>
 
 </body>
