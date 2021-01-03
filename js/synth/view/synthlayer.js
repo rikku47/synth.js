@@ -1,29 +1,19 @@
 class SynthLayer {
     //#endregion
-    constructor(container, x = 0, y = 0, isCenterCoordinate = true, isCoordinateAxes = true, isGrid = true, northWest = true, northEast = true, southEast = true, southWest = true, gapX = 30, gapY = 30) {
+    constructor(container, isGrid = true, northWest = true, northEast = true, southEast = true, southWest = true, gapX = 30, gapY = 30) {
         this.container = container;
-        this.x = x;
-        this.y = y;
-        this.isCenterCoordinate = isCenterCoordinate;
-        this.isCoordinateAxes = isCoordinateAxes;
-        this.isGrid = isGrid;
         this.northWest = northWest;
         this.northEast = northEast;
         this.southEast = southEast;
         this.southWest = southWest;
         this.gapX = gapX;
         this.gapY = gapY;
+        this.GroupsOfPoints = [];
         this.createLayer('layer0');
-        this.pointGroups = [];
+        this.setLayer();
     }
     //#endregion
     //#region Getter Setter
-    get isCenterCoordinate() {
-        return this._centerCoordinate;
-    }
-    set isCenterCoordinate(value) {
-        this._centerCoordinate = value;
-    }
     get container() {
         return this._container;
     }
@@ -41,18 +31,6 @@ class SynthLayer {
     }
     set gapY(value) {
         this._gapY = value;
-    }
-    get isCoordinateAxes() {
-        return this._isCoordinateAxes;
-    }
-    set isCoordinateAxes(value) {
-        this._isCoordinateAxes = value;
-    }
-    get isGrid() {
-        return this._isGrid;
-    }
-    set isGrid(value) {
-        this._isGrid = value;
     }
     get isX() {
         return this._isX;
@@ -90,28 +68,16 @@ class SynthLayer {
     set southEast(value) {
         this._southEast = value;
     }
-    get x() {
-        return this._x;
-    }
-    set x(value) {
-        this._x = value;
-    }
-    get y() {
-        return this._y;
-    }
-    set y(value) {
-        this._y = value;
-    }
     get layer() {
         return this._layer;
     }
     set layer(value) {
         this._layer = value;
     }
-    get pointGroups() {
+    get GroupsOfPoints() {
         return this._paths;
     }
-    set pointGroups(value) {
+    set GroupsOfPoints(value) {
         this._paths = value;
     }
     createLayer(id) {
@@ -126,328 +92,134 @@ class SynthLayer {
     resetLayer() {
         this.layer.clearRect(0, 0, this.layer.canvas.width, this.layer.canvas.height);
     }
-    centerCoordinate() {
-        if (this.isCenterCoordinate) {
-            this.x = this.layer.canvas.clientWidth / 2;
-            this.y = this.layer.canvas.clientHeight / 2;
-        }
+    centerBase(path) {
+        path.base.x = this.getHalfX();
+        path.base.y = this.getHalfY();
+    }
+    getHalfX() {
+        return this.layer.canvas.clientWidth / 2;
+    }
+    getHalfY() {
+        return this.layer.canvas.clientHeight / 2;
+    }
+    getFullX() {
+        return this.layer.canvas.clientWidth;
+    }
+    getFullY() {
+        return this.layer.canvas.clientHeight;
     }
     drawCoordinateAxes() {
-        if (this.isCoordinateAxes) {
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: this.x,
-                    y: this.y,
-                },
-                points: [{
-                        x: 0,
-                        y: this.y
-                    }],
-                color: 'red',
-                width: 2
-            });
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: this.x,
-                    y: this.y,
-                },
-                points: [{
-                        x: this.x,
-                        y: 0
-                    }],
-                color: 'blue',
-                width: 2
-            });
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: this.x,
-                    y: this.y,
-                },
-                points: [{
-                        x: this.layer.canvas.width,
-                        y: this.y
-                    }],
-                color: 'blue',
-                width: 2
-            });
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: this.x,
-                    y: this.y,
-                },
-                points: [{
-                        x: this.x,
-                        y: this.layer.canvas.height
-                    }],
-                color: 'red',
-                width: 2
-            });
-            this.drawPaths();
-        }
-    }
-    drawBarsVerticalNorthWest(width, height) {
-        ({ height, width } = this.setWidthAndHeight(height, width));
-        let current = this.x;
-        let floor = this.y;
-        let roof = floor - height;
-        while (current >= (this.x - width + this.gapX)) {
-            current -= this.gapX;
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: current,
-                    y: floor,
-                },
-                points: [{
-                        x: current,
-                        y: roof
-                    }],
-                color: 'black',
-                width: 1
-            });
-        }
+        // x: number,
+        // y: number,
+        // centerBase: boolean,
+        // points: any[],
+        // addToBase: boolean,
+        // connectToBase: boolean,
+        // color: any,
+        // width: number
+        let x = 0;
+        let y = 0;
+        let color = 'red';
+        let width = 2;
+        this.GroupsOfPoints.push(this.createGroupOfPoints(x, y, true, [0, 'half'], false, false, true, color, width));
+        this.GroupsOfPoints.push(this.createGroupOfPoints(x, y, true, ['half', 'full'], false, false, true, color, width));
+        color = 'blue';
+        this.GroupsOfPoints.push(this.createGroupOfPoints(x, y, true, ['half', 0], false, false, true, color, width));
+        this.GroupsOfPoints.push(this.createGroupOfPoints(x, y, true, ['full', 'half'], false, false, true, color, width));
         this.drawPaths();
-    }
-    drawBarsVerticalNorthEast(width, height) {
-        ({ height, width } = this.setWidthAndHeight(height, width));
-        let current = this.x;
-        let floor = this.y;
-        let roof = floor - height;
-        while (current <= (this.x + width - this.gapX)) {
-            current += this.gapX;
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: current,
-                    y: floor,
-                },
-                points: [{
-                        x: current,
-                        y: roof
-                    }],
-                color: 'black',
-                width: 1
-            });
-        }
-        this.drawPaths();
-    }
-    drawBarsVerticalSouthEast(width, height) {
-        ({ height, width } = this.setWidthAndHeight(height, width));
-        let current = this.x;
-        let floor = this.y;
-        let roof = floor + height;
-        while (current <= (this.x + width - this.gapX)) {
-            current += this.gapX;
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: current,
-                    y: floor,
-                },
-                points: [{
-                        x: current,
-                        y: roof
-                    }],
-                color: 'black',
-                width: 1
-            });
-        }
-        this.drawPaths();
-    }
-    drawBarsVerticalSouthWest(width, height) {
-        ({ height, width } = this.setWidthAndHeight(height, width));
-        let current = this.x;
-        let floor = this.y;
-        let roof = floor + height;
-        while (current >= (this.x - width + this.gapX)) {
-            current -= this.gapX;
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: current,
-                    y: floor,
-                },
-                points: [{
-                        x: current,
-                        y: roof
-                    }],
-                color: 'black',
-                width: 1
-            });
-        }
-        this.drawPaths();
-    }
-    drawBarsHorizontalNorthWest(width, height) {
-        ({ height, width } = this.setWidthAndHeight(height, width));
-        let current = this.y;
-        let right = this.x;
-        let left = this.x - width;
-        while (current >= (this.y - height + this.gapY)) {
-            current -= this.gapY;
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: right,
-                    y: current,
-                },
-                points: [{
-                        x: left,
-                        y: current
-                    }],
-                color: 'black',
-                width: 1
-            });
-        }
-        this.drawPaths();
-    }
-    drawBarsHorizontalNorthEast(width, height) {
-        ({ height, width } = this.setWidthAndHeight(height, width));
-        let current = this.y;
-        let right = this.x + width;
-        let left = this.x;
-        while (current >= (this.y - height + this.gapY)) {
-            current -= this.gapY;
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: right,
-                    y: current,
-                },
-                points: [{
-                        x: left,
-                        y: current
-                    }],
-                color: 'black',
-                width: 1
-            });
-        }
-        this.drawPaths();
-    }
-    drawBarsHorizontalSouthEast(width, height) {
-        ({ height, width } = this.setWidthAndHeight(height, width));
-        let current = this.y;
-        let right = this.x + width;
-        let left = this.x;
-        while (current <= (this.y + height - this.gapY)) {
-            current += this.gapY;
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: right,
-                    y: current,
-                },
-                points: [{
-                        x: left,
-                        y: current
-                    }],
-                color: 'black',
-                width: 1
-            });
-        }
-        this.drawPaths();
-    }
-    drawBarsHorizontalSouthWest(width, height) {
-        ({ height, width } = this.setWidthAndHeight(height, width));
-        let current = this.y;
-        let right = this.x;
-        let left = this.x - width;
-        while (current <= (this.y + height - this.gapY)) {
-            current += this.gapY;
-            this.pointGroups.push({
-                connectToBase: true,
-                addToBase: false,
-                isDraw: false,
-                base: {
-                    x: right,
-                    y: current,
-                },
-                points: [{
-                        x: left,
-                        y: current
-                    }],
-                color: 'black',
-                width: 1
-            });
-        }
-        this.drawPaths();
-    }
-    setWidthAndHeight(height, width) {
-        if (height == 'max') {
-            height = this.y;
-        }
-        if (width == 'max') {
-            width = this.x;
-        }
-        width = Number(width);
-        height = Number(height);
-        return { height, width };
     }
     drawGrid() {
         //              x   y   legend  inverse index
-        // LeftTop      -   +   1       3       0
-        // RightTop     +   +   2       4       1
-        // RightBottom  +   -   3       1       2
-        // LeftBottom   -   -   4       2       3
-        if (this.isGrid) {
-            if (this.northWest) {
-                this.drawBarsVerticalNorthWest('max', 'max');
-                this.drawBarsHorizontalNorthWest('max', 'max');
+        // northWest    -   +   1       3       0
+        // northEast    +   +   2       4       1
+        // southEast    +   -   3       1       2
+        // southWest    -   -   4       2       3
+        let xBase = 0;
+        let yBase = 0;
+        let numberOfpointGroupsX = 0;
+        let numberOfpointGroupsY = 0;
+        let color = 'black';
+        let width = 1;
+        if (true) {
+            numberOfpointGroupsX = (Math.floor(this.getHalfX() / this.gapX));
+        }
+        if (true) {
+            numberOfpointGroupsY = (Math.floor(this.getHalfY() / this.gapY));
+        }
+        if (numberOfpointGroupsY > 0) {
+            xBase = this.getHalfX();
+            yBase = this.getHalfY();
+            let count = 0;
+            while (count <= numberOfpointGroupsY) {
+                if (this.northWest && this._northEast) {
+                    let left = 0;
+                    let right = this.getFullX();
+                    yBase -= this.gapY;
+                    this.GroupsOfPoints.push(this.createGroupOfPoints(left, yBase, false, [right, yBase], false, false, true, color, width));
+                }
+                else {
+                    if (this.northWest) {
+                        let left = 0;
+                        let right = this.getHalfX();
+                        yBase -= this.gapY;
+                        this.GroupsOfPoints.push(this.createGroupOfPoints(right, yBase, false, [left, yBase], false, false, true, color, width));
+                    }
+                    if (this.northEast) {
+                        let left = this.getHalfX();
+                        let right = this.getHalfX();
+                        yBase -= this.gapY;
+                        this.GroupsOfPoints.push(this.createGroupOfPoints(left, yBase, false, [right, yBase], false, false, true, color, width));
+                    }
+                }
+                // if (this.southEast) {
+                // }
+                // if (this.southWest) {
+                // }
+                count++;
             }
-            if (this.northEast) {
-                this.drawBarsVerticalNorthEast('max', 'max');
-                this.drawBarsHorizontalNorthEast('max', 'max');
-            }
-            if (this.southEast) {
-                this.drawBarsVerticalSouthEast('max', 'max');
-                this.drawBarsHorizontalSouthEast('max', 'max');
-            }
-            if (this.southWest) {
-                this.drawBarsVerticalSouthWest('max', 'max');
-                this.drawBarsHorizontalSouthWest('max', 'max');
-            }
+            this.drawPaths();
         }
     }
     drawPaths() {
-        this.pointGroups.forEach((path) => {
+        this.GroupsOfPoints.forEach((path) => {
             if (!path.isDraw) {
                 this.layer.beginPath();
+                if (path.centerBase) {
+                    this.centerBase(path);
+                }
                 if (path.connectToBase) {
                     this.layer.moveTo(path.base.x, path.base.y);
                 }
                 this.layer.strokeStyle = path.color;
                 this.layer.lineWidth = path.width;
                 path.points.forEach((point) => {
-                    if (path.addToBase) {
-                        this.layer.lineTo(path.base.x + point.x, path.base.y + point.y);
+                    let x = 0;
+                    let y = 0;
+                    if (point.x == 'half') {
+                        x = this.getHalfX();
+                    }
+                    else if (point.x == 'full') {
+                        x = this.getFullX();
                     }
                     else {
-                        this.layer.lineTo(point.x, point.y);
+                        x = point.x;
+                    }
+                    if (point.y == 'half') {
+                        y = this.getHalfY();
+                    }
+                    else if (point.y == 'full') {
+                        y = this.getFullY();
+                    }
+                    else {
+                        y = point.y;
+                    }
+                    if (path.addToBase) {
+                        this.layer.lineTo(path.base.x + x, path.base.y + y);
+                    }
+                    else if (path.subtractToBase) {
+                    }
+                    else {
+                        this.layer.lineTo(x, y);
                     }
                 });
                 this.layer.stroke();
@@ -456,24 +228,33 @@ class SynthLayer {
         });
     }
     draw() {
-        this.setLayer();
-        this.centerCoordinate();
         this.drawCoordinateAxes();
         this.drawGrid();
     }
-    addPath(x, y, connectToBase, addToBase, points, color, width) {
-        this.pointGroups.push({
-            connectToBase: connectToBase,
-            addToBase: addToBase,
-            isDraw: false,
+    createGroupOfPoints(x, y, centerBase, points, addToBase, subtractToBase, connectToBase, color, width) {
+        let group = {
             base: {
                 x: x,
                 y: y,
             },
-            points: points,
+            centerBase: centerBase,
+            points: [],
+            addToBase: addToBase,
+            subtractToBase: subtractToBase,
+            connectToBase: connectToBase,
             color: color,
-            width: width
-        });
+            width: width,
+            isDraw: false,
+        };
+        for (let index = 0; index < points.length;) {
+            let x = points[index];
+            index++;
+            let y = points[index];
+            group.points.push({ x: x, y: y });
+            // group.points.push({ x: x, y: y, shiftX: 0, shiftY: 0, shiftFromBase: true, shiftisShift: false });
+            index++;
+        }
+        return group;
     }
     swapVariables() {
     }
