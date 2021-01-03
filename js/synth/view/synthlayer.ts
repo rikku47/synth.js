@@ -7,12 +7,18 @@ class SynthLayer {
     private _gapY: number;
     private _isX: boolean;
     private _isY: boolean;
-    private _northWest: boolean;
-    private _northEast: boolean;
-    private _southEast: boolean;
-    private _southWest: boolean;
+    private _left: boolean;
+    private _up: boolean;
+    private _right: boolean;
+    private _down: boolean;
+    private _gridNorthWest: boolean;
+    private _gridNorthEast: boolean;
+    private _gridSouthEast: boolean;
+    private _gridSouthWest: boolean;
 
     private _layer: any;
+    private _grid: any;
+    private _coordinateAxes: any[];
     private _paths: any[];
 
     //#endregion
@@ -59,36 +65,36 @@ class SynthLayer {
         this._isY = value;
     }
 
-    public get northWest(): boolean {
-        return this._northWest;
+    public get gridNorthWest(): boolean {
+        return this._gridNorthWest;
     }
 
-    public set northWest(value: boolean) {
-        this._northWest = value;
+    public set gridNorthWest(value: boolean) {
+        this._gridNorthWest = value;
     }
 
-    public get northEast(): boolean {
-        return this._northEast;
+    public get gridNorthEast(): boolean {
+        return this._gridNorthEast;
     }
 
-    public set northEast(value: boolean) {
-        this._northEast = value;
+    public set gridNorthEast(value: boolean) {
+        this._gridNorthEast = value;
     }
 
-    public get southWest(): boolean {
-        return this._southWest;
+    public get gridSouthWest(): boolean {
+        return this._gridSouthWest;
     }
 
-    public set southWest(value: boolean) {
-        this._southWest = value;
+    public set gridSouthWest(value: boolean) {
+        this._gridSouthWest = value;
     }
 
-    public get southEast(): boolean {
-        return this._southEast;
+    public get gridSouthEast(): boolean {
+        return this._gridSouthEast;
     }
 
-    public set southEast(value: boolean) {
-        this._southEast = value;
+    public set gridSouthEast(value: boolean) {
+        this._gridSouthEast = value;
     }
 
     public get layer(): any {
@@ -97,6 +103,22 @@ class SynthLayer {
 
     public set layer(value: any) {
         this._layer = value;
+    }
+
+    public get grid(): any {
+        return this._grid;
+    }
+
+    public set grid(value: any) {
+        this._grid = value;
+    }
+
+    public get coordinateAxes(): any[] {
+        return this._coordinateAxes;
+    }
+
+    public set coordinateAxes(value: any[]) {
+        this._coordinateAxes = value;
     }
 
     public get GroupsOfPoints(): any[] {
@@ -110,22 +132,30 @@ class SynthLayer {
 
     constructor(
         container: HTMLElement,
-        isGrid = true,
-        northWest = true,
-        northEast = true,
-        southEast = true,
-        southWest = true,
+        gridNorthWest = true,
+        gridNorthEast = true,
+        gridSouthEast = true,
+        gridSouthWest = true,
         gapX = 30,
         gapY = 30
     ) {
         this.container = container
-        this.northWest = northWest
-        this.northEast = northEast
-        this.southEast = southEast
-        this.southWest = southWest
+        this.gridNorthWest = gridNorthWest
+        this.gridNorthEast = gridNorthEast
+        this.gridSouthEast = gridSouthEast
+        this.gridSouthWest = gridSouthWest
         this.gapX = gapX
         this.gapY = gapY
-        this.GroupsOfPoints = [];
+        this.GroupsOfPoints = []
+        this.coordinateAxes = []
+        this.grid = {
+            northWest: [],
+            northEast: [],
+            southEast: [],
+            southWest: []
+        }
+
+
 
         this.createLayer('layer0')
         this.setLayer()
@@ -170,31 +200,35 @@ class SynthLayer {
 
     drawCoordinateAxes() {
 
-        // x: number,
-        // y: number,
-        // centerBase: boolean,
-        // points: any[],
-        // addToBase: boolean,
-        // connectToBase: boolean,
-        // color: any,
-        // width: number
-
         let x = 0
         let y = 0
         let color = 'red'
         let width = 2
 
-        this.GroupsOfPoints.push(this.createGroupOfPoints(x, y, true, [0, 'half'], false, false, true, color, width))
+        if (true) {
+            this.coordinateAxes.push(this.createGroupOfPoints(x, y, true, [0, 'half'], false, false, true, color, width))
+        }
 
-        this.GroupsOfPoints.push(this.createGroupOfPoints(x, y, true, ['half', 'full'], false, false, true, color, width))
+        if (true) {
+            this.coordinateAxes.push(this.createGroupOfPoints(x, y, true, ['half', 'full'], false, false, true, color, width))
+
+        }
 
         color = 'blue'
 
-        this.GroupsOfPoints.push(this.createGroupOfPoints(x, y, true, ['half', 0], false, false, true, color, width))
+        if (true) {
+            this.coordinateAxes.push(this.createGroupOfPoints(x, y, true, ['half', 0], false, false, true, color, width))
 
-        this.GroupsOfPoints.push(this.createGroupOfPoints(x, y, true, ['full', 'half'], false, false, true, color, width))
+        }
 
-        this.drawPaths()
+        if (true) {
+            this.coordinateAxes.push(this.createGroupOfPoints(x, y, true, ['full', 'half'], false, false, true, color, width))
+
+        }
+
+        if (true || true || true || true) {
+            this.drawPaths(this.coordinateAxes)
+        }
     }
 
     drawGrid() {
@@ -205,83 +239,235 @@ class SynthLayer {
         // southEast    +   -   3       1       2
         // southWest    -   -   4       2       3
 
+        let numberOfPointGroupsX = 0;
+        let numberOfPointGroupsY = 0;
 
-        let xBase = 0
-        let yBase = 0
+        if (true) {
+            numberOfPointGroupsX = (Math.floor(this.getHalfX() / this.gapX))
+        }
 
-        let numberOfpointGroupsX = 0;
-        let numberOfpointGroupsY = 0;
+        if (true) {
+            numberOfPointGroupsY = (Math.floor(this.getHalfY() / this.gapY))
+        }
+
+        if (numberOfPointGroupsY > 0) {
+
+            this.gridNorthWestHorizontal(numberOfPointGroupsY)
+
+            this.gridNorthEastHorizontal(numberOfPointGroupsY)
+
+            this.gridSouthEastHorizontal(numberOfPointGroupsY)
+
+            this.gridSouthWestHorizontal(numberOfPointGroupsY)
+        }
+
+        if (numberOfPointGroupsX > 0) {
+
+            this.gridNorthWestVertical(numberOfPointGroupsX)
+   
+            this.gridSouthEastVertical(numberOfPointGroupsX)
+
+            this.gridSouthWestVertical(numberOfPointGroupsX)
+
+            this.gridNorthEastVertical(numberOfPointGroupsX)
+        }
+    }
+
+    private gridNorthWestHorizontal(numberOfPointGroupsY: number) {
+
+        let y = this.getHalfY()
 
         let color = 'black'
         let width = 1
 
-        if (true) {
-            numberOfpointGroupsX = (Math.floor(this.getHalfX() / this.gapX));
+        let left = 0
+        let right = this.getHalfX()
+
+        let counter = 0
+
+        while (counter <= numberOfPointGroupsY) {
+
+            y -= this.gapY
+
+            this.grid.northWest.push(this.createGroupOfPoints(left, y, false, [right, y], false, false, true, color, width))
+
+            counter++
         }
 
-        if (true) {
-            numberOfpointGroupsY = (Math.floor(this.getHalfY() / this.gapY));
-        }
-
-        if (numberOfpointGroupsY > 0) {
-
-            xBase = this.getHalfX()
-            yBase = this.getHalfY()
-
-            let count = 0
-
-            while (count <= numberOfpointGroupsY) {
-
-                if (this.northWest && this._northEast) {
-
-                    let left = 0
-                    let right = this.getFullX()
-
-                    yBase -= this.gapY;
-
-                    this.GroupsOfPoints.push(this.createGroupOfPoints(left, yBase, false, [right, yBase], false, false, true, color, width))
-
-                } else {
-                    if (this.northWest) {
-
-                        let left = 0
-                        let right = this.getHalfX()
-
-                        yBase -= this.gapY;
-
-                        this.GroupsOfPoints.push(this.createGroupOfPoints(right, yBase, false, [left, yBase], false, false, true, color, width))
-
-                    }
-                    
-                    if (this.northEast) {
-
-                        let left = this.getHalfX()
-                        let right = this.getHalfX()
-
-                        yBase -= this.gapY;
-
-                        this.GroupsOfPoints.push(this.createGroupOfPoints(left, yBase, false, [right, yBase], false, false, true, color, width))
-                    }
-                }
-
-                // if (this.southEast) {
-
-                // }
-
-                // if (this.southWest) {
-
-                // }
-
-                count++;
-            }
-
-            this.drawPaths()
-        }
+        this.drawPaths(this.grid.northWest)
     }
 
-    drawPaths() {
+    private gridNorthEastHorizontal(numberOfPointGroupsY: number) {
 
-        this.GroupsOfPoints.forEach((path) => {
+        let y = this.getHalfY()
+
+        let color = 'black'
+        let width = 1
+
+        let left = this.getHalfX()
+        let right = this.getFullX()
+
+        let counter = 0
+
+        while (counter <= numberOfPointGroupsY) {
+
+            y -= this.gapY
+
+            this.grid.northEast.push(this.createGroupOfPoints(left, y, false, [right, y], false, false, true, color, width))
+
+            counter++
+        }
+
+        this.drawPaths(this.grid.northEast)
+    }
+
+    private gridSouthEastHorizontal(numberOfPointGroupsY: number) {
+
+        let y = this.getHalfY()
+
+        let color = 'black'
+        let width = 1
+
+        let left = this.getHalfX()
+        let right = this.getFullX()
+
+        let counter = 0
+
+        while (counter <= numberOfPointGroupsY) {
+
+            y += this.gapY
+
+            this.grid.southEast.push(this.createGroupOfPoints(left, y, false, [right, y], false, false, true, color, width))
+
+            counter++
+        }
+
+        this.drawPaths(this.grid.southEast)
+    }
+
+    private gridSouthWestHorizontal(numberOfPointGroupsY: number) {
+
+        let y = this.getHalfY()
+
+        let color = 'black'
+        let width = 1
+
+        let left = 0
+        let right = this.getHalfX()
+
+        let counter = 0
+
+        while (counter <= numberOfPointGroupsY) {
+
+            y += this.gapY
+
+            this.grid.southWest.push(this.createGroupOfPoints(left, y, false, [right, y], false, false, true, color, width))
+
+            counter++
+        }
+
+        this.drawPaths(this.grid.southWest)
+    }
+
+    private gridNorthWestVertical(numberOfPointGroupsX: number) {
+
+        let x = this.getHalfX()
+
+        let color = 'black'
+        let width = 1
+
+        let top = 0
+        let bottom = this.getHalfY()
+
+        let counter = 0
+
+        while (counter <= numberOfPointGroupsX) {
+
+            x -= this.gapX
+
+            this.grid.northWest.push(this.createGroupOfPoints(x, top, false, [x, bottom], false, false, true, color, width))
+
+            counter++
+        }
+
+        this.drawPaths(this.grid.northWest)
+    }
+
+    private gridNorthEastVertical(numberOfPointGroupsX: number) {
+
+        let x = this.getHalfX()
+
+        let color = 'black'
+        let width = 1
+
+        let top = 0
+        let bottom = this.getHalfY()
+
+        let counter = 0
+
+        while (counter <= numberOfPointGroupsX) {
+
+            x += this.gapX
+
+            this.grid.northEast.push(this.createGroupOfPoints(x, top, false, [x, bottom], false, false, true, color, width))
+
+            counter++
+        }
+
+        this.drawPaths(this.grid.northEast)
+    }
+
+    private gridSouthEastVertical(numberOfPointGroupsX: number) {
+
+        let x = this.getHalfX()
+
+        let color = 'black'
+        let width = 1
+
+        let top = this.getHalfY()
+        let bottom = this.getFullY()
+
+        let counter = 0
+
+        while (counter <= numberOfPointGroupsX) {
+
+            x += this.gapX
+
+            this.grid.southEast.push(this.createGroupOfPoints(x, top, false, [x, bottom], false, false, true, color, width))
+
+            counter++
+        }
+
+        this.drawPaths(this.grid.southEast)
+    }
+
+    private gridSouthWestVertical(numberOfPointGroupsX: number) {
+
+        let x = this.getHalfX()
+
+        let color = 'black'
+        let width = 1
+
+        let top = this.getHalfY()
+        let bottom = this.getFullY()
+
+        let counter = 0
+
+        while (counter <= numberOfPointGroupsX) {
+
+            x -= this.gapX
+
+            this.grid.southWest.push(this.createGroupOfPoints(x, top, false, [x, bottom], false, false, true, color, width))
+
+            counter++
+        }
+
+        this.drawPaths(this.grid.southWest)
+    }
+
+    drawPaths(GroupsOfPoints: any) {
+
+        GroupsOfPoints.forEach((path) => {
 
             if (!path.isDraw) {
 

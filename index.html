@@ -27,7 +27,14 @@
     const layer0 = new SynthLayer(container);
 
     layer0.drawCoordinateAxes();
+
+    layer0.northWest = true;
+    layer0.northEast = true;
+    layer0.southEast = true;
+    layer0.southWest = true;
+    
     layer0.drawGrid();
+    
     // const sine = new Sine();
 
     // sine.calc();
