@@ -221,7 +221,7 @@ class SynthLayer {
     gridSouthWestHorizontal(numberOfPointGroupsY) {
         let y = this.getHalfY();
         let color = 'black';
-        let width = 1;
+        let width = 4;
         let left = 0;
         let right = this.getHalfX();
         let counter = 0;
@@ -235,7 +235,7 @@ class SynthLayer {
     gridNorthWestVertical(numberOfPointGroupsX) {
         let x = this.getHalfX();
         let color = 'black';
-        let width = 1;
+        let width = 4;
         let top = 0;
         let bottom = this.getHalfY();
         let counter = 0;
@@ -336,8 +336,8 @@ class SynthLayer {
         });
     }
     draw() {
-        this.drawCoordinateAxes();
-        this.drawGrid();
+        this.resetLayer();
+        this.drawPaths(this.grid.northWest);
     }
     createGroupOfPoints(x, y, centerBase, points, addToBase, subtractToBase, connectToBase, color, width) {
         let group = {

@@ -264,18 +264,21 @@ class SynthLayer {
         if (numberOfPointGroupsX > 0) {
 
             this.gridNorthWestVertical(numberOfPointGroupsX)
-   
+
             this.gridSouthEastVertical(numberOfPointGroupsX)
 
             this.gridSouthWestVertical(numberOfPointGroupsX)
 
             this.gridNorthEastVertical(numberOfPointGroupsX)
+
         }
     }
 
     private gridNorthWestHorizontal(numberOfPointGroupsY: number) {
 
-        let y = this.getHalfY()
+        if (this.grid.northWest != undefined && this.grid.northWest.length != numberOfPointGroupsY) {
+            this.grid.northWest = []
+            let y = this.getHalfY()
 
         let color = 'black'
         let width = 1
@@ -293,6 +296,8 @@ class SynthLayer {
 
             counter++
         }
+        }
+        
 
         this.drawPaths(this.grid.northWest)
     }
@@ -350,7 +355,7 @@ class SynthLayer {
         let y = this.getHalfY()
 
         let color = 'black'
-        let width = 1
+        let width = 4
 
         let left = 0
         let right = this.getHalfX()
@@ -374,7 +379,7 @@ class SynthLayer {
         let x = this.getHalfX()
 
         let color = 'black'
-        let width = 1
+        let width = 4
 
         let top = 0
         let bottom = this.getHalfY()
@@ -524,9 +529,10 @@ class SynthLayer {
 
     draw() {
 
-        this.drawCoordinateAxes()
+        this.resetLayer()
 
-        this.drawGrid()
+        this.drawPaths(this.grid.northWest);
+
     }
 
     createGroupOfPoints(
