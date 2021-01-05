@@ -7,7 +7,7 @@
 </head>
 
 <body>
-  <!-- <script src="js/controls/div/div.js"></script>
+  <script src="js/controls/div/div.js"></script>
   <script src="js/controls/heading/heading.js"></script>
   <script src="js/controls/label/label.js"></script>
   <script src="js/controls/input/input.js"></script>
@@ -16,37 +16,25 @@
   <script src="js/controls/ul/ul.js"></script>
   <script src="js/controls/li/li.js"></script>
   <script src="js/controls/a/a.js"></script>
-  <script src="js/synth/listeners/synthlisteners.js"></script> -->
+  <script src="js/synth/listeners/synthlisteners.js"></script>
 
 
-  <script src="js/synth/view/synthlayer.js"></script>
+  <script src="js/synth/view/svg/synthlayer.js"></script>
   <script src="js/synth/voices/sine/sine.js"></script>
   <script>
-    let container = document.body;
-
-    const layer0 = new SynthLayer(container);
-
-    layer0.drawCoordinateAxes();
-
-    layer0.northWest = true;
-    layer0.northEast = true;
-    layer0.southEast = true;
-    layer0.southWest = true;
     
-    layer0.drawGrid();
-    
+    const svg = new SynthLayerSVG(document.body);
+
+    svg.drawGrid();
+
+    svg.drawCoordinateAxes();
+
     // const sine = new Sine();
 
     // sine.calc();
 
-    // console.log(sine.result);
-
     // sine.equalizeY();
 
-    // console.log(sine.wavetable);
-
-    // layer.addPath(layer.x, layer.y, false, true, sine.wavetable, 'magenta', 2);
-    // layer.drawPaths();
   </script>
 
 </body>
