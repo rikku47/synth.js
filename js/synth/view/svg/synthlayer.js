@@ -375,6 +375,7 @@ class SynthLayerSVG {
         let currentY = this.getHalfY();
         let toX = 0;
         let toY = 0;
+        let g = this.createGroup('sine');
         for (let index = 0; index <= 360;) {
             index += increment;
             let rad = index * Math.PI / 180;
@@ -382,10 +383,11 @@ class SynthLayerSVG {
             y *= 90;
             toX = currentX + increment;
             toY = this.getHalfY() + y;
-            this.layer.appendChild(this.createLine('sineY' + y, currentX + '', currentY + '', toX + '', toY + '', 'rgb(255,100,255)', '4'));
+            g.appendChild(this.createLine('sineY' + y, currentX + '', currentY + '', toX + '', toY + '', 'rgb(255,100,255)', '4'));
             currentX = toX;
             currentY = toY;
         }
+        this.layer.appendChild(g);
     }
     swapVariables() {
     }

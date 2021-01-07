@@ -786,6 +786,8 @@ class SynthLayerSVG {
         let toX = 0
         let toY = 0
 
+        let g = this.createGroup('sine')
+
         for (let index = 0; index <= 360;) {
 
             index += increment
@@ -799,7 +801,7 @@ class SynthLayerSVG {
             toX = currentX + increment
             toY = this.getHalfY() + y
 
-            this.layer.appendChild(
+            g.appendChild(
                 this.createLine(
                     'sineY' + y,
                     currentX + '',
@@ -814,6 +816,8 @@ class SynthLayerSVG {
             currentX = toX
             currentY = toY
         }
+
+        this.layer.appendChild(g)
     }
 
     swapVariables() {

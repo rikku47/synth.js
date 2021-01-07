@@ -7,34 +7,29 @@
 </head>
 
 <body>
-  <script src="js/controls/div/div.js"></script>
-  <script src="js/controls/heading/heading.js"></script>
-  <script src="js/controls/label/label.js"></script>
-  <script src="js/controls/input/input.js"></script>
-  <script src="js/controls/select/select.js"></script>
-  <script src="js/controls/option/option.js"></script>
-  <script src="js/controls/ul/ul.js"></script>
-  <script src="js/controls/li/li.js"></script>
-  <script src="js/controls/a/a.js"></script>
-  <script src="js/synth/listeners/synthlisteners.js"></script>
 
-
+  <!-- GUI -->
+  <script src="js/synth/view/interface/synthlayerinterface.js"></script>
   <script src="js/synth/view/svg/synthlayer.js"></script>
   <script src="js/synth/voices/sine/sine.js"></script>
   <script>
-    
-    const svg = new SynthLayerSVG(document.body);
+    let body = document.body;
+
+    const svg = new SynthLayerSVG(body);
 
     svg.drawGrid();
 
     svg.drawCoordinateAxes();
+
+    const interface = new SynthLayerInterface(body);
+
+    // svg.drawSine();
 
     // const sine = new Sine();
 
     // sine.calc();
 
     // sine.equalizeY();
-
   </script>
 
 </body>
