@@ -1,0 +1,6 @@
+class MHTMLElement {
+    
+    constructor(parameters) {
+        
+    }
+}
