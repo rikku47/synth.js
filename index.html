@@ -10,16 +10,20 @@
 
   <!-- GUI -->
   <script src="js/synth/view/interface/synthlayerinterface.js"></script>
-  <script src="js/synth/view/svg/synthlayer.js"></script>
-  <script src="js/synth/voices/sine/sine.js"></script>
+  <!-- <script src="js/synth/view/svg/synthlayer.js"></script>
+  <script src="js/synth/voices/sine/sine.js"></script> -->
+
+  <script src="js/synth/view/interface/controls/HTMLElement/DIVElement/DIVElement.js"></script>
   <script>
-    let body = document.body;
+    const interface = new SynthLayerInterface(document.body);
 
-    const svg = new SynthLayerSVG(body);
+    // let body = document.body;
 
-    svg.drawGrid();
+    // const svg = new SynthLayerSVG(body);
 
-    svg.drawCoordinateAxes();
+    // svg.drawGrid();
+
+    // svg.drawCoordinateAxes();
 
     // const interface = new SynthLayerInterface(body);
 
