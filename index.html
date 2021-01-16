@@ -9,25 +9,22 @@
 <body>
 
   <!-- GUI -->
-  <script src="js/synth/view/interface/synthlayerinterface.js"></script>
-  <!-- <script src="js/synth/view/svg/synthlayer.js"></script>
-  <script src="js/synth/voices/sine/sine.js"></script> -->
+  <script src="js/synth/view/svg/synthlayer.js"></script>
 
-  <script src="js/synth/view/interface/controls/HTMLElement/DIVElement/DIVElement.js"></script>
   <script>
-    const interface = new SynthLayerInterface(document.body);
+    let body = document.body;
 
-    // let body = document.body;
+    const svg = new SynthLayerSVG(body);
 
-    // const svg = new SynthLayerSVG(body);
+    svg.drawGrid();
 
-    // svg.drawGrid();
+    svg.drawCoordinateAxes();
 
-    // svg.drawCoordinateAxes();
+    svg.calc();
 
-    // const interface = new SynthLayerInterface(body);
+    // svg.draw();
 
-    // svg.drawSine();
+    svg.applyVolume();
 
     // const sine = new Sine();
 

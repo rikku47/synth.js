@@ -1,6 +1,7 @@
 class SynthLayerSVG {
     //#endregion
-    constructor(container, gridNorthWest = true, gridNorthEast = true, gridSouthEast = true, gridSouthWest = true, isX = true, isY = true, gapX = 30, gapY = 30) {
+    //#region Constructor
+    constructor(container, gridNorthWest = true, gridNorthEast = true, gridSouthEast = true, gridSouthWest = true, isX = true, isY = true, gapX = 30, gapY = 30, volume = 90) {
         this.container = container;
         this.gridNorthWest = gridNorthWest;
         this.gridNorthEast = gridNorthEast;
@@ -30,9 +31,11 @@ class SynthLayerSVG {
                 y: []
             }
         };
+        this.volume = volume;
         this.createLayer('layer0');
         this.setLayer();
     }
+    //#endregion
     //#endregion
     //#region Getter Setter
     get container() {
@@ -137,6 +140,20 @@ class SynthLayerSVG {
     set GroupsOfPoints(value) {
         this._paths = value;
     }
+    get paths() {
+        return this._paths;
+    }
+    set paths(value) {
+        this._paths = value;
+    }
+    get volume() {
+        return this._volume;
+    }
+    set volume(value) {
+        this._volume = value;
+    }
+    //#endregion
+    //#region Layer methods
     createLayer(id) {
         this.layer = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         this.layer.id = id;
@@ -149,6 +166,7 @@ class SynthLayerSVG {
     resetLayer() {
         // Clear svg
     }
+    //#endregion
     centerBase(path) {
         path.base.x = this.getHalfX();
         path.base.y = this.getHalfY();
@@ -369,28 +387,103 @@ class SynthLayerSVG {
             this.layer.appendChild(g);
         }
     }
-    drawSine() {
-        let increment = 1;
-        let currentX = this.getHalfX();
-        let currentY = this.getHalfY();
+    applyVolume() {
+        this.paths.forEach(path => {
+            path.forEach(point => {
+                point.y = point.y * this.volume;
+            });
+        });
+        this.draw();
+    }
+    calcFunc(func, start, end, increment) {
+        //#region Parameter
+        let path = [];
+        let x = start;
+        //#endregion
+        while (x <= end) {
+            let radiant = x * Math.PI / 180;
+            let y = 0;
+            switch (func) {
+                case 'cosquare':
+                    y = Math.cos(radiant);
+                    if (y > 0) {
+                        y = 1;
+                    }
+                    else {
+                        y = -1;
+                    }
+                    break;
+                case 'cosine':
+                case 'cotriangle':
+                    y = Math.cos(radiant);
+                    break;
+                case 'square':
+                    y = Math.sin(radiant);
+                    if (y < 0) {
+                        y = -1;
+                    }
+                    else {
+                        y = 1;
+                    }
+                    break;
+                default:
+                    y = Math.sin(radiant);
+                    break;
+            }
+            path.push({ x, y });
+            x += increment;
+        }
+        this.paths.push(path);
+    }
+    drawWave(x, y) {
+        let baseX = x;
+        let baseY = y;
         let toX = 0;
         let toY = 0;
-        let g = this.createGroup('sine');
-        for (let index = 0; index <= 360;) {
-            index += increment;
-            let rad = index * Math.PI / 180;
-            let y = Math.sin(rad);
-            y *= 90;
-            toX = currentX + increment;
-            toY = this.getHalfY() + y;
-            g.appendChild(this.createLine('sineY' + y, currentX + '', currentY + '', toX + '', toY + '', 'rgb(255,100,255)', '4'));
-            currentX = toX;
-            currentY = toY;
+        let currentX = 0;
+        let currentY = 0;
+        let color = 'rgb(255,100,255)';
+        let width = '4';
+        let g = this.createGroup('wave');
+        for (let index0 = 0; index0 < this.paths.length; index0++) {
+            for (let index1 = 0; index1 < this.paths[index0].length; index1++) {
+                const point0 = this.paths[index0][index1];
+                index1++;
+                const point1 = this.paths[index0][index1];
+                index1--;
+                currentX = baseX + point0.x;
+                currentY = baseY + point0.y;
+                if (point1 != undefined) {
+                    toX = baseX + point1.x;
+                    toY = baseY + point1.y;
+                    g.appendChild(this.createLine(Date.now() + '', currentX + '', currentY + '', toX + '', toY + '', color, width));
+                }
+            }
         }
         this.layer.appendChild(g);
     }
     swapVariables() {
     }
     syncToBase() {
+    }
+    calc() {
+        let temp = ((this.getHalfX() - (this.getHalfX() % 360)) * 2);
+        let start = temp * -1;
+        let end = temp;
+        this.calcFunc('sine', start, end, 1);
+        // this.calcFunc('cosine', start, end, 1)
+        this.calcFunc('triangle', start, end, 90);
+        // this.calcFunc('cotriangle', start, end, 90)
+        this.calcFunc('square', start, end, 1);
+        // this.calcFunc('cosquare', start, end, 1)
+    }
+    draw() {
+        let wave = document.getElementById('wave');
+        if (wave != undefined) {
+            wave.remove();
+        }
+        let x = this.getHalfX();
+        let y = this.getHalfY();
+        this.drawWave(x, y);
     }
 }
