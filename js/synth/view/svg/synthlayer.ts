@@ -858,7 +858,6 @@ class SynthLayerSVG {
     calcFunc(func: string, start: number, end: number, increment: number) {
 
         //#region Parameter
-
         let path = []
 
         let x = start
@@ -918,7 +917,7 @@ class SynthLayerSVG {
         this.paths.push(path);
     }
 
-    drawWave(x: number, y: number) {
+    drawWave(x: number, y: number, red: number, green: number, blue: number, width: number) {
 
         let baseX = x
         let baseY = y
@@ -927,9 +926,6 @@ class SynthLayerSVG {
 
         let currentX = 0
         let currentY = 0
-
-        let color = 'rgb(255,100,255)'
-        let width = '4'
 
         let g = this.createGroup('wave')
 
@@ -955,8 +951,8 @@ class SynthLayerSVG {
                             currentY + '',
                             toX + '',
                             toY + '',
-                            color,
-                            width
+                            'rgb(' + red + ',' + green + ',' + blue + ')',
+                            width + ''
                         )
                     )
                 }
@@ -974,18 +970,28 @@ class SynthLayerSVG {
 
     }
 
-    calc() {
+    calc(step: number) {
+
+        this.paths = []
 
         let range = ((this.getHalfX() - (this.getHalfX() % 360)) * 2)
         let start = range * -1
         let end = range
 
-        this.calcFunc('sine', start, end, 1)
-        // this.calcFunc('cosine', start, end, 1)
-        this.calcFunc('triangle', start, end, 90)
+        this.calcFunc('sine', start, end, step)
+        // this.calcFunc('cosine', start, end, step)
+        // this.calcFunc('triangle', start, end, 90)
         // this.calcFunc('cotriangle', start, end, 90)
-        this.calcFunc('square', start, end, 1)
-        // this.calcFunc('cosquare', start, end, 1)
+        // this.calcFunc('square', start, end, step)
+        // this.calcFunc('cosquare', start, end, step)
+    }
+
+    addFunction() {
+
+    }
+
+    color() {
+
     }
 
     draw() {
@@ -999,6 +1005,6 @@ class SynthLayerSVG {
         let x = this.getHalfX()
         let y = this.getHalfY()
 
-        this.drawWave(x, y)
+        this.drawWave(x, y, 0, 0, 0, 4)
     }
 }

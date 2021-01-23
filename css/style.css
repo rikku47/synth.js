@@ -28,7 +28,7 @@ body {
     min-width: 8rem;
     padding: 1rem;
     position: absolute;
-
+    top: 0;
     /* overflow: auto;
     resize: both; */
 }

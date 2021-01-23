@@ -76,7 +76,7 @@ class SynthLayerInterface {
                         ],
                         name: 'functions',
                         funcs: [
-                            ['change', updateFunction]
+                            ['change', getVaule]
                         ]
                     },
                     {

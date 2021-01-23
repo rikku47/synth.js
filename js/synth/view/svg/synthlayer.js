@@ -435,15 +435,13 @@ class SynthLayerSVG {
         }
         this.paths.push(path);
     }
-    drawWave(x, y) {
+    drawWave(x, y, red, green, blue, width) {
         let baseX = x;
         let baseY = y;
         let toX = 0;
         let toY = 0;
         let currentX = 0;
         let currentY = 0;
-        let color = 'rgb(255,100,255)';
-        let width = '4';
         let g = this.createGroup('wave');
         for (let index0 = 0; index0 < this.paths.length; index0++) {
             for (let index1 = 0; index1 < this.paths[index0].length; index1++) {
@@ -456,7 +454,7 @@ class SynthLayerSVG {
                 if (point1 != undefined) {
                     toX = baseX + point1.x;
                     toY = baseY + point1.y;
-                    g.appendChild(this.createLine(Date.now() + '', currentX + '', currentY + '', toX + '', toY + '', color, width));
+                    g.appendChild(this.createLine(Date.now() + '', currentX + '', currentY + '', toX + '', toY + '', 'rgb(' + red + ',' + green + ',' + blue + ')', width + ''));
                 }
             }
         }
@@ -466,16 +464,21 @@ class SynthLayerSVG {
     }
     syncToBase() {
     }
-    calc() {
-        let temp = ((this.getHalfX() - (this.getHalfX() % 360)) * 2);
-        let start = temp * -1;
-        let end = temp;
-        this.calcFunc('sine', start, end, 1);
-        // this.calcFunc('cosine', start, end, 1)
-        this.calcFunc('triangle', start, end, 90);
+    calc(step) {
+        this.paths = [];
+        let range = ((this.getHalfX() - (this.getHalfX() % 360)) * 2);
+        let start = range * -1;
+        let end = range;
+        this.calcFunc('sine', start, end, step);
+        // this.calcFunc('cosine', start, end, step)
+        // this.calcFunc('triangle', start, end, 90)
         // this.calcFunc('cotriangle', start, end, 90)
-        this.calcFunc('square', start, end, 1);
-        // this.calcFunc('cosquare', start, end, 1)
+        // this.calcFunc('square', start, end, step)
+        // this.calcFunc('cosquare', start, end, step)
+    }
+    addFunction() {
+    }
+    color() {
     }
     draw() {
         let wave = document.getElementById('wave');
@@ -484,6 +487,6 @@ class SynthLayerSVG {
         }
         let x = this.getHalfX();
         let y = this.getHalfY();
-        this.drawWave(x, y);
+        this.drawWave(x, y, 0, 0, 0, 4);
     }
 }
