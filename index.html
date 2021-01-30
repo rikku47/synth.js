@@ -9,206 +9,23 @@
 <body>
 
   <!-- GUI -->
-  <script src="js/synth/view/interface/synthlayerinterface.js"></script>
+  <script src="js/synth/view/interface/synth.js"></script>
   <script src="js/synth/view/svg/synthlayer.js"></script>
 
   <script>
     let body = document.body;
 
-    const svg = new SynthLayerSVG(body);
+    const layer = new SynthLayerSVG(body);
 
-    svg.drawGrid();
+    layer.drawGrid();
 
-    svg.drawCoordinateAxes();
+    layer.drawCoordinateAxes();
 
-    svg.calc(1);
+    layer.calc(1);
 
-    svg.draw();
+    layer.draw();
 
-    svg.applyVolume();
-
-    //#region 
-    //#endregion
-
-    //#region Colors
-
-    let rgbRed = 0
-    let rgbGreen = 0
-    let rgbBlue = 0
-
-    //#endregion
-
-    //#region Interface
-
-    let interface = document.createElement('div')
-
-    interface.id = 'interface'
-
-    //#endregion
-
-    //#region Steps
-
-    let steps = document.createElement('input')
-
-    steps.id = 'steps'
-
-    steps.type = 'number'
-
-    steps.min = '1'
-
-    steps.max = '360'
-
-    steps.value = '1'
-
-    steps.addEventListener('input', (ev) => {
-
-      let output = document.getElementById('output')
-
-      output.textContent = ev.data
-
-      svg.calc(Number(ev.data))
-
-      svg.draw()
-
-      svg.applyVolume()
-    })
-
-    //#endregion
-
-    //#region Red
-
-    let red = document.createElement('input')
-
-    red.id = 'red'
-
-    red.type = 'number'
-
-    red.min = '0'
-
-    red.max = '255'
-
-    red.value = '1'
-
-    red.addEventListener('input', (ev) => {
-
-      let output = document.getElementById('output')
-
-      rgbRed = Number(ev.data)
-
-      let value = rgbRed * 360 / 255
-
-      output.textContent = 'Color: ' + rgbRed + ' ' + 'Degree: ' + value
-
-      changeColor()
-    })
-
-    //#endregion
-
-    //#region Green
-
-    let green = document.createElement('input')
-
-    green.id = 'green'
-
-    green.type = 'number'
-
-    green.min = '0'
-
-    green.max = '255'
-
-    green.value = '1'
-
-    green.addEventListener('input', (ev) => {
-
-      let output = document.getElementById('output')
-
-      rgbGreen = Number(ev.data)
-
-      let value = rgbGreen * 360 / 255
-
-      output.textContent = 'Color: ' + rgbGreen + ' ' + 'Degree: ' + value
-
-      changeColor()
-    })
-
-    //#endregion
-
-    //#region Blue
-
-    let blue = document.createElement('input')
-
-    blue.id = 'blue'
-
-    blue.type = 'number'
-
-    blue.min = '0'
-
-    blue.max = '255'
-
-    blue.value = '1'
-
-    blue.addEventListener('input', (ev) => {
-
-      let output = document.getElementById('output')
-
-      rgbBlue = Number(ev.data)
-
-      let value = rgbBlue * 360 / 255
-
-      output.textContent = 'Color: ' + rgbBlue + ' ' + 'Degree: ' + value
-
-      changeColor()
-    })
-
-    //#endregion
-
-    //#region Add color
-
-    let btnAddColor = document.createElement('button')
-
-    btnAddColor.id = 'addColor'
-
-    btnAddColor.textContent = 'add Color'
-
-    btnAddColor.addEventListener("click", addColor, false);
-
-    //#endregion
-
-    //#region Testarea
-
-    let testarea = document.createElement('div')
-
-    testarea.id = 'testarea'
-
-    let textarea = document.createElement('textarea')
-
-    textarea.id = 'output'
-
-    testarea.appendChild(textarea)
-
-    //#endregion
-
-    //#region Append at interface
-
-    interface.appendChild(steps)
-    interface.appendChild(red)
-    interface.appendChild(green)
-    interface.appendChild(blue)
-    interface.appendChild(btnAddColor)
-    interface.appendChild(testarea)
-
-    //#endregion
-
-    document.body.appendChild(interface)
-
-
-    function changeColor() {
-      document.body.style.backgroundColor = 'rgb(' + rgbRed + ',' + rgbGreen + ',' + rgbBlue + ')'
-    }
-
-    function addColor() {
-      console.log('added..')
-    }
+    layer.applyVolume();
 
   </script>
 
