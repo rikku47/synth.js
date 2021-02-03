@@ -1,3 +1,8 @@
 # synth.js
 
-Goal: Basic SineWave-Sound
+synth.js should be a software synthesizer.
+
+### Todos
+
+  - Sinewave - Sound
+  - ADSR - Envelope
