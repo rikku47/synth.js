@@ -3,6 +3,12 @@
     padding: 0;
 }
 
+body {
+    max-height: 100%;
+    max-width: 100%;
+    overflow: clip;
+}
+
 h1,
 h2,
 h3,
@@ -12,11 +18,19 @@ h6 {
     color: #00B0FF;
 }
 
-body {
-    max-height: 100%;
-    max-width: 100%;
-    overflow: clip;
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
 }
+
+input {
+    width: max-content;
+    margin: auto;
+}
+
+/* IDs */
 
 #canvas {
     background-color: #212121;
@@ -33,21 +47,8 @@ body {
     resize: both; */
 }
 
-.col {
-    display: flex;
-    flex-direction: column;
-}
-
-input {
-    width: max-content;
-    margin: auto;
-}
-
-img {
-    -webkit-user-drag: none;
-    -khtml-user-drag: none;
-    -moz-user-drag: none;
-    -o-user-drag: none;
+#interface.cm {
+    cursor: move;
 }
 
 #values {
@@ -55,8 +56,11 @@ img {
     overflow-y: auto;
 }
 
-#interface.cm {
-    cursor: move;
+/* Classes */
+
+.col {
+    display: flex;
+    flex-direction: column;
 }
 
 .content-container {

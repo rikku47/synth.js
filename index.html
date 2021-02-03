@@ -10,22 +10,22 @@
 
   <!-- GUI -->
   <script src="js/synth/view/interface/synth.js"></script>
-  <script src="js/synth/view/svg/synthlayer.js"></script>
 
   <script>
     let body = document.body;
 
-    const layer = new SynthLayerSVG(body);
+    const synth = new Synth();
+    // const layer = new SynthLayerSVG(body);
 
-    layer.drawGrid();
+    // layer.drawGrid();
 
-    layer.drawCoordinateAxes();
+    // layer.drawCoordinateAxes();
 
-    layer.calc(1);
+    // layer.calc(1);
 
-    layer.draw();
+    // layer.draw();
 
-    layer.applyVolume();
+    // layer.applyVolume();
 
   </script>
 
