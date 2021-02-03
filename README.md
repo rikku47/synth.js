@@ -1,6 +1,6 @@
 # synth.js
 
-synth.js should become a software synthsizer.
+synth.js should be a software synthesizer.
 
 ### Todos
 
