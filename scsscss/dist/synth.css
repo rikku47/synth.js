@@ -1,0 +1,94 @@
+html body {
+  grid-template-areas: "b b b b b b b b b b b b" "c c c c c c c c c c c c" "pr pr pr pr pr pr pr pr pr pr pr pr" "m m m m m m m m m m m m";
+  grid-template-rows: 4rem auto 4rem;
+}
+
+#synth {
+  color: #00B0FF;
+  grid-area: c;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  grid-template-areas: "m m m m m m m m m m m m";
+  row-gap: 0;
+  box-sizing: border-box;
+  background-color: #1A1A1A;
+}
+
+#synth button,
+#synth input,
+#synth select {
+  color: #00B0FF;
+}
+
+.channel-volume,
+.channel-envelope,
+.channel-oscillators {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.channel-volume {
+  height: 4rem;
+}
+
+.channel-envelope {
+  height: min-content;
+}
+
+.channel-oscillators {
+  height: 40rem;
+}
+
+.master,
+.channel {
+  padding: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.master {
+  grid-area: m;
+}
+
+.channel {
+  flex-direction: column;
+}
+
+.envelope,
+.oscillators {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+#pianoRoll {
+  grid-area: pr;
+  display: initial;
+  width: 100%;
+  overflow-y: auto;
+  height: min-content;
+}
+
+#pianoRoll .white {
+  background-color: white;
+  border: solid 1px black;
+  color: black;
+  height: 7rem;
+  width: 3rem;
+}
+
+#pianoRoll .black {
+  background-color: black;
+  border: none;
+  color: white;
+  height: 4.5rem;
+  left: -1rem;
+  margin-right: -2rem;
+  position: relative;
+  top: -1.25rem;
+  width: 2rem;
+}

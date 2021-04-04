@@ -1,0 +1,136 @@
+html body {
+      grid-template-areas: "b b b b b b b b b b b b" "c c c c c c c c c c c c" "pr pr pr pr pr pr pr pr pr pr pr pr" "m m m m m m m m m m m m";
+  -ms-grid-rows: 4rem auto 4rem;
+      grid-template-rows: 4rem auto 4rem;
+}
+
+#synth {
+  color: #00B0FF;
+  -ms-grid-row: 2;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 12;
+  grid-area: c;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: auto;
+      grid-template-columns: auto;
+  -ms-grid-rows: auto;
+      grid-template-rows: auto;
+      grid-template-areas: "m m m m m m m m m m m m";
+  row-gap: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: #1A1A1A;
+}
+
+#synth button,
+#synth input,
+#synth select {
+  color: #00B0FF;
+}
+
+.channel-volume,
+.channel-envelope,
+.channel-oscillators {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
+}
+
+.channel-volume {
+  height: 4rem;
+}
+
+.channel-envelope {
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+}
+
+.channel-oscillators {
+  height: 40rem;
+}
+
+.master,
+.channel {
+  padding: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.master {
+  -ms-grid-row: 1;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 12;
+  grid-area: m;
+}
+
+.channel {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.envelope,
+.oscillators {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#pianoRoll {
+  -ms-grid-row: 3;
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 12;
+  grid-area: pr;
+  display: initial;
+  width: 100%;
+  overflow-y: auto;
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+}
+
+#pianoRoll .white {
+  background-color: white;
+  border: solid 1px black;
+  color: black;
+  height: 7rem;
+  width: 3rem;
+}
+
+#pianoRoll .black {
+  background-color: black;
+  border: none;
+  color: white;
+  height: 4.5rem;
+  left: -1rem;
+  margin-right: -2rem;
+  position: relative;
+  top: -1.25rem;
+  width: 2rem;
+}
+/*# sourceMappingURL=synth.css.map */
