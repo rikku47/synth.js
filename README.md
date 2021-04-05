@@ -4,7 +4,7 @@ synth.js should become a software synthsizer. In some parts it works.
 ## Todos
   - MIDI Support
   - ...
-  - 
+
 ## Implemented
   - Sinewave, Square, Triangle and Sawtooth - Sound
   - ADSR - Envelope
@@ -16,7 +16,7 @@ The [WEB Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_A
 
 Like a real [synthesizer](https://en.wikipedia.org/wiki/Synthesizer)!
 
-The [envelope](https://en.wikipedia.org/wiki/Envelope_(music)) is just a controller for a signal, like a [gamepad](https://en.wikipedia.org/wiki/Gamepad), which control the signal it automatically.
+The [envelope](https://en.wikipedia.org/wiki/Envelope_(music)) is just a controller for a signal, like a [gamepad](https://en.wikipedia.org/wiki/Gamepad), which controls the signal it automatically.
 
 In other words, the envelope is like a timetable, at which time the signal goes up and down. And yes, that is the whole magic at this stage.
 
