@@ -3,6 +3,7 @@ synth.js should become a software synthsizer. In some parts it works.
 
 ## Todos
   - MIDI Support
+  - Piano Roll
   - ...
 
 ## Implemented
