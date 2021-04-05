@@ -9,6 +9,9 @@ synth.js should become a software synthsizer. In some parts it works.
   - Sinewave, Square, Triangle and Sawtooth - Sound
   - ADSR - Envelope
  
+ ## More informations
+https://webaudio.github.io/web-audio-api/
+
 ## Notices
 This Topic is absolute new to me. So I learn a lot of new things.
 
