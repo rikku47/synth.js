@@ -1,11 +1,12 @@
 //#region Create synth.js
 
-import { Channel } from "../../classes/channel";
+import { Volume } from "../../classes/volume";
 import { Envelope } from "../../classes/envelope";
 import { Synth } from "../../synth";
 
-export function createSynth(synthjs: Synth) {
-  let synthContainer = document.getElementById("synth");
+export function createSynth(synthjs: Synth, element: HTMLElement) {
+  
+  let synthContainer = element;
 
   if (synthContainer != null) {
     let oscillatorsDiv = document.createElement("div");
@@ -29,35 +30,35 @@ export function createSynth(synthjs: Synth) {
 
       let buttonStart = document.createElement("button");
       buttonStart.addEventListener("click", () => {
-        if (oscillator.Status) {
-          oscillator.connect(oscillator.Amplitude);
-        } else {
           oscillator.start();
-          oscillator.Status = true;
-        }
       });
-      buttonStart.textContent = "Start";
+      buttonStart.textContent = "Start (Create)";
 
-      let buttonStop = document.createElement("button");
-      buttonStop.addEventListener("click", () => {
+      let buttonDisconnect = document.createElement("button");
+      buttonDisconnect.addEventListener("click", () => {
         oscillator.disconnect();
-        // oscillator.stop(); // remain it?
-        // oscillator.Status = false;
       });
-      buttonStop.textContent = "Stop";
+      buttonDisconnect.textContent = "Disconnect";
+
+      let buttonConnect = document.createElement("button");
+      buttonConnect.addEventListener("click", () => {
+        oscillator.connect(oscillator.DestinationNode);
+      });
+      buttonConnect.textContent = "Connect";
 
       oscillatorDiv.appendChild(buttonStart);
-      oscillatorDiv.appendChild(buttonStop);
+      oscillatorDiv.appendChild(buttonDisconnect);
+      oscillatorDiv.appendChild(buttonConnect);
 
       oscillatorsDiv.appendChild(oscillatorDiv);
     });
 
     synthContainer.appendChild(oscillatorsDiv);
-    synthContainer.appendChild(createEnvelopeControl(synthjs.Envelope));
+    synthContainer.appendChild(createEnvelopeControl(synthjs.Envelopes[0]));
 
     let buttonStartEnvelope = document.createElement("button");
     buttonStartEnvelope.addEventListener("click", () => {
-      synthjs.Envelope.toggle();
+      synthjs.Envelopes[0].toggle();
     });
     buttonStartEnvelope.textContent = "Toggle Envelope";
 
@@ -65,14 +66,14 @@ export function createSynth(synthjs: Synth) {
 
     let channelsDiv = document.createElement("div");
 
-    synthjs.Channels.forEach((channel) => {
-      channelsDiv.appendChild(createChannel(channel, "Channel"));
+    synthjs.Volumes.forEach((volume) => {
+      channelsDiv.appendChild(createChannel(volume, "Volume"));
     });
 
     synthContainer.appendChild(channelsDiv);
 
     synthContainer.appendChild(
-      createChannel(synthjs.MasterChannel, "Master Channel")
+      createChannel(synthjs.MasterVolume, "Master Channel")
     );
 
     // createPianoRoll(synthjs.Keys, synthjs.Channels);
@@ -273,7 +274,7 @@ function createSelection(name: string, options: string[]) {
   return typeSelect;
 }
 
-function createChannel(channel: Channel, title: string) {
+function createChannel(channel: Volume, title: string) {
   let channelDiv = document.createElement("div");
   let channelh2 = document.createElement("h2");
   let channelVolumeDiv = document.createElement("div");

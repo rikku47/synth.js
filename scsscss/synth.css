@@ -4,6 +4,11 @@ html body {
       grid-template-rows: 4rem auto 4rem;
 }
 
+button#start-synth {
+  width: 8rem;
+  height: 4rem;
+}
+
 #synth {
   color: #00B0FF;
   -ms-grid-row: 2;
