@@ -3,9 +3,10 @@
 import { Volume } from "../../classes/volume";
 import { Envelope } from "../../classes/envelope";
 import { Synth } from "../../synth";
+import * as pianoRoll from "../../interfaces/gui/pianoRoll";
 
 export function createSynth(synthjs: Synth, element: HTMLElement) {
-  
+
   let synthContainer = element;
 
   if (synthContainer != null) {
@@ -30,7 +31,7 @@ export function createSynth(synthjs: Synth, element: HTMLElement) {
 
       let buttonStart = document.createElement("button");
       buttonStart.addEventListener("click", () => {
-          oscillator.start();
+        oscillator.start();
       });
       buttonStart.textContent = "Start (Create)";
 
@@ -75,6 +76,8 @@ export function createSynth(synthjs: Synth, element: HTMLElement) {
     synthContainer.appendChild(
       createChannel(synthjs.MasterVolume, "Master Channel")
     );
+
+    synthContainer.appendChild(pianoRoll.createPianoRoll())
 
     // createPianoRoll(synthjs.Keys, synthjs.Channels);
   }
@@ -176,21 +179,21 @@ function createGroupOfLabelSelection(
   switch (label) {
     case "Attack Type":
       selection.addEventListener("change", (ev: Event) => {
-        envelope.EnvelopeShape.attack.type = (ev.target as HTMLInputElement).value;
+        envelope.AttackType = (ev.target as HTMLInputElement).value;
         logEnvelopeOnConsole(envelope);
       });
       break;
 
     case "Decay Type":
       selection.addEventListener("change", (ev: Event) => {
-        envelope.EnvelopeShape.decay.type = (ev.target as HTMLInputElement).value;
+        envelope.DecayType = (ev.target as HTMLInputElement).value;
         logEnvelopeOnConsole(envelope);
       });
       break;
 
     case "Release Type":
       selection.addEventListener("change", (ev: Event) => {
-        envelope.EnvelopeShape.release.type = (ev.target as HTMLInputElement).value;
+        envelope.ReleaseType = (ev.target as HTMLInputElement).value;
         logEnvelopeOnConsole(envelope);
       });
       break;
@@ -212,49 +215,49 @@ function createGroupOfLabelRange(
 
   switch (label) {
     case "Attack Time":
-      range.defaultValue = envelope.EnvelopeShape.attack.time + "";
+      range.defaultValue = envelope.AttackTime + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.EnvelopeShape.attack.time = (ev.target as HTMLInputElement).valueAsNumber;
+        envelope.AttackTime = (ev.target as HTMLInputElement).valueAsNumber;
         logEnvelopeOnConsole(envelope);
       });
       break;
 
     case "Attack Peak":
-      range.defaultValue = envelope.EnvelopeShape.attack.peak + "";
+      range.defaultValue = envelope.AttackPeak + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.EnvelopeShape.attack.peak = (ev.target as HTMLInputElement).valueAsNumber;
+        envelope.AttackPeak = (ev.target as HTMLInputElement).valueAsNumber;
         logEnvelopeOnConsole(envelope);
       });
       break;
 
     case "Decay Time":
-      range.defaultValue = envelope.EnvelopeShape.decay.time + "";
+      range.defaultValue = envelope.DecayTime + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.EnvelopeShape.decay.time = (ev.target as HTMLInputElement).valueAsNumber;
+        envelope.DecayTime = (ev.target as HTMLInputElement).valueAsNumber;
         logEnvelopeOnConsole(envelope);
       });
       break;
 
     case "Decay Peak":
-      range.defaultValue = envelope.EnvelopeShape.decay.peak + "";
+      range.defaultValue = envelope.DecayPeak + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.EnvelopeShape.decay.peak = (ev.target as HTMLInputElement).valueAsNumber;
+        envelope.DecayPeak = (ev.target as HTMLInputElement).valueAsNumber;
         logEnvelopeOnConsole(envelope);
       });
       break;
 
     case "Sustain Time":
-      range.defaultValue = envelope.EnvelopeShape.sustain.time + "";
+      range.defaultValue = envelope.SustainTime + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.EnvelopeShape.sustain.time = (ev.target as HTMLInputElement).valueAsNumber;
+        envelope.SustainTime = (ev.target as HTMLInputElement).valueAsNumber;
         logEnvelopeOnConsole(envelope);
       });
       break;
 
     case "Release Time":
-      range.defaultValue = envelope.EnvelopeShape.release.time + "";
+      range.defaultValue = envelope.ReleaseTime + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.EnvelopeShape.release.time = (ev.target as HTMLInputElement).valueAsNumber;
+        envelope.ReleaseTime = (ev.target as HTMLInputElement).valueAsNumber;
         logEnvelopeOnConsole(envelope);
       });
       break;
@@ -355,21 +358,21 @@ function createH2(text: string) {
 function logEnvelopeOnConsole(envelope: Envelope) {
   console.clear();
   console.log("Attack Time");
-  console.log(envelope.EnvelopeShape.attack.time);
+  console.log(envelope.AttackTime);
   console.log("Attack Peak");
-  console.log(envelope.EnvelopeShape.attack.peak);
+  console.log(envelope.AttackPeak);
   console.log("Attack Type");
-  console.log(envelope.EnvelopeShape.attack.type);
+  console.log(envelope.AttackType);
   console.log("Decay Time");
-  console.log(envelope.EnvelopeShape.decay.time);
+  console.log(envelope.DecayTime);
   console.log("Decay Peak");
-  console.log(envelope.EnvelopeShape.decay.peak);
+  console.log(envelope.DecayPeak);
   console.log("Decay Type");
-  console.log(envelope.EnvelopeShape.decay.type);
+  console.log(envelope.DecayTime);
   console.log("Sustain Time");
-  console.log(envelope.EnvelopeShape.sustain.time);
+  console.log(envelope.DecayType);
   console.log("Release Time");
-  console.log(envelope.EnvelopeShape.release.time);
+  console.log(envelope.ReleaseTime);
   console.log("Release Type");
-  console.log(envelope.EnvelopeShape.release.type);
+  console.log(envelope.ReleaseTime);
 }
