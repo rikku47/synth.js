@@ -72,19 +72,11 @@ export class Envelope extends GainNode {
 
     if (inputNodes != undefined) {
       this._inputNodes = inputNodes;
-<<<<<<< HEAD
-    } 
-    
-    if (outputNodes != undefined) {
-      this._outputNodes = outputNodes;
-    } 
-=======
     }
 
     if (outputNodes != undefined) {
       this._outputNodes = outputNodes;
     }
->>>>>>> 5c4bea71bc4d2ced05ee67d2108ace3000123719
 
     this._envelopeShape = {
       attack: {
@@ -113,60 +105,6 @@ export class Envelope extends GainNode {
   //#region  Envelope
 
   toggle() {
-<<<<<<< HEAD
-    for (let index = 0; index < this.InputNodes.length; index++) {
-      const inputNode = this.InputNodes[index];
-
-        let now = inputNode.context.currentTime;
-        let attackTime = now + this.EnvelopeShape.attack.time;
-        let decayTime = attackTime + this.EnvelopeShape.decay.time;
-        let sustainTime = decayTime + this.EnvelopeShape.sustain.time;
-        let releaseTime = sustainTime + this.EnvelopeShape.release.time;
-
-        inputNode.gain.cancelScheduledValues(0);
-        inputNode.gain.value = 0;
-
-        if (this.EnvelopeShape.attack.type == "linear") {
-          inputNode.gain.linearRampToValueAtTime(
-            this.EnvelopeShape.attack.peak,
-            attackTime
-          );
-        } else {
-          inputNode.gain.exponentialRampToValueAtTime(
-            this.EnvelopeShape.attack.peak,
-            attackTime
-          );
-        }
-
-        if (this.EnvelopeShape.decay.type == "linear") {
-          inputNode.gain.linearRampToValueAtTime(
-            this.EnvelopeShape.decay.peak,
-            decayTime
-          );
-        } else {
-          inputNode.gain.exponentialRampToValueAtTime(
-            this.EnvelopeShape.decay.peak,
-            decayTime
-          );
-        }
-
-        inputNode.gain.linearRampToValueAtTime(
-          this.EnvelopeShape.decay.peak,
-          sustainTime
-        );
-
-        if (this.EnvelopeShape.release.type == "linear") {
-          inputNode.gain.linearRampToValueAtTime(
-            0.0001,
-            releaseTime
-          );
-        } else {
-          inputNode.gain.exponentialRampToValueAtTime(
-            0.0001,
-            releaseTime
-          );
-        }
-=======
     let now = this.context.currentTime;
     let attackTime = now + this.EnvelopeShape.attack.time;
     let decayTime = attackTime + this.EnvelopeShape.decay.time;
@@ -215,7 +153,6 @@ export class Envelope extends GainNode {
         0.0001,
         releaseTime
       );
->>>>>>> 5c4bea71bc4d2ced05ee67d2108ace3000123719
     }
   }
 
