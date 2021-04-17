@@ -1,4 +1,4 @@
-import { Channel } from "./classes/channel";
+import { Volume } from "./classes/volume";
 import { Envelope } from "./classes/envelope";
 import { Oscillator } from "./classes/oscillator";
 
@@ -6,10 +6,9 @@ export class Synth extends AudioContext {
   // #region Private fields
 
   private _oscillators: Oscillator[];
-  private _envelope: Envelope;
-  private _masterChannel: Channel;
-  private _channels: Channel[];
-
+  private _envelopes: Envelope[];
+  private _volumes: Volume[];
+  private _masterVolume: Volume;
   // #endregion
 
   // #region Getter and Setters
@@ -22,45 +21,50 @@ export class Synth extends AudioContext {
     this._oscillators = value;
   }
 
-  public get Envelope(): Envelope {
-    return this._envelope;
+  public get Envelopes(): Envelope[] {
+    return this._envelopes;
   }
 
-  public set Envelope(value: Envelope) {
-    this._envelope = value;
+  public set Envelopes(value: Envelope[]) {
+    this._envelopes = value;
   }
 
-  get MasterChannel(): Channel {
-    return this._masterChannel;
+  get Volumes(): Volume[] {
+    return this._volumes;
   }
 
-  get Channels(): Channel[] {
-    return this._channels;
+  get MasterVolume(): Volume {
+    return this._masterVolume;
   }
 
   // #endregion */
 
   // #region  Constructor
 
-  constructor(channels = 1, oscillators = 9) {
+  constructor(volumes = 1, envelopes = 1, oscillators = 3) {
     super();
 
-    this._masterChannel = new Channel(this.destination, this, { gain: 0.0 });
-    this._channels = [];
-
-    for (let channel = 0; channel < channels; channel++) {
-      let channel = new Channel(this.MasterChannel, this, { gain: 0.0 });
-
-      this.Channels.push(channel);
-    }
-
     this._oscillators = [];
-    
-    for (let oscillator = 0; oscillator < oscillators; oscillator++) {
-      this.Oscillators.push(new Oscillator(this, this.Channels[0]));
-    }
+    this._envelopes = [];
+    this._volumes = [];
+    this._masterVolume = new Volume(this, this.destination);
 
-    this._envelope = new Envelope(this.Oscillators);
+    for (let oscillator = 0; oscillator < oscillators; oscillator++) {
+      this.Oscillators.push(new Oscillator(this));
+    };
+
+    for (let envelope = 0; envelope < envelopes; envelope++) {
+      this.Envelopes.push(new Envelope(this));
+    };
+
+    for (let volume = 0; volume < volumes; volume++) {
+      this.Volumes.push(new Volume(this));
+    };
+
+    this.Oscillators.forEach((oscillator) => {
+      oscillator.connect(this.Envelopes[0]).connect(this.Volumes[0]).connect(this.MasterVolume);
+      oscillator.DestinationNode = this.Envelopes[0];
+    });
   }
 
   // #endregion

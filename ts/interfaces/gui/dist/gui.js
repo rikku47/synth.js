@@ -2,8 +2,8 @@
 //#region Create synth.js
 exports.__esModule = true;
 exports.createSynth = void 0;
-function createSynth(synthjs) {
-    var synthContainer = document.getElementById("synth");
+function createSynth(synthjs, element) {
+    var synthContainer = element;
     if (synthContainer != null) {
         var oscillatorsDiv_1 = document.createElement("div");
         synthjs.Oscillators.forEach(function (oscillator) {

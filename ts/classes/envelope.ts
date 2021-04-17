@@ -20,17 +20,27 @@ interface EnvelopeShape {
   };
 }
 
-export class Envelope {
-  private _oscillators: Oscillator[];
+export class Envelope extends GainNode {
+
+  private _inputNodes: GainNode[] = [];
+  private _outputNodes: AudioNode[] = [];
   private _envelopeShape: EnvelopeShape;
   private _status: boolean;
 
-  public get Oscillators(): Oscillator[] {
-    return this._oscillators;
+  public get InputNodes(): GainNode[] {
+    return this._inputNodes;
   }
 
-  public set Oscillators(value: Oscillator[]) {
-    this._oscillators = value;
+  public set InputNodes(value: GainNode[]) {
+    this._inputNodes = value;
+  }
+
+  public get OutputNodes(): AudioNode[] {
+    return this._outputNodes;
+  }
+
+  public set OutputNodes(value: AudioNode[]) {
+    this._outputNodes = value;
   }
 
   public get EnvelopeShape(): EnvelopeShape {
@@ -52,8 +62,22 @@ export class Envelope {
   /**
    *
    */
-  constructor(oscillators: Oscillator[]) {
-    this._oscillators = oscillators;
+  constructor(
+    context: BaseAudioContext,
+    inputNodes?: GainNode[],
+    outputNodes?: AudioNode[],
+    options?: GainOptions
+  ) {
+    super(context, options);
+
+    if (inputNodes != undefined) {
+      this._inputNodes = inputNodes;
+    } 
+    
+    if (outputNodes != undefined) {
+      this._outputNodes = outputNodes;
+    } 
+
     this._envelopeShape = {
       attack: {
         time: 0.1,
@@ -74,65 +98,65 @@ export class Envelope {
       },
     };
     this._status = false;
+
+    this.gain.value = 0;
   }
 
   //#region  Envelope
 
   toggle() {
-    for (let index = 0; index < this.Oscillators.length; index++) {
-      const oscillator = this.Oscillators[index];
+    for (let index = 0; index < this.InputNodes.length; index++) {
+      const inputNode = this.InputNodes[index];
 
-      if (oscillator.Status == true) {
-        let now = oscillator.context.currentTime;
+        let now = inputNode.context.currentTime;
         let attackTime = now + this.EnvelopeShape.attack.time;
         let decayTime = attackTime + this.EnvelopeShape.decay.time;
         let sustainTime = decayTime + this.EnvelopeShape.sustain.time;
         let releaseTime = sustainTime + this.EnvelopeShape.release.time;
 
-        oscillator.Amplitude.gain.cancelScheduledValues(0);
-        oscillator.Amplitude.gain.value = 0;
+        inputNode.gain.cancelScheduledValues(0);
+        inputNode.gain.value = 0;
 
         if (this.EnvelopeShape.attack.type == "linear") {
-          oscillator.Amplitude.gain.linearRampToValueAtTime(
+          inputNode.gain.linearRampToValueAtTime(
             this.EnvelopeShape.attack.peak,
             attackTime
           );
         } else {
-          oscillator.Amplitude.gain.exponentialRampToValueAtTime(
+          inputNode.gain.exponentialRampToValueAtTime(
             this.EnvelopeShape.attack.peak,
             attackTime
           );
         }
 
         if (this.EnvelopeShape.decay.type == "linear") {
-          oscillator.Amplitude.gain.linearRampToValueAtTime(
+          inputNode.gain.linearRampToValueAtTime(
             this.EnvelopeShape.decay.peak,
             decayTime
           );
         } else {
-          oscillator.Amplitude.gain.exponentialRampToValueAtTime(
+          inputNode.gain.exponentialRampToValueAtTime(
             this.EnvelopeShape.decay.peak,
             decayTime
           );
         }
 
-        oscillator.Amplitude.gain.linearRampToValueAtTime(
+        inputNode.gain.linearRampToValueAtTime(
           this.EnvelopeShape.decay.peak,
           sustainTime
         );
 
         if (this.EnvelopeShape.release.type == "linear") {
-          oscillator.Amplitude.gain.linearRampToValueAtTime(
+          inputNode.gain.linearRampToValueAtTime(
             0.0001,
             releaseTime
           );
         } else {
-          oscillator.Amplitude.gain.exponentialRampToValueAtTime(
+          inputNode.gain.exponentialRampToValueAtTime(
             0.0001,
             releaseTime
           );
         }
-      }
     }
   }
   //#endregion
