@@ -10,72 +10,66 @@ export function createSynth(synthjs: Synth, element: HTMLElement) {
   let synthContainer = element;
 
   if (synthContainer != null) {
-    let oscillatorsDiv = document.createElement("div");
-
-    synthjs.Oscillators.forEach((oscillator) => {
-      let oscillatorDiv = document.createElement("div");
-
-      let select = document.createElement("select");
-
-      select.appendChild(createOption("sine"));
-      select.appendChild(createOption("square"));
-      select.appendChild(createOption("triangle"));
-      select.appendChild(createOption("sawtooth"));
-
-      select.addEventListener("change", (ev: any) => {
-        oscillator.changeOscillatorType(ev.srcElement.value);
-      });
-
-      oscillatorDiv.appendChild(createLabel("OSC", "OSC"));
-      oscillatorDiv.appendChild(select);
-
-      let buttonStart = document.createElement("button");
-      buttonStart.addEventListener("click", () => {
-        oscillator.start();
-      });
-      buttonStart.textContent = "Start (Create)";
-
-      let buttonDisconnect = document.createElement("button");
-      buttonDisconnect.addEventListener("click", () => {
-        oscillator.disconnect();
-      });
-      buttonDisconnect.textContent = "Disconnect";
-
-      let buttonConnect = document.createElement("button");
-      buttonConnect.addEventListener("click", () => {
-        oscillator.connect(oscillator.DestinationNode);
-      });
-      buttonConnect.textContent = "Connect";
-
-      oscillatorDiv.appendChild(buttonStart);
-      oscillatorDiv.appendChild(buttonDisconnect);
-      oscillatorDiv.appendChild(buttonConnect);
-
-      oscillatorsDiv.appendChild(oscillatorDiv);
-    });
-
-    synthContainer.appendChild(oscillatorsDiv);
-    synthContainer.appendChild(createEnvelopeControl(synthjs.Envelopes[0]));
-
-    let buttonStartEnvelope = document.createElement("button");
-    buttonStartEnvelope.addEventListener("click", () => {
-      synthjs.Envelopes[0].toggle();
-    });
-    buttonStartEnvelope.textContent = "Toggle Envelope";
-
-    synthContainer.appendChild(buttonStartEnvelope);
-
-    let channelsDiv = document.createElement("div");
-
-    synthjs.Volumes.forEach((volume) => {
-      channelsDiv.appendChild(createChannel(volume, "Volume"));
-    });
-
-    synthContainer.appendChild(channelsDiv);
-
+    
     synthContainer.appendChild(
-      createChannel(synthjs.MasterVolume, "Master Channel")
+      createVolume(synthjs.MasterVolume, "Master Channel")
     );
+
+    synthjs.Instruments.forEach((instrument) => {
+
+      let instrumentDiv = document.createElement("div");
+
+      instrumentDiv.appendChild(createVolume(instrument.Volume, "Volume"));
+
+      instrumentDiv.appendChild(createEnvelopeControl(instrument.Envelope));
+
+      let oscillatorsDiv = document.createElement("div");
+
+      instrument.Oscillators.forEach((oscillator) => {
+
+        let oscillatorDiv = document.createElement("div");
+
+        let select = document.createElement("select");
+
+        select.appendChild(createOption("sine"));
+        select.appendChild(createOption("square"));
+        select.appendChild(createOption("triangle"));
+        select.appendChild(createOption("sawtooth"));
+
+        select.addEventListener("change", (ev: any) => {
+          oscillator.changeOscillatorType(ev.srcElement.value);
+        });
+
+        oscillatorDiv.appendChild(createLabel("OSC", "OSC"));
+        oscillatorDiv.appendChild(select);
+
+        let buttonStart = document.createElement("button");
+        buttonStart.addEventListener("click", () => {
+          oscillator.start();
+        });
+        buttonStart.textContent = "Start (Create)";
+
+        let buttonDisconnect = document.createElement("button");
+        buttonDisconnect.addEventListener("click", () => {
+          oscillator.disconnect();
+        });
+        buttonDisconnect.textContent = "Disconnect";
+
+        let buttonConnect = document.createElement("button");
+        buttonConnect.addEventListener("click", () => {
+          oscillator.connect(oscillator.DestinationNode);
+        });
+        buttonConnect.textContent = "Connect";
+
+        oscillatorDiv.appendChild(buttonStart);
+        oscillatorDiv.appendChild(buttonDisconnect);
+        oscillatorDiv.appendChild(buttonConnect);
+
+        oscillatorsDiv.appendChild(oscillatorDiv);
+      })
+      instrumentDiv.appendChild(oscillatorsDiv);
+      synthContainer.appendChild(instrumentDiv);
+    });
 
     synthContainer.appendChild(pianoRoll.createPianoRoll())
 
@@ -277,27 +271,27 @@ function createSelection(name: string, options: string[]) {
   return typeSelect;
 }
 
-function createChannel(channel: Volume, title: string) {
-  let channelDiv = document.createElement("div");
-  let channelh2 = document.createElement("h2");
-  let channelVolumeDiv = document.createElement("div");
+function createVolume(volume: Volume, title: string) {
+  let volumeDiv = document.createElement("div");
+  let volumeh2 = document.createElement("h2");
+  let volumeVolumeDiv = document.createElement("div");
 
-  channelh2.textContent = title;
+  volumeh2.textContent = title;
 
-  channelDiv.classList.add("channel");
-  channelVolumeDiv.classList.add("channel-volume");
+  volumeDiv.classList.add("volume");
+  volumeVolumeDiv.classList.add("volume-volume");
 
-  let volumeSlider = createRange(0, 1, 0.001, channel.gain.value, "volume");
+  let volumeSlider = createRange(0, 1, 0.001, volume.gain.value, "volume");
 
   volumeSlider.addEventListener("input", (ev: any) => {
-    channel.gain.setValueAtTime(ev.srcElement.valueAsNumber, 0);
+    volume.gain.setValueAtTime(ev.srcElement.valueAsNumber, 0);
   });
 
-  channelVolumeDiv.appendChild(createLabel("Volume", "master-volume"));
-  channelVolumeDiv.appendChild(volumeSlider);
-  channelDiv.appendChild(channelh2);
-  channelDiv.appendChild(channelVolumeDiv);
-  return channelDiv;
+  volumeVolumeDiv.appendChild(createLabel("Volume", "master-volume"));
+  volumeVolumeDiv.appendChild(volumeSlider);
+  volumeDiv.appendChild(volumeh2);
+  volumeDiv.appendChild(volumeVolumeDiv);
+  return volumeDiv;
 }
 
 function createLabel(text: string, htmlFor: string) {
