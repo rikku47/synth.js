@@ -71,9 +71,7 @@ export function createSynth(synthjs: Synth, element: HTMLElement) {
       synthContainer.appendChild(instrumentDiv);
     });
 
-    synthContainer.appendChild(pianoRoll.createPianoRoll())
-
-    // createPianoRoll(synthjs.Keys, synthjs.Channels);
+    synthContainer.appendChild(pianoRoll.createPianoRoll(synthjs));
   }
   //#endregion
 }

@@ -1,3 +1,5 @@
+import { Synth } from "../../synth";
+
 let keys = [{
   "PianoKeyNumber": 88,
   "NotationEN": "C8",
@@ -487,7 +489,7 @@ let keys = [{
 }
 ]
 
-export function createPianoRoll() {
+export function createPianoRoll(synthjs: Synth) {
   let pianoRoll = document.createElement('div');
 
   if (pianoRoll != null) {
@@ -523,13 +525,9 @@ export function createPianoRoll() {
 
         console.log(frequency);
 
-        // channels.forEach((channel) => {
-        //   channel.Oscillators.forEach((oscillator) => {
-        //     oscillator.changeOscillatorFrequncy(frequency);
-        //   });
-
-        //   channel.applyEnvelope(channel.Envelope);
-        // });
+        synthjs.Instruments.forEach((instrument) => {
+          instrument.playNote(frequency)
+        });
       });
 
       pianoRoll.appendChild(pianoKey);

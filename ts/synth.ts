@@ -27,7 +27,7 @@ export class Synth extends AudioContext {
 
   // #region  Constructor
 
-  constructor(instruments = 3) {
+  constructor(instruments = 1) {
     super();
     this._masterVolume = new Volume(this, this.destination);
 
@@ -42,8 +42,8 @@ export class Synth extends AudioContext {
 
   // #region  Functions
 
-  changeVolume(volume: number, gainNode: GainNode) {
-    gainNode.gain.value = volume;
+  changeVolume(volume: number) {
+    this.MasterVolume.gain.value = volume;
   }
 
   // #endregion

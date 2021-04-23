@@ -102,6 +102,12 @@ class Instrument {
     this.isVolumeConnectedToDestinationNode = true;
   }
 
+  playNote(frequency: number) {
+    this.Oscillators.forEach((oscillator) => {
+      oscillator.frequency.value = frequency;
+      this.Envelope.toggle();
+    });
+  }
   //#endregion
 }
 
