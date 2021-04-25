@@ -6,6 +6,7 @@ class Instrument {
 
   /* #region Private fields  */
 
+  private _context: BaseAudioContext;
   private _destinationNode: AudioNode;
   private _volume: Volume;
   private _isVolumeConnectedToDestinationNode: boolean = false;
@@ -18,6 +19,14 @@ class Instrument {
   /* #endregion */
 
   //#region Getters and Setters
+
+  public get Context(): BaseAudioContext {
+    return this._context;
+  }
+
+  public set Context(value: BaseAudioContext) {
+    this._context = value;
+  }
 
   get DestinationNode(): AudioNode {
     return this._destinationNode;
@@ -74,12 +83,13 @@ class Instrument {
    */
   constructor(
     context: BaseAudioContext,
-    destinationNode: AudioNode
-    // options?: OscillatorOptions
+    destinationNode: AudioNode,
+    options?: OscillatorOptions
   ) {
-    // super(context, options);
 
-    this._destinationNode = destinationNode
+    this._context = context;
+
+    this._destinationNode = destinationNode;
 
     this._oscillators = [];
 
@@ -87,14 +97,9 @@ class Instrument {
 
     this._envelope = new Envelope(context);
 
-    for (let oscillator = 0; oscillator < 4; oscillator++) {
-      this.Oscillators.push(new Oscillator(context));
+    for (let oscillator = 0; oscillator < 3; oscillator++) {
+      this.Oscillators.push(new Oscillator(context, this.Envelope));
     };
-
-    this.Oscillators.forEach((oscillator) => {
-      oscillator.connect(this.Envelope);
-      oscillator.isConnectedToDestinationNode = true;
-    });
 
     this.Envelope.connect(this.Volume).connect(this.DestinationNode);
 

@@ -1,18 +1,18 @@
 //#region Create synth.js
 
-import { Volume } from "../../classes/volume";
-import { Envelope } from "../../classes/envelope";
 import { Synth } from "../../synth";
-import * as pianoRoll from "../../interfaces/gui/pianoRoll";
+import createPianoRoll from "../../interfaces/gui/pianoRoll";
+import { Oscillator } from "../../classes/oscillator";
+import { Instrument } from "../../classes/instrument";
 
-export function createSynth(synthjs: Synth, element: HTMLElement) {
+export default function createGui(synthjs: Synth, element: HTMLElement) {
 
   let synthContainer = element;
 
   if (synthContainer != null) {
-    
+
     synthContainer.appendChild(
-      createVolume(synthjs.MasterVolume, "Master Channel")
+      createVolume(synthjs.MasterVolume, "Master Volume")
     );
 
     synthjs.Instruments.forEach((instrument) => {
@@ -21,11 +21,15 @@ export function createSynth(synthjs: Synth, element: HTMLElement) {
 
       instrumentDiv.appendChild(createVolume(instrument.Volume, "Volume"));
 
-      instrumentDiv.appendChild(createEnvelopeControl(instrument.Envelope));
+      instrumentDiv.appendChild(createEnvelopeControl(instrument));
 
       let oscillatorsDiv = document.createElement("div");
 
+      let count = 0;
+
       instrument.Oscillators.forEach((oscillator) => {
+
+        count++;
 
         let oscillatorDiv = document.createElement("div");
 
@@ -36,18 +40,26 @@ export function createSynth(synthjs: Synth, element: HTMLElement) {
         select.appendChild(createOption("triangle"));
         select.appendChild(createOption("sawtooth"));
 
-        select.addEventListener("change", (ev: any) => {
-          oscillator.changeOscillatorType(ev.srcElement.value);
+        select.addEventListener("change", (ev: Event) => {
+          oscillator.changeType((ev.target as HTMLInputElement).value);
         });
 
-        oscillatorDiv.appendChild(createLabel("OSC", "OSC"));
+        oscillatorDiv.appendChild(createLabel("OSC" + count, "OSC" + count));
         oscillatorDiv.appendChild(select);
 
-        let buttonStart = document.createElement("button");
-        buttonStart.addEventListener("click", () => {
-          oscillator.start();
-        });
-        buttonStart.textContent = "Start (Create)";
+        // let buttonCreate = document.createElement("button");
+        // buttonCreate.addEventListener("click", () => {
+        //   if (!oscillator.Exist) {
+        //     oscillator = new Oscillator(instrument.Context, instrument.Envelope);
+        //   };
+        // });
+        // buttonCreate.textContent = "Create";
+
+        // let buttonDestroy = document.createElement("button");
+        // buttonDestroy.addEventListener("click", () => {
+        //   oscillator.stop();
+        // });
+        // buttonDestroy.textContent = "Destroy";
 
         let buttonDisconnect = document.createElement("button");
         buttonDisconnect.addEventListener("click", () => {
@@ -57,13 +69,22 @@ export function createSynth(synthjs: Synth, element: HTMLElement) {
 
         let buttonConnect = document.createElement("button");
         buttonConnect.addEventListener("click", () => {
-          oscillator.connect(oscillator.DestinationNode);
+          oscillator.connect(instrument.Envelope);
         });
         buttonConnect.textContent = "Connect";
 
-        oscillatorDiv.appendChild(buttonStart);
+        // oscillatorDiv.appendChild(buttonCreate);
+        // oscillatorDiv.appendChild(buttonDestroy);
         oscillatorDiv.appendChild(buttonDisconnect);
         oscillatorDiv.appendChild(buttonConnect);
+
+        let InputDetune = createNumberBox(oscillator.detune.minValue, oscillator.detune.maxValue, 1, oscillator.detune.value);
+
+        InputDetune.addEventListener("input", (ev: Event) => {
+          oscillator.changeDtune((ev.target as HTMLInputElement).valueAsNumber);
+        });
+
+        oscillatorDiv.appendChild(InputDetune);
 
         oscillatorsDiv.appendChild(oscillatorDiv);
       })
@@ -71,12 +92,12 @@ export function createSynth(synthjs: Synth, element: HTMLElement) {
       synthContainer.appendChild(instrumentDiv);
     });
 
-    synthContainer.appendChild(pianoRoll.createPianoRoll(synthjs));
+    synthContainer.appendChild(createPianoRoll(synthjs, 'en'));
   }
   //#endregion
 }
 
-function createEnvelopeControl(envelope: Envelope) {
+function createEnvelopeControl(instrument: Instrument) {
   let minTime = 0;
   let maxTime = 20;
   let stepTime = 0.001;
@@ -95,7 +116,7 @@ function createEnvelopeControl(envelope: Envelope) {
     minTime,
     maxTime,
     stepTime,
-    envelope,
+    instrument,
     "Attack Time"
   );
 
@@ -104,11 +125,11 @@ function createEnvelopeControl(envelope: Envelope) {
     minPeak,
     maxPeak,
     stepPeak,
-    envelope,
+    instrument,
     "Attack Peak"
   );
 
-  createGroupOfLabelSelection(envelopeDiv, envelope, "Attack Type");
+  createGroupOfLabelSelection(envelopeDiv, instrument, "Attack Type");
 
   envelopeDiv.appendChild(createH2("Decay"));
 
@@ -117,7 +138,7 @@ function createEnvelopeControl(envelope: Envelope) {
     minTime,
     maxTime,
     stepTime,
-    envelope,
+    instrument,
     "Decay Time"
   );
 
@@ -126,11 +147,11 @@ function createEnvelopeControl(envelope: Envelope) {
     minPeak,
     maxPeak,
     stepPeak,
-    envelope,
+    instrument,
     "Decay Peak"
   );
 
-  createGroupOfLabelSelection(envelopeDiv, envelope, "Decay Type");
+  createGroupOfLabelSelection(envelopeDiv, instrument, "Decay Type");
 
   envelopeDiv.appendChild(createH2("Sustain"));
 
@@ -139,7 +160,7 @@ function createEnvelopeControl(envelope: Envelope) {
     minTime,
     maxTime,
     stepTime,
-    envelope,
+    instrument,
     "Sustain Time"
   );
 
@@ -150,18 +171,18 @@ function createEnvelopeControl(envelope: Envelope) {
     minTime,
     maxTime,
     stepTime,
-    envelope,
+    instrument,
     "Release Time"
   );
 
-  createGroupOfLabelSelection(envelopeDiv, envelope, "Release Type");
+  createGroupOfLabelSelection(envelopeDiv, instrument, "Release Type");
 
   return envelopeDiv;
 }
 
 function createGroupOfLabelSelection(
   divToAppend: HTMLDivElement,
-  envelope: Envelope,
+  instrument: Instrument,
   label: string
 ) {
   divToAppend.appendChild(createLabel(label, label));
@@ -171,22 +192,19 @@ function createGroupOfLabelSelection(
   switch (label) {
     case "Attack Type":
       selection.addEventListener("change", (ev: Event) => {
-        envelope.AttackType = (ev.target as HTMLInputElement).value;
-        logEnvelopeOnConsole(envelope);
+        instrument.Envelope.AttackType = (ev.target as HTMLInputElement).value;
       });
       break;
 
     case "Decay Type":
       selection.addEventListener("change", (ev: Event) => {
-        envelope.DecayType = (ev.target as HTMLInputElement).value;
-        logEnvelopeOnConsole(envelope);
+        instrument.Envelope.DecayType = (ev.target as HTMLInputElement).value;
       });
       break;
 
     case "Release Type":
       selection.addEventListener("change", (ev: Event) => {
-        envelope.ReleaseType = (ev.target as HTMLInputElement).value;
-        logEnvelopeOnConsole(envelope);
+        instrument.Envelope.ReleaseType = (ev.target as HTMLInputElement).value;
       });
       break;
   }
@@ -199,7 +217,7 @@ function createGroupOfLabelRange(
   minTime: number,
   maxTime: number,
   stepTime: number,
-  envelope: Envelope,
+  instrument: Instrument,
   label: string
 ) {
   divToAppend.appendChild(createLabel(label, label));
@@ -207,50 +225,44 @@ function createGroupOfLabelRange(
 
   switch (label) {
     case "Attack Time":
-      range.defaultValue = envelope.AttackTime + "";
+      range.defaultValue = instrument.Envelope.AttackTime + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.AttackTime = (ev.target as HTMLInputElement).valueAsNumber;
-        logEnvelopeOnConsole(envelope);
+        instrument.Envelope.AttackTime = (ev.target as HTMLInputElement).valueAsNumber;
       });
       break;
 
     case "Attack Peak":
-      range.defaultValue = envelope.AttackPeak + "";
+      range.defaultValue = instrument.Envelope.AttackPeak + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.AttackPeak = (ev.target as HTMLInputElement).valueAsNumber;
-        logEnvelopeOnConsole(envelope);
+        instrument.Envelope.AttackPeak = (ev.target as HTMLInputElement).valueAsNumber;
       });
       break;
 
     case "Decay Time":
-      range.defaultValue = envelope.DecayTime + "";
+      range.defaultValue = instrument.Envelope.DecayTime + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.DecayTime = (ev.target as HTMLInputElement).valueAsNumber;
-        logEnvelopeOnConsole(envelope);
+        instrument.Envelope.DecayTime = (ev.target as HTMLInputElement).valueAsNumber;
       });
       break;
 
     case "Decay Peak":
-      range.defaultValue = envelope.DecayPeak + "";
+      range.defaultValue = instrument.Envelope.DecayPeak + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.DecayPeak = (ev.target as HTMLInputElement).valueAsNumber;
-        logEnvelopeOnConsole(envelope);
+        instrument.Envelope.DecayPeak = (ev.target as HTMLInputElement).valueAsNumber;
       });
       break;
 
     case "Sustain Time":
-      range.defaultValue = envelope.SustainTime + "";
+      range.defaultValue = instrument.Envelope.SustainTime + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.SustainTime = (ev.target as HTMLInputElement).valueAsNumber;
-        logEnvelopeOnConsole(envelope);
+        instrument.Envelope.SustainTime = (ev.target as HTMLInputElement).valueAsNumber;
       });
       break;
 
     case "Release Time":
-      range.defaultValue = envelope.ReleaseTime + "";
+      range.defaultValue = instrument.Envelope.ReleaseTime + "";
       range.addEventListener("input", (ev: Event) => {
-        envelope.ReleaseTime = (ev.target as HTMLInputElement).valueAsNumber;
-        logEnvelopeOnConsole(envelope);
+        instrument.Envelope.ReleaseTime = (ev.target as HTMLInputElement).valueAsNumber;
       });
       break;
   }
@@ -269,7 +281,7 @@ function createSelection(name: string, options: string[]) {
   return typeSelect;
 }
 
-function createVolume(volume: Volume, title: string) {
+function createVolume(volume: GainNode, title: string) {
   let volumeDiv = document.createElement("div");
   let volumeh2 = document.createElement("h2");
   let volumeVolumeDiv = document.createElement("div");
@@ -345,26 +357,4 @@ function createH2(text: string) {
   let h2 = document.createElement("h2");
   h2.textContent = text;
   return h2;
-}
-
-function logEnvelopeOnConsole(envelope: Envelope) {
-  console.clear();
-  console.log("Attack Time");
-  console.log(envelope.AttackTime);
-  console.log("Attack Peak");
-  console.log(envelope.AttackPeak);
-  console.log("Attack Type");
-  console.log(envelope.AttackType);
-  console.log("Decay Time");
-  console.log(envelope.DecayTime);
-  console.log("Decay Peak");
-  console.log(envelope.DecayPeak);
-  console.log("Decay Type");
-  console.log(envelope.DecayTime);
-  console.log("Sustain Time");
-  console.log(envelope.DecayType);
-  console.log("Release Time");
-  console.log(envelope.ReleaseTime);
-  console.log("Release Type");
-  console.log(envelope.ReleaseTime);
 }

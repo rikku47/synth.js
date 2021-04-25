@@ -489,7 +489,7 @@ let keys = [{
 }
 ]
 
-export function createPianoRoll(synthjs: Synth) {
+export default function createPianoRoll(synthjs: Synth, language: string) {
   let pianoRoll = document.createElement('div');
 
   if (pianoRoll != null) {
@@ -501,7 +501,12 @@ export function createPianoRoll(synthjs: Synth) {
 
       let pianoKey = document.createElement("button");
 
-      pianoKey.textContent = key.NotationEN;
+      if (language == "en") {
+        pianoKey.textContent = key.NotationEN;
+      } else {
+        pianoKey.textContent = key.NotationDE;
+      }
+
       pianoKey.value = key.Frequency + "";
 
       if (keyInOctave == 12) {

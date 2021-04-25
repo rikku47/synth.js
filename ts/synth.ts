@@ -1,5 +1,6 @@
 import { Volume } from "./classes/volume";
 import { Instrument } from "./classes/instrument";
+import createGui from './interfaces/gui/gui';
 
 export class Synth extends AudioContext {
   // #region Private fields
@@ -44,6 +45,10 @@ export class Synth extends AudioContext {
 
   changeVolume(volume: number) {
     this.MasterVolume.gain.value = volume;
+  }
+
+  createGui(elememt: HTMLElement){
+    createGui(this, elememt);
   }
 
   // #endregion

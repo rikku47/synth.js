@@ -39,6 +39,9 @@ class Volume extends GainNode {
     };
 
     this.gain.value = 0.2;
+
+    // console.log(this.gain.automationRate);
+    // this.gain.automationRate = 'k-rate';
   }
 }
 

@@ -1,7 +1,6 @@
 import * as _ from "lodash";
 import "./scsscss/synth.css";
 import { Synth } from "./ts/synth";
-import { createSynth } from "./ts/interfaces/gui/gui";
 
 function start() {
   let synthjs = document.createElement("div");
@@ -58,15 +57,15 @@ function start() {
   startSynth.id = "start-synth";
   startSynth.textContent = "Start";
   startSynth.addEventListener("click", () => {
-    let synthjs = document.getElementById("synthjs");
+    let container = document.getElementById("synthjs");
 
-    if (synthjs != null) {
-      while (synthjs.lastChild) {
-        synthjs.lastChild.remove();
+    if (container != null) {
+      while (container.lastChild) {
+        container.lastChild.remove();
       }
 
       const synth = new Synth();
-      createSynth(synth, synthjs);
+      synth.createGui(container);
     }
   });
 

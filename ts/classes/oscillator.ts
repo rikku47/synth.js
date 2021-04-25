@@ -3,6 +3,7 @@ class Oscillator extends OscillatorNode {
   /* #region Private fields  */
 
   private _destinationNode: AudioNode;
+  private _exist: boolean = false;
   private _isConnectedToDestinationNode: boolean = false;
 
   // private _envelope: Envelope;
@@ -19,9 +20,18 @@ class Oscillator extends OscillatorNode {
     this._destinationNode = value;
   }
 
+  public get Exist(): boolean {
+    return this._exist;
+  }
+
+  public set Exist(value: boolean) {
+    this._exist = value;
+  }
+
   get isConnectedToDestinationNode(): boolean {
     return this._isConnectedToDestinationNode;
   }
+
   set isConnectedToDestinationNode(value: boolean) {
     this._isConnectedToDestinationNode = value;
   }
@@ -41,16 +51,28 @@ class Oscillator extends OscillatorNode {
     if (destinationNode != undefined) {
       this._destinationNode = destinationNode;
       this.connect(destinationNode);
+      this.isConnectedToDestinationNode = true;
     } else {
       this._destinationNode = this.context.destination;
-    }
+    };
+
+    this.start();
+    this.Exist = true;
+
+    this.onended = () => {
+      this.Exist = false
+    };
   }
 
-  changeOscillatorFrequncy(frequency: number) {
+  changeDtune(detune: number) {
+    this.detune.value = detune;
+  }
+
+  changeFrequncy(frequency: number) {
     this.frequency.value = frequency;
   }
 
-  changeOscillatorType(type: string) {
+  changeType(type: string) {
     this.type = type as OscillatorType;
   }
 
