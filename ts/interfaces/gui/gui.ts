@@ -27,7 +27,7 @@ export default function createGui(synthjs: Synth, element: HTMLElement) {
 
       let count = 0;
 
-      instrument.Oscillators.forEach((oscillator) => {
+      instrument.OscillatorNodes.forEach((oscillator) => {
 
         count++;
 

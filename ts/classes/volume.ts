@@ -1,6 +1,7 @@
 class Volume extends GainNode {
   private _inputNodes: AudioNode[] = [];
   private _outputNodes: AudioNode[] = [];
+  private _isVolumeConnectedToDestinationNode: boolean = false;
 
   public get InputNodes(): AudioNode[] {
     return this._inputNodes;
@@ -16,6 +17,14 @@ class Volume extends GainNode {
 
   public set OutputNodes(value: AudioNode[]) {
     this._outputNodes = value;
+  }
+
+  get isVolumeConnectedToDestinationNode(): boolean {
+    return this._isVolumeConnectedToDestinationNode;
+  }
+
+  set isVolumeConnectedToDestinationNode(value: boolean) {
+    this._isVolumeConnectedToDestinationNode = value;
   }
 
   /**
@@ -39,9 +48,6 @@ class Volume extends GainNode {
     };
 
     this.gain.value = 0.2;
-
-    // console.log(this.gain.automationRate);
-    // this.gain.automationRate = 'k-rate';
   }
 }
 

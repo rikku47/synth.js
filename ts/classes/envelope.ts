@@ -2,16 +2,16 @@ class Envelope extends GainNode {
 
   private _inputNodes: GainNode[] = [];
   private _outputNodes: AudioNode[] = [];
-  private _attackTime: number;
-  private _attackPeak: number;
-  private _attackType: string;
-  private _decayTime: number;
-  private _decayPeak: number;
-  private _decayType: string;
-  private _sustainTime: number;
-  private _releaseTime: number;
-  private _releaseType: string;
-  private _status: boolean;
+  private _attackTime: number = 0.1;
+  private _attackPeak: number = 1;
+  private _attackType: string = "linear";
+  private _decayTime: number = 0.04;
+  private _decayPeak: number = 0.2;
+  private _decayType: string = "linear";
+  private _sustainTime: number = 0.0;
+  private _releaseTime: number = 0.04;
+  private _releaseType: string = "linear";
+  private _isEnvelopeConnectedToVolume: boolean = false;
 
   public get InputNodes(): GainNode[] {
     return this._inputNodes;
@@ -101,12 +101,12 @@ class Envelope extends GainNode {
     this._releaseType = value;
   }
 
-  public get Status(): boolean {
-    return this._status;
+  get isEnvelopeConnectedToVolume(): boolean {
+    return this._isEnvelopeConnectedToVolume;
   }
 
-  public set Status(value: boolean) {
-    this._status = value;
+  set isEnvelopeConnectedToVolume(value: boolean) {
+    this._isEnvelopeConnectedToVolume = value;
   }
 
   /**
@@ -127,21 +127,6 @@ class Envelope extends GainNode {
     if (outputNodes != undefined) {
       this._outputNodes = outputNodes;
     }
-
-    this._attackTime = 0.1;
-    this._attackPeak = 1;
-    this._attackType = "linear";
-
-    this._decayTime = 0.04;
-    this._decayPeak = 0.2;
-    this._decayType = "linear";
-
-    this._sustainTime = 0.0;
-
-    this._releaseTime = 0.04;
-    this._releaseType = "linear";
-
-    this._status = false;
 
     this.gain.value = 0;
   }
@@ -201,4 +186,4 @@ class Envelope extends GainNode {
   }
 }
 
-export {Envelope}
+export { Envelope }

@@ -6,13 +6,12 @@ class Instrument {
 
   /* #region Private fields  */
 
+  private _audioNodes: AudioNode[] = [];
   private _context: BaseAudioContext;
   private _destinationNode: AudioNode;
   private _volume: Volume;
-  private _isVolumeConnectedToDestinationNode: boolean = false;
   private _envelope: Envelope;
-  private _isEnvelopeConnectedToVolume: boolean = false;
-  private _oscillators: Oscillator[];
+  private _oscillatorNodes: OscillatorNode[] = [];
 
   // private _envelope: Envelope;
 
@@ -20,12 +19,12 @@ class Instrument {
 
   //#region Getters and Setters
 
-  public get Context(): BaseAudioContext {
-    return this._context;
+  public get AudioNodes(): AudioNode[] {
+    return this._audioNodes;
   }
 
-  public set Context(value: BaseAudioContext) {
-    this._context = value;
+  public get Context(): BaseAudioContext {
+    return this._context;
   }
 
   get DestinationNode(): AudioNode {
@@ -40,40 +39,12 @@ class Instrument {
     return this._volume;
   }
 
-  set Volume(value: Volume) {
-    this._volume = value;
-  }
-
-  get isVolumeConnectedToDestinationNode(): boolean {
-    return this._isVolumeConnectedToDestinationNode;
-  }
-
-  set isVolumeConnectedToDestinationNode(value: boolean) {
-    this._isVolumeConnectedToDestinationNode = value;
-  }
-
-  get Envelope(): Envelope {
-    return this._envelope;
-  }
-
   set Envelope(value: Envelope) {
     this._envelope = value;
   }
 
-  get isEnvelopeConnectedToVolume(): boolean {
-    return this._isEnvelopeConnectedToVolume;
-  }
-
-  set isEnvelopeConnectedToVolume(value: boolean) {
-    this._isEnvelopeConnectedToVolume = value;
-  }
-
-  get Oscillators(): Oscillator[] {
-    return this._oscillators;
-  }
-
-  set Oscillators(value: Oscillator[]) {
-    this._oscillators = value;
+  get OscillatorNodes(): OscillatorNode[] {
+    return this._oscillatorNodes;
   }
 
   //#endregion
@@ -84,34 +55,50 @@ class Instrument {
   constructor(
     context: BaseAudioContext,
     destinationNode: AudioNode,
+    oscillators = 4,
     options?: OscillatorOptions
   ) {
-
     this._context = context;
-
     this._destinationNode = destinationNode;
-
-    this._oscillators = [];
-
     this._volume = new Volume(context);
-
     this._envelope = new Envelope(context);
 
-    for (let oscillator = 0; oscillator < 3; oscillator++) {
-      this.Oscillators.push(new Oscillator(context, this.Envelope));
+    for (let oscillator = 0; oscillator < oscillators; oscillator++) {
+      this.OscillatorNodes.push(new OscillatorNode(this.Context));
     };
 
-    this.Envelope.connect(this.Volume).connect(this.DestinationNode);
+    this.AudioNodes.push(this.Volume, this.Envelope);
 
-    this.isEnvelopeConnectedToVolume = true;
-    this.isVolumeConnectedToDestinationNode = true;
+    this.connectAudioNodes(this.AudioNodes);
   }
 
   playNote(frequency: number) {
-    this.Oscillators.forEach((oscillator) => {
-      oscillator.frequency.value = frequency;
+    this.OscillatorNodes.forEach((oscillatorNode) => {
+      oscillatorNode.frequency.value = frequency;
       this.Envelope.toggle();
     });
+  }
+
+  connectAudioNodes(audioNodes: AudioNode[]) {
+    if (audioNodes.length > 1) {
+      for (
+        let index1 = 0, index2 = 1;
+        index1 < audioNodes.length;
+        index1++, index2++
+      ) {
+        const audioNode1 = audioNodes[index1];
+        const audioNode2 = audioNodes[index2];
+        audioNode1.connect(audioNode2);
+      }
+    }
+  }
+
+  connectOscillatorNodesToAudio(oscillatorNodes: OscillatorNode[], audioNode: AudioNode) {
+    if (oscillatorNodes.length > 1 && audioNode != undefined) {
+      oscillatorNodes.forEach(oscillatorNode => {
+        oscillatorNode.connect(audioNode)
+      });
+    };
   }
   //#endregion
 }
