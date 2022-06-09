@@ -1,0 +1,651 @@
+{
+    "C0 Double Pedal C": {
+        "frequency": 16.35160,
+        "keyNumber": 89,
+        "midiNote": 12,
+        "helmholtzName": "C͵͵ sub-contra-octave"
+    },
+    "C♯0/D♭0": {
+        "frequency": 17.32391,
+        "keyNumber": 90,
+        "midiNote": 13,
+        "helmholtzName": "C♯͵͵/D♭͵͵"
+    },
+    "D0": {
+        "frequency": 18.35405,
+        "keyNumber": 91,
+        "midiNote": 14,
+        "helmholtzName": "D͵͵"
+    },
+    "D♯0/E♭0": {
+        "frequency": 19.44544,
+        "keyNumber": 92,
+        "midiNote": 15,
+        "helmholtzName": "D♯͵͵/E♭͵͵"
+    },
+    "E0": {
+        "frequency": 20.60172,
+        "keyNumber": 93,
+        "midiNote": 16,
+        "helmholtzName": "E͵͵"
+    },
+    "F0": {
+        "frequency": 21.82676,
+        "keyNumber": 94,
+        "midiNote": 17,
+        "helmholtzName": "F͵͵"
+    },
+    "F♯0/G♭0": {
+        "frequency": 23.12465,
+        "keyNumber": 95,
+        "midiNote": 18,
+        "helmholtzName": "F♯͵͵/G♭͵͵"
+    },
+    "G0": {
+        "frequency": 24.49971,
+        "keyNumber": 96,
+        "midiNote": 19,
+        "helmholtzName": "G͵͵"
+    },
+    "G♯0/A♭0": {
+        "frequency": 25.95654,
+        "keyNumber": 97,
+        "midiNote": 20,
+        "helmholtzName": "G♯͵͵/A♭͵͵"
+    },
+
+    "A0": {
+        "frequency": 27.5,
+        "keyNumber": 1,
+        "midiNote": 21,
+        "helmholtzName": "A͵͵"
+    },
+    "A♯0/B♭0": {
+        "frequency": 29.1352,
+        "keyNumber": 2,
+        "midiNote": 22,
+        "helmholtzName": "A♯͵͵/B♭͵͵"
+    },
+    "B0": {
+        "frequency": 30.8677,
+        "keyNumber": 3,
+        "midiNote": 23,
+        "helmholtzName": "B͵͵"
+    },
+    "C1 Pedal C": {
+        "frequency": 32.7032,
+        "keyNumber": 4,
+        "midiNote": 24,
+        "helmholtzName": "C͵ contra-octave"
+    },
+    "C♯1/D♭1": {
+        "frequency": 34.6478,
+        "keyNumber": 5,
+        "midiNote": 25,
+        "helmholtzName": "C♯͵/D♭͵"
+    },
+    "D1 ": {
+        "frequency": 36.7081,
+        "keyNumber": 6,
+        "midiNote": 26,
+        "helmholtzName": "D͵"
+    },
+    "D♯1/E♭1": {
+        "frequency": 38.8909,
+        "keyNumber": 7,
+        "midiNote": 27,
+        "helmholtzName": "D♯͵/E♭͵"
+    },
+    "E1": {
+        "frequency": 41.2034,
+        "keyNumber": 8,
+        "midiNote": 28,
+        "helmholtzName": "E͵"
+    },
+    "F1": {
+        "frequency": 43.6535,
+        "keyNumber": 9,
+        "midiNote": 29,
+        "helmholtzName": "F͵"
+    },
+    "F♯1/G♭1": {
+        "frequency": 46.2493,
+        "keyNumber": 10,
+        "midiNote": 30,
+        "helmholtzName": "F♯͵/G♭͵"
+    },
+    "G1": {
+        "frequency": 48.9994,
+        "keyNumber": 11,
+        "midiNote": 31,
+        "helmholtzName": "G͵"
+    },
+    "G♯1/A♭1": {
+        "frequency": 51.9131,
+        "keyNumber": 12,
+        "midiNote": 32,
+        "helmholtzName": "G♯͵/A♭͵"
+    },
+    "A1": {
+        "frequency": 55,
+        "keyNumber": 13,
+        "midiNote": 33,
+        "helmholtzName": "A͵"
+    },
+    "A♯1/B♭1": {
+        "frequency": 58.2705,
+        "keyNumber": 14,
+        "midiNote": 34,
+        "helmholtzName": "A♯͵/B♭͵"
+    },
+    "B1": {
+        "frequency": 61.7354,
+        "keyNumber": 15,
+        "midiNote": 35,
+        "helmholtzName": "B͵"
+    },
+    "C2 Deep C": {
+        "frequency": 65.4064,
+        "keyNumber": 16,
+        "midiNote": 36,
+        "helmholtzName": "C great octave"
+    },
+    "C♯2/D♭2": {
+        "frequency": 69.2957,
+        "keyNumber": 17,
+        "midiNote": 37,
+        "helmholtzName": "C♯/D♭"
+    },
+    "D2": {
+        "frequency": 73.4162,
+        "keyNumber": 18,
+        "midiNote": 38,
+        "helmholtzName": "D"
+    },
+    "D♯2/E♭2": {
+        "frequency": 77.7817,
+        "keyNumber": 19,
+        "midiNote": 39,
+        "helmholtzName": "D♯/E♭"
+    },
+    "E2": {
+        "frequency": 82.4069,
+        "keyNumber": 20,
+        "midiNote": 40,
+        "helmholtzName": "E"
+    },
+    "F2": {
+        "frequency": 87.3071,
+        "keyNumber": 21,
+        "midiNote": 41,
+        "helmholtzName": "F"
+    },
+    "F♯2/G♭2": {
+        "frequency": 92.4986,
+        "keyNumber": 22,
+        "midiNote": 42,
+        "helmholtzName": "F♯/G♭"
+    },
+    "G2": {
+        "frequency": 97.9989,
+        "keyNumber": 23,
+        "midiNote": 43,
+        "helmholtzName": "G"
+    },
+    "G♯2/A♭2": {
+        "frequency": 103.826,
+        "keyNumber": 24,
+        "midiNote": 44,
+        "helmholtzName": "G♯/A♭"
+    },
+    "A2": {
+        "frequency": 110,
+        "keyNumber": 25,
+        "midiNote": 45,
+        "helmholtzName": "A"
+    },
+    "A♯2/B♭2": {
+        "frequency": 116.541,
+        "keyNumber": 26,
+        "midiNote": 46,
+        "helmholtzName": "A♯/B♭"
+    },
+    "B2": {
+        "frequency": 123.471,
+        "keyNumber": 27,
+        "midiNote": 47,
+        "helmholtzName": "B"
+    },
+    "C3": {
+        "frequency": 130.813,
+        "keyNumber": 28,
+        "midiNote": 48,
+        "helmholtzName": "c small octave"
+    },
+    "C♯3/D♭3": {
+        "frequency": 138.591,
+        "keyNumber": 29,
+        "midiNote": 49,
+        "helmholtzName": "c♯/d♭"
+    },
+    "D3": {
+        "frequency": 146.832,
+        "keyNumber": 30,
+        "midiNote": 50,
+        "helmholtzName": "d"
+    },
+    "D♯3/E♭3": {
+        "frequency": 155.563,
+        "keyNumber": 31,
+        "midiNote": 51,
+        "helmholtzName": "d♯/e♭"
+    },
+    "E3": {
+        "frequency": 164.814,
+        "keyNumber": 32,
+        "midiNote": 52,
+        "helmholtzName": "e"
+    },
+    "F3": {
+        "frequency": 174.614,
+        "keyNumber": 33,
+        "midiNote": 53,
+        "helmholtzName": "f"
+    },
+    "F♯3/G♭3": {
+        "frequency": 184.997,
+        "keyNumber": 34,
+        "midiNote": 54,
+        "helmholtzName": "f♯/g♭"
+    },
+    "G3": {
+        "frequency": 195.998,
+        "keyNumber": 35,
+        "midiNote": 55,
+        "helmholtzName": "g"
+    },
+    "G♯3/A♭3": {
+        "frequency": 207.652,
+        "keyNumber": 36,
+        "midiNote": 56,
+        "helmholtzName": "g♯/a♭"
+    },
+    "A3": {
+        "frequency": 220,
+        "keyNumber": 37,
+        "midiNote": 57,
+        "helmholtzName": "a"
+    },
+    "A♯3/B♭3": {
+        "frequency": 233.082,
+        "keyNumber": 38,
+        "midiNote": 58,
+        "helmholtzName": "a♯/b♭"
+    },
+    "B3": {
+        "frequency": 246.942,
+        "keyNumber": 39,
+        "midiNote": 59,
+        "helmholtzName": "b"
+    },
+    "C4 Middle C": {
+        "frequency": 261.626,
+        "keyNumber": 40,
+        "midiNote": 60,
+        "helmholtzName": "c′ 1-line octave"
+    },
+    "C♯4/D♭4": {
+        "frequency": 277.183,
+        "keyNumber": 41,
+        "midiNote": 61,
+        "helmholtzName": "c♯′/d♭′"
+    },
+    "D4": {
+        "frequency": 293.665,
+        "keyNumber": 42,
+        "midiNote": 62,
+        "helmholtzName": "d′"
+    },
+    "D♯4/E♭4": {
+        "frequency": 311.127,
+        "keyNumber": 43,
+        "midiNote": 63,
+        "helmholtzName": "d♯′/e♭′"
+    },
+    "E4": {
+        "frequency": 329.628,
+        "keyNumber": 44,
+        "midiNote": 64,
+        "helmholtzName": "e′"
+    },
+    "F4": {
+        "frequency": 349.228,
+        "keyNumber": 45,
+        "midiNote": 65,
+        "helmholtzName": "f′"
+    },
+    "F♯4/G♭4": {
+        "frequency": 369.994,
+        "keyNumber": 46,
+        "midiNote": 66,
+        "helmholtzName": "f♯′/g♭′"
+    },
+    "G4": {
+        "frequency": 391.995,
+        "keyNumber": 47,
+        "midiNote": 67,
+        "helmholtzName": "g′"
+    },
+    "G♯4/A♭4": {
+        "frequency": 415.305,
+        "keyNumber": 48,
+        "midiNote": 68,
+        "helmholtzName": "g♯′/a♭′"
+    },
+    "A4 A440": {
+        "frequency": 440,
+        "keyNumber": 49,
+        "midiNote": 69,
+        "helmholtzName": "a′"
+    },
+    "A♯4/B♭4": {
+        "frequency": 466.164,
+        "keyNumber": 50,
+        "midiNote": 70,
+        "helmholtzName": "a♯′/b♭′"
+    },
+    "B4": {
+        "frequency": 493.883,
+        "keyNumber": 51,
+        "midiNote": 71,
+        "helmholtzName": "b′"
+    },
+    "C5 Tenor C": {
+        "frequency": 523.251,
+        "keyNumber": 52,
+        "midiNote": 72,
+        "helmholtzName": "c′′ 2-line octave"
+    },
+    "C♯5/D♭5": {
+        "frequency": 554.365,
+        "keyNumber": 53,
+        "midiNote": 73,
+        "helmholtzName": "c♯′′/d♭′′"
+    },
+    "D5": {
+        "frequency": 587.330,
+        "keyNumber": 54,
+        "midiNote": 74,
+        "helmholtzName": "d′′"
+    },
+    "D♯5/E♭5": {
+        "frequency": 622.254,
+        "keyNumber": 55,
+        "midiNote": 75,
+        "helmholtzName": "d♯′′/e♭′′"
+    },
+    "E5": {
+        "frequency": 659.255,
+        "keyNumber": 56,
+        "midiNote": 76,
+        "helmholtzName": "e′′"
+    },
+    "F5": {
+        "frequency": 698.456,
+        "keyNumber": 57,
+        "midiNote": 77,
+        "helmholtzName": "f′′"
+    },
+    "F♯5/G♭5": {
+        "frequency": 739.989,
+        "keyNumber": 58,
+        "midiNote": 78,
+        "helmholtzName": "f♯′′/g♭′′"
+    },
+    "G5": {
+        "frequency": 783.991,
+        "keyNumber": 59,
+        "midiNote": 79,
+        "helmholtzName": "g′′"
+    },
+    "G♯5/A♭5": {
+        "frequency": 830.609,
+        "keyNumber": 60,
+        "midiNote": 80,
+        "helmholtzName": "g♯′′/a♭′′"
+    },
+    "A5": {
+        "frequency": 880,
+        "keyNumber": 61,
+        "midiNote": 81,
+        "helmholtzName": "a′′"
+    },
+    "A♯5/B♭5": {
+        "frequency": 932.328,
+        "keyNumber": 62,
+        "midiNote": 82,
+        "helmholtzName": "a♯′′/b♭′′"
+    },
+    "B5": {
+        "frequency": 987.767,
+        "keyNumber": 63,
+        "midiNote": 83,
+        "helmholtzName": "b′′"
+    },
+    "C6 Soprano C (High C)": {
+        "frequency": 1046.50,
+        "keyNumber": 64,
+        "midiNote": 84,
+        "helmholtzName": "c′′′ 3-line octave"
+    },
+    "C♯6/D♭6": {
+        "frequency": 1108.73,
+        "keyNumber": 65,
+        "midiNote": 85,
+        "helmholtzName": "c♯′′′/d♭′′′"
+    },
+    "D6": {
+        "frequency": 1174.66,
+        "keyNumber": 66,
+        "midiNote": 86,
+        "helmholtzName": "d′′′"
+    },
+    "D♯6/E♭6": {
+        "frequency": 1244.51,
+        "keyNumber": 67,
+        "midiNote": 87,
+        "helmholtzName": "d♯′′′/e♭′′′"
+    },
+    "E6": {
+        "frequency": 1318.51,
+        "keyNumber": 68,
+        "midiNote": 88,
+        "helmholtzName": "e′′′"
+    },
+    "F6": {
+        "frequency": 1396.91,
+        "keyNumber": 69,
+        "midiNote": 89,
+        "helmholtzName": "f′′′"
+    },
+    "F♯6/G♭6": {
+        "frequency": 1479.98,
+        "keyNumber": 70,
+        "midiNote": 90,
+        "helmholtzName": "f♯′′′/g♭′′′"
+    },
+    "G6": {
+        "frequency": 1567.98,
+        "keyNumber": 71,
+        "midiNote": 91,
+        "helmholtzName": "g′′′"
+    },
+    "G♯6/A♭6": {
+        "frequency": 1661.22,
+        "keyNumber": 72,
+        "midiNote": 92,
+        "helmholtzName": "g♯′′′/a♭′′′"
+    },
+    "A6": {
+        "frequency": 1760,
+        "keyNumber": 73,
+        "midiNote": 93,
+        "helmholtzName": "a′′′"
+    },
+    "A♯6/B♭6": {
+        "frequency": 1864.66,
+        "keyNumber": 74,
+        "midiNote": 94,
+        "helmholtzName": "a♯′′′/b♭′′′"
+    },
+    "B6": {
+        "frequency": 1975.53,
+        "keyNumber": 75,
+        "midiNote": 95,
+        "helmholtzName": "b′′′"
+    },
+    "C7 Double high C": {
+        "frequency": 2093.00,
+        "keyNumber": 76,
+        "midiNote": 96,
+        "helmholtzName": "c′′′′ 4-line octave"
+    },
+    "C♯7/D♭7": {
+        "frequency": 2217.46,
+        "keyNumber": 77,
+        "midiNote": 97,
+        "helmholtzName": "c♯′′′′/d♭′′′′"
+    },
+    "D7": {
+        "frequency": 2349.32,
+        "keyNumber": 78,
+        "midiNote": 98,
+        "helmholtzName": "d′′′′"
+    },
+    "D♯7/E♭7": {
+        "frequency": 2489.02,
+        "keyNumber": 79,
+        "midiNote": 99,
+        "helmholtzName": "d♯′′′′/e♭′′′′"
+    },
+    "E7": {
+        "frequency": 2637.02,
+        "keyNumber": 80,
+        "midiNote": 100,
+        "helmholtzName": "e′′′′"
+    },
+    "F7": {
+        "frequency": 2793.83,
+        "keyNumber": 81,
+        "midiNote": 101,
+        "helmholtzName": "f′′′′"
+    },
+    "F♯7/G♭7": {
+        "frequency": 2959.96,
+        "keyNumber": 82,
+        "midiNote": 102,
+        "helmholtzName": "f♯′′′′/g♭′′′′"
+    },
+    "G7": {
+        "frequency": 3135.96,
+        "keyNumber": 83,
+        "midiNote": 103,
+        "helmholtzName": "g′′′′"
+    },
+    "G♯7/A♭7": {
+        "frequency": 3322.44,
+        "keyNumber": 84,
+        "midiNote": 104,
+        "helmholtzName": "g♯′′′′/a♭′′′′"
+    },
+    "A7": {
+        "frequency": 3520,
+        "keyNumber": 85,
+        "midiNote": 105,
+        "helmholtzName": "a′′′′"
+    },
+    "A♯7/B♭7": {
+        "frequency": 3729.31,
+        "keyNumber": 86,
+        "midiNote": 106,
+        "helmholtzName": "a♯′′′′/b♭′′′′"
+    },
+    "B7": {
+        "frequency": 3951.07,
+        "keyNumber": 87,
+        "midiNote": 107,
+        "helmholtzName": "b′′′′"
+    },
+    "C8 Eighth octave": {
+        "frequency": 4186.009,
+        "keyNumber": 88,
+        "midiNote": 108,
+        "helmholtzName": "c′′′′′ 5-line octave"
+    },
+    "C♯8/D♭8": {
+        "frequency": 4434.922,
+        "keyNumber": 98,
+        "midiNote": 109,
+        "helmholtzName": "c♯′′′′′/d♭′′′′′"
+    },
+    "D8": {
+        "frequency": 4698.636,
+        "keyNumber": 99,
+        "midiNote": 110,
+        "helmholtzName": "d′′′′′"
+    },
+    "D♯8/E♭8": {
+        "frequency": 4978.032,
+        "keyNumber": 100,
+        "midiNote": 111,
+        "helmholtzName": "d♯′′′′′/e♭′′′′′"
+    },
+    "E8": {
+        "frequency": 5274.041,
+        "keyNumber": 101,
+        "midiNote": 112,
+        "helmholtzName": "e′′′′′"
+    },
+    "F8": {
+        "frequency": 5587.652,
+        "keyNumber": 102,
+        "midiNote": 113,
+        "helmholtzName": "f′′′′′"
+    },
+    "F♯8/G♭8": {
+        "frequency": 5919.911,
+        "keyNumber": 103,
+        "midiNote": 114,
+        "helmholtzName": "f♯′′′′′/g♭′′′′′"
+    },
+    "G8": {
+        "frequency": 6271.927,
+        "keyNumber": 104,
+        "midiNote": 115,
+        "helmholtzName": "g′′′′′"
+    },
+    "G♯8/A♭8": {
+        "frequency": 6644.875,
+        "keyNumber": 105,
+        "midiNote": 116,
+        "helmholtzName": "g♯′′′′′/a♭′′′′′"
+    },
+    "A8": {
+        "frequency": 7040.000,
+        "keyNumber": 106,
+        "midiNote": 117,
+        "helmholtzName": "a′′′′′"
+    },
+    "A♯8/B♭8": {
+        "frequency": 7458.620,
+        "keyNumber": 107,
+        "midiNote": 118,
+        "helmholtzName": "a♯′′′′′/b♭′′′′′"
+    },
+    "B8": {
+        "frequency": 7902.133,
+        "keyNumber": 108,
+        "midiNote": 119,
+        "helmholtzName": "b′′′′′"
+    }
+}
