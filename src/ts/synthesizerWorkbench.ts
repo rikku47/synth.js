@@ -65,7 +65,8 @@ class SynthesizerWorkbench {
             distortion: {
                 components: {
                     waveshaper: WaveShaper,
-                    gain: Gain,
+                    gain1: Gain,
+                    gain2: Gain,
                 }
             },
             delay: {
@@ -76,7 +77,8 @@ class SynthesizerWorkbench {
             reverb: {
                 components: {
                     connvolver: Convolver,
-                    gain: Gain,
+                    gain1: Gain,
+                    gain2: Gain,
                 }
             }
         },
@@ -171,7 +173,8 @@ class SynthesizerWorkbench {
                 distortion: {
                     components: {
                         waveshaper: new WaveShaper(this.audioContext),
-                        gain: new Gain(this.audioContext, 1),
+                        gain1: new Gain(this.audioContext, 0),
+                        gain2: new Gain(this.audioContext, 1),
                     }
                 },
                 delay: {
@@ -182,7 +185,8 @@ class SynthesizerWorkbench {
                 reverb: {
                     components: {
                         connvolver: new Convolver(this.audioContext),
-                        gain: new Gain(this.audioContext, 1)
+                        gain1: new Gain(this.audioContext, 0),
+                        gain2: new Gain(this.audioContext, 1)
                     }
                 }
             },
@@ -196,8 +200,8 @@ class SynthesizerWorkbench {
         };
 
         this.modules.oscillators.oscillator1.connectNode(this.modules.mixer.mixer1);
-        this.modules.oscillators.oscillator2.connectNode(this.modules.mixer.mixer2);
         this.modules.oscillators.oscillator3.connectNode(this.modules.mixer.mixer3);
+        this.modules.oscillators.oscillator2.connectNode(this.modules.mixer.mixer2);
         this.modules.oscillators.oscillator4.connectNode(this.modules.mixer.mixer4);
 
         this.modules.mixer.mixer1.connectNode(this.modules.envelope.components.gain);
@@ -206,14 +210,31 @@ class SynthesizerWorkbench {
         this.modules.mixer.mixer4.connectNode(this.modules.envelope.components.gain);
 
         this.modules.envelope.components.gain.connectNode(this.modules.effects.distortion.components.waveshaper);
-        this.modules.envelope.components.gain.connectNode(this.modules.effects.distortion.components.gain);
+        this.modules.envelope.components.gain.connectNode(this.modules.effects.distortion.components.gain2);
 
-        this.modules.effects.distortion.components.waveshaper.connectNode(this.modules.effects.delay.components.delay);
-        this.modules.effects.distortion.components.gain.connectNode(this.modules.effects.delay.components.delay);
+        this.modules.effects.distortion.components.waveshaper.connectNode(this.modules.effects.distortion.components.gain1);
 
-        this.modules.effects.delay.components.delay.connectNode(this.modules.channels.channelMaster);
+        this.modules.effects.distortion.components.gain1.connectNode(this.modules.effects.delay.components.delay);
+        this.modules.effects.distortion.components.gain2.connectNode(this.modules.effects.delay.components.delay);
+
+        this.modules.effects.delay.components.delay.connectNode(this.modules.effects.reverb.components.connvolver);
+        this.modules.effects.delay.components.delay.connectNode(this.modules.effects.reverb.components.gain2);
+
+        this.modules.effects.reverb.components.connvolver.connectNode(this.modules.effects.reverb.components.gain1);
+
+        this.modules.effects.reverb.components.gain1.connectNode(this.modules.channels.channelMaster);
+        this.modules.effects.reverb.components.gain2.connectNode(this.modules.channels.channelMaster);
 
         this.modules.channels.channelMaster.component.connect(this.audioContext.destination);
+
+        this.modules.oscillators.oscillator1.component.start();
+        this.modules.oscillators.oscillator3.component.start();
+        this.modules.oscillators.oscillator2.component.start();
+        this.modules.oscillators.oscillator4.component.start();
+
+        this.modules.effects.distortion.components.waveshaper.component.curve = makeDistortionCurve(40, 3);
+        this.modules.effects.distortion.components.waveshaper.component.oversample = '4x';
+        this.modules.effects.reverb.components.connvolver.component.buffer = createReverb(1, 2, this.audioContext.sampleRate, this.audioContext);
 
         // this.modules.channels.channelMaster.component.disconnect(this.audioContext.destination);
     }
