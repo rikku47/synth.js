@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DynamicCompressorNode</title>
+</head>
+<body>
+    <fieldset>
+        <legend>Dynamic Compressor</legend>
+        <label for="attack">Attack</label>
+        <input id="attack" max="1" min="0" placeholder="0.003" step="0.001" type="number" value="0.003" />
+        <label for="knee">Knee</label>
+        <input id="knee" max="40" min="0" placeholder="30.0" step="1" type="number" value="30.0" />
+        <label for="ratio">Ratio</label>
+        <input id="ratio" max="20" min="1" placeholder="12.0" step="1" type="number" value="12.0" />
+        <label for="reduction">Reduction</label>
+        <input id="reduction" max="0" min="-20" placeholder="0.0" step="1" type="number" value="0.0" />
+        <label for="release">Release</label>
+        <input id="release" max="1" min="0" placeholder="0.25" step="0.01" type="number" value="0.25" />
+        <label for="threshold">Threshold</label>
+        <input id="threshold" max="0" min="-100" placeholder="-24" step="1" type="number" value="-24" />
+    </fieldset>
+</body>
+</html>
