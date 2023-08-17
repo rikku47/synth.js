@@ -8,12 +8,14 @@ let btnStart = document.getElementById("btnStart");
 var audioContext;
 var oscillator;
 var volume;
+var analyser;
 function start() {
     audioContext = new AudioContext();
     oscillator = audioContext.createOscillator();
     oscillator.start();
     volume = audioContext.createGain();
     volume.gain.value = 0;
+    analyser = audioContext.createAnalyser();
     oscillator.connect(volume).connect(audioContext.destination);
     sampleRate.value = audioContext.sampleRate.toString();
     frequency.max = oscillator.frequency.maxValue.toString();

@@ -2,11 +2,12 @@
     "compilerOptions": {
         "forceConsistentCasingInFileNames": true,
         "module": "ES6",
-        "outDir": "./dist/js",
-        "rootDir": "./src/ts",
+        "outDir": "./js",
+        "removeComments": true,
+        "rootDir": "./ts",
         "strict": true,
         "sourceMap": true,
-        "target": "es5"
+        "target": "ES2022"
     },
     "files": [
         "ts/oscillator.ts"

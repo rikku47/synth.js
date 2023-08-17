@@ -4,22 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OscillatorNode</title>
+    <script defer src="js/oscillator.js"></script>
 </head>
 <body>
     <fieldset>
-        <legend>Oscillator</legend>
-        <label for="frequency">Frequency</label>
-        <input id="frequency" max="153600" min="-153600" placeholder="440.0" type="number" value="440.0" />
-        <label for="detune">Detune</label>
-        <input id="detune" max="153600" min="-153600" placeholder="0.0" type="number" value="0.0" />
-        <label for="type">Type</label>
-        <select id="type" name="type">
-            <option value="sine">Sine</option>
-            <option value="square">Square</option>
-            <option value="sawtooth">Sawtooth</option>
-            <option value="triangle">Triangle</option>
-            <option value="custom">Custom</option>
-        </select>
+        <legend>Audio - Context</legend>
+        <label for="sample-rate">Sample Rate</label>
+        <input id="sample-rate" placeholder="44100" type="number" value="44100" />
+        <fieldset>
+            <legend>Oscillator</legend>
+            <label for="frequency">Frequency</label>
+            <input id="frequency" type="number" />
+            <label for="detune">Detune</label>
+            <input id="detune" type="number" />
+            <label for="type">Type</label>
+            <select id="type" name="type">
+                <option value="sine">Sine</option>
+                <option value="square">Square</option>
+                <option value="sawtooth">Sawtooth</option>
+                <option value="triangle">Triangle</option>
+                <option value="custom">Custom</option>
+            </select>
+            <fieldset>
+                <legend>Volume</legend>
+                <label for="gain">Gain</label>
+                <input id="gain" max="1" min="0.000" placeholder="0.000" step="0.001" type="range" value="0.000" />
+            </fieldset>
+        </fieldset>
+        <button id="btnStart" type="button" onclick="start()">Start</button>
     </fieldset>
 </body>
 </html>

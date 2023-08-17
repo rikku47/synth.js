@@ -1,3 +1,4 @@
+//ANCHOR - synth
 import * as _ from "lodash";
 import "./scsscss/synth.css";
 import { Synth } from "./ts/synth";

@@ -1,19 +1,24 @@
 # synth.js
+
 synth.js should become a software synthsizer. In some parts it works.
 
 ## Todos
-  - MIDI Support
-  - Piano Roll
-  - ...
+
+- MIDI Support
+- Piano Roll
+- ...
 
 ## Implemented
-  - Sinewave, Square, Triangle and Sawtooth - Sound
-  - ADSR - Envelope
- 
- ## More informations
-https://webaudio.github.io/web-audio-api/
+
+- Sinewave, Square, Triangle and Sawtooth - Sound
+- ADSR - Envelope
+
+## More informations
+
+<https://webaudio.github.io/web-audio-api/>
 
 ## Notices
+
 This Topic is absolute new to me. So I learn a lot of new things.
 
 The [WEB Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) was very confusing at the beginning for me. Now, I think, I have a solid base of understanding, how the API works in some parts. For example, that the Audio Nodes connected to each other by [phone connectors, audio jacks, patch cables... etc.](https://en.wikipedia.org/wiki/Phone_connector_(audio))
